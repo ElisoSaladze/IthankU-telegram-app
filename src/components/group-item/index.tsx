@@ -2,7 +2,6 @@ import { Avatar, ListItemButton, Stack, Typography } from "@mui/material";
 
 import defaultImageUrl from "../../assets/images/itu-circle.png";
 
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Group } from "../../api/group/types";
 import ShadeComponent from "../shade-component";

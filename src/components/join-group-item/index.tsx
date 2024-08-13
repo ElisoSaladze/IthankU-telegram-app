@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { joinGroup } from "../../api/group";
 import { Group } from "../../api/group/types";
 import ShadeComponent from "../shade-component";

@@ -1,7 +1,5 @@
-import React from 'react'
-
 const LanguagePage = () => {
-  return <div>LanguagePage</div>
-}
+  return <div>LanguagePage</div>;
+};
 
-export default LanguagePage
+export default LanguagePage;
