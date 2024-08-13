@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import {
   AppBar,
@@ -9,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   useCreateGroupContext,
