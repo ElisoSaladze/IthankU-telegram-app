@@ -131,7 +131,7 @@ export const routes = [
         state: "authenticated",
       },
       {
-        path: "appreciate",
+        path: "appreciate/:appreciateId",
         factory: () => import("src/pages/appreciate/index"),
         state: "authenticated",
       },
