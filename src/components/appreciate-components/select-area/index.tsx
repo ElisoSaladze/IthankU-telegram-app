@@ -12,11 +12,12 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { getShades, Shade } from "src/api/shade";
 import ShadeComponent from "src/components/shade-component";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 type Props = {
   onSelect?: (shade: Shade | null) => void;
+  defaultSelected?: string;
 };
-const AreaSelect = ({ onSelect }: Props) => {
+const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
   const [selectedShade, setSelectedShade] = useState<Shade | null>(null);
 
   const {
@@ -40,6 +41,15 @@ const AreaSelect = ({ onSelect }: Props) => {
       onSelect && onSelect(shade);
     }
   };
+
+  useEffect(() => {
+    if (defaultSelected && shades?.data) {
+      const initialShade = shades.data.find(
+        (shade) => shade.en === defaultSelected
+      );
+      if (initialShade) setSelectedShade(initialShade);
+    }
+  }, [defaultSelected, shades?.data]);
 
   if (isLoading || isFetching) return <Skeleton width={"100%"} height={60} />;
   if (isError) return <Typography>Failed to load shades</Typography>;

@@ -13,11 +13,12 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { getHashtags, Hashtag } from "src/api/hashtag/api";
 import TagItem from "src/components/tag";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 type Props = {
-  onSelect?: (shade: Hashtag | null) => void;
+  onSelect?: (hashtag: Hashtag | null) => void;
+  defaultSelected?: string;
 };
-const HashtagSelect = ({ onSelect }: Props) => {
+const HashtagSelect = ({ onSelect, defaultSelected }: Props) => {
   const [selectedHashtag, setSelectedHashtag] = useState<Hashtag | null>(null);
 
   const {
@@ -29,6 +30,15 @@ const HashtagSelect = ({ onSelect }: Props) => {
     queryKey: ["hashtags"],
     queryFn: getHashtags,
   });
+
+  useEffect(() => {
+    if (defaultSelected && hashtags?.data) {
+      const initialHashtag = hashtags.data.find(
+        (hashtag) => hashtag.hashtag === defaultSelected
+      );
+      if (initialHashtag) setSelectedHashtag(initialHashtag);
+    }
+  }, [defaultSelected, hashtags?.data]);
 
   const handleSelectHashtag = (hashtag: Hashtag) => {
     if (selectedHashtag?.hashtag === hashtag.hashtag) {
