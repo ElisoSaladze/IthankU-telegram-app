@@ -5,8 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { getGroups } from "src/api/group";
 import Loader from "src/components/loader";
-import GroupItem from "src/components/group-item";
+
 import { Group } from "src/api/group/types";
+import GroupItem from "src/components/join-group-item";
 
 const JoinGroupPage = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const JoinGroupPage = () => {
           Connect with others and explore shared interests.
         </Typography>
         <Stack
-          height={`calc(100vh - 250px)`}
+          height={`calc(100vh - 220px)`}
           gap={1}
           flexGrow={1}
           width={"100%"}
@@ -54,6 +55,8 @@ const JoinGroupPage = () => {
         </Stack>
       </Stack>
       <Button
+        onClick={() => navigate('/create-group')}
+        size="large"
         endIcon={<AddIcon fontSize="large" />}
         variant="contained"
         color={"primary"}

@@ -1,25 +1,15 @@
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import {
-  AppBar,
-  Box,
-  Button,
-  IconButton,
-  Stack,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
-import NotificationsIcon from "src/assets/icons/notifications.svg";
-
-import { Params, useNavigate, useParams } from "react-router-dom";
+import { Params, useParams } from "react-router-dom";
 import Loader from "src/components/loader";
 import PostItem from "src/components/post-item";
 import { getPost } from "src/api/post";
+import BackButtonAppBar from "src/components/appbar";
 
 const PrivatePostPage = () => {
   const { postId } = useParams<Params>();
-  const navigate = useNavigate();
+
   const post = useQuery({
     queryKey: ["postDetails", postId],
     queryFn: () => getPost(postId!),
@@ -27,27 +17,7 @@ const PrivatePostPage = () => {
 
   return (
     <Stack>
-      <AppBar>
-        <Toolbar>
-          <ArrowBackIosIcon
-            onClick={() => navigate(-1)}
-            sx={{ color: "secondary.dark" }}
-          />
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography
-              fontWeight={500}
-              variant="h6"
-              component="div"
-              sx={{ textAlign: "center", color: "black", fontSize: 20 }}
-            >
-              Post
-            </Typography>
-          </Box>
-          <IconButton>
-            <NotificationsIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+      <BackButtonAppBar pageName="Post" />
       <Typography>Continue Reading?</Typography>
       <Typography>
         You`&apos;ve reached the end of the preview. To unlock the full content
