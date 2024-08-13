@@ -9,10 +9,12 @@ import { globalAccessToken } from "../../providers/auth";
  */
 type Method = "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
 
+const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
+
 export const request =
   (method: Method) =>
   async <T>(path: string, body?: Record<string, any>): Promise<T> => {
-    const result = await fetch(path, {
+    const result = await fetch(`${VITE_APP_API_URL}/${path}`, {
       method,
       headers: {
         "Content-type": "application/json",

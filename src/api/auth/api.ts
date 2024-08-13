@@ -6,8 +6,6 @@ import { TelegramSignUpRequestBody } from "./types";
 import { post } from "src/lib/request/request";
 import { AuthUserResponse } from "src/providers/auth";
 
-const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
-
 const cookies = new Cookies();
 
 export const checkUser = async () => {
@@ -16,7 +14,7 @@ export const checkUser = async () => {
   console.warn("initDataRaw:", initDataRaw);
   const initDataRawEncoded = encodeURIComponent(initDataRaw || "");
   return post<AuthUserResponse>(
-    `${VITE_APP_API_URL}api/auth/telegram?initDataRaw=${initDataRawEncoded}`
+    `api/auth/telegram?initDataRaw=${initDataRawEncoded}`
   );
 };
 
@@ -26,9 +24,9 @@ export const checkUser = async () => {
 //  * @returns A promise that resolves with the authentication response containing updated tokens.
 //  */
 export const reissueToken = async () =>
-  post<AuthUserResponse>(`${VITE_APP_API_URL}auth/refreshToken`, {
+  post<AuthUserResponse>(`auth/refreshToken`, {
     token: cookies.get("refreshToken"),
   });
 
 export const telegramSignUp = async (body: TelegramSignUpRequestBody) =>
-  post<AuthUserResponse>(`${VITE_APP_API_URL}auth/telegram`, body);
+  post<AuthUserResponse>(`auth/telegram`, body);

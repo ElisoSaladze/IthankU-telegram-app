@@ -5,16 +5,12 @@ import {
   GetAppreciateUserInput,
 } from "./types";
 
-const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
-
 export const appreciateUser = async (body: AppreciateUserInput) => {
-  return await post(`${VITE_APP_API_URL}transactions`, body);
+  return await post(`transactions`, body);
 };
 
 export const getAppreciateUser = async ({
   appreciateId,
 }: GetAppreciateUserInput) => {
-  return await get<AppreciateQRCode>(
-    `${VITE_APP_API_URL}appreciations/check/${appreciateId}`
-  );
+  return await get<AppreciateQRCode>(`appreciations/check/${appreciateId}`);
 };

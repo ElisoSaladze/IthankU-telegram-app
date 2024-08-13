@@ -3,26 +3,23 @@ import { PostsResponse } from "../post/types";
 import { GroupDetailsResponse, GroupsResponse } from "./types";
 import { globalAccessToken } from "src/providers/auth";
 
-const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
-
-export const getGroups = async () =>
-  get<GroupsResponse>(`${VITE_APP_API_URL}api/groups`);
+export const getGroups = async () => get<GroupsResponse>(`api/groups`);
 
 export const getGroupDetails = async (groupId: string) =>
-  get<GroupDetailsResponse>(`${VITE_APP_API_URL}api/groups/${groupId}`);
+  get<GroupDetailsResponse>(`api/groups/${groupId}`);
 
 export const getGroupPosts = async (groupId: string) =>
-  get<PostsResponse>(`${VITE_APP_API_URL}api/posts/group/${groupId}`);
+  get<PostsResponse>(`api/posts/group/${groupId}`);
 
 export const joinGroup = async (groupId: string) =>
-  post(`${VITE_APP_API_URL}api/groups/${groupId}/join`);
+  post(`api/groups/${groupId}/join`);
 
 export const leaveGroup = async (groupId: string) =>
-  del(`${VITE_APP_API_URL}api/groups/${groupId}/leave`);
+  del(`api/groups/${groupId}/leave`);
 
 export const createGroup = async (body: FormData) => {
   try {
-    const response = await fetch(`${VITE_APP_API_URL}api/groups`, {
+    const response = await fetch(`api/groups`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${globalAccessToken}`,

@@ -2,17 +2,14 @@ import { globalAccessToken } from "src/providers/auth";
 import { PostDetails, PostsResponse } from "./types";
 import { get } from "src/lib/request/request";
 
-const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
-
-export const getPosts = async () =>
-  get<PostsResponse>(`${VITE_APP_API_URL}api/posts`);
+export const getPosts = async () => get<PostsResponse>(`api/posts`);
 
 export const getPost = async (postId: string) =>
-  get<PostDetails>(`${VITE_APP_API_URL}api/posts/${postId}`);
+  get<PostDetails>(`api/posts/${postId}`);
 
 export const createPost = async (body: FormData) => {
   try {
-    const response = await fetch(`${VITE_APP_API_URL}api/posts`, {
+    const response = await fetch(`api/posts`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${globalAccessToken}`,
