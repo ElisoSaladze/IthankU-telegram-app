@@ -20,6 +20,7 @@ const GroupItem = ({ group }: Props) => {
   const join = useMutation({
     mutationKey: ["join-group"],
     mutationFn: () => joinGroup(group._id),
+    onSuccess: () => setJoined(true),
   });
 
   const handleJoinGroup = () => {
