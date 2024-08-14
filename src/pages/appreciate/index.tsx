@@ -2,7 +2,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { useForm } from "react-hook-form";
-import { Params, useNavigate, useParams } from "react-router-dom";
+import { Params, useLocation, useNavigate, useParams } from "react-router-dom";
 import { appreciateUser, getAppreciateUser } from "src/api/appreciate/api";
 import { AppreciateUserInput } from "src/api/appreciate/types";
 import BackButtonAppBar from "src/components/appbar";
@@ -12,10 +12,14 @@ import { ControlledTextArea } from "src/components/form/controlled/controlled-te
 
 const AppreciatePage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { postAuthor } = location.state || {};
+  console.log(postAuthor);
   const { appreciateId } = useParams<Params>();
   const { control, setValue, handleSubmit } = useForm<AppreciateUserInput>({
     defaultValues: {
-      _id: appreciateId,
+      _id: postAuthor,
+      postId: appreciateId,
     },
   });
 

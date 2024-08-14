@@ -123,7 +123,15 @@ const PostItem = ({ post, isDetails = false }: Props) => {
             (post.hasLiked ? (
               <FavoriteIcon color="primary" />
             ) : (
-              <IconButton onClick={() => navigate(`/appreciate/${post._id}`)}>
+              <IconButton
+                onClick={() =>
+                  navigate(`/appreciate/${post._id}`, {
+                    state: {
+                      postAuthor: post.author?._id,
+                    },
+                  })
+                }
+              >
                 <FavoriteBorderIcon />
               </IconButton>
             ))}

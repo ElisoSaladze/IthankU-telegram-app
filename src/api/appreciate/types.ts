@@ -1,5 +1,6 @@
 export type AppreciateUserInput = {
   _id: string;
+  postId?: string;
   shade?: string;
   hashtag?: string;
   comment?: string;
