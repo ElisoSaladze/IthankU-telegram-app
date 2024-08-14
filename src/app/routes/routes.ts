@@ -145,6 +145,26 @@ export const routes = [
         factory: () => import("src/pages/pending-transactions/index"),
         state: "authenticated",
       },
+      {
+        path: "appreciate",
+        factory: () => import("src/pages/appreciate/index"),
+        state: "authenticated",
+      },
+      {
+        path: "get-appreciate",
+        factory: () => import("src/pages/get-appreciate/index"),
+        state: "authenticated",
+      },
+      {
+        path: "get-appreciate/qr-options",
+        factory: () => import("src/pages/get-appreciate/qr-options"),
+        state: "authenticated",
+      },
+      {
+        path: "scan-qr-code",
+        factory: () => import("src/pages/appreciate/scanner"),
+        state: "authenticated",
+      },
     ],
   }),
 ];
