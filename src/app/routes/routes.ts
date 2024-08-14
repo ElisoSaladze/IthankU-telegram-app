@@ -65,13 +65,13 @@ export const routes = [
   buildRoute({
     path: "/",
     factory: () => import("src/pages/main-layout/index"),
-    state: "unauthenticated",
+    state: "authenticated",
     defaultNavigation: "/home",
     children: [
       {
         path: "home",
         factory: () => import("src/pages/home/index"),
-        state: "unauthenticated",
+        state: "authenticated",
       },
       {
         path: "groups",
