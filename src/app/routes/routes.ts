@@ -65,13 +65,13 @@ export const routes = [
   buildRoute({
     path: "/",
     factory: () => import("src/pages/main-layout/index"),
-    state: "authenticated",
+    state: "unauthenticated",
     defaultNavigation: "/home",
     children: [
       {
         path: "home",
         factory: () => import("src/pages/home/index"),
-        state: "authenticated",
+        state: "unauthenticated",
       },
       {
         path: "groups",
@@ -133,6 +133,16 @@ export const routes = [
       {
         path: "appreciate",
         factory: () => import("src/pages/appreciate/index"),
+        state: "authenticated",
+      },
+      {
+        path: "get-appreciate",
+        factory: () => import("src/pages/get-appreciate/index"),
+        state: "authenticated",
+      },
+      {
+        path: "get-appreciate/qr-options",
+        factory: () => import("src/pages/get-appreciate/qr-options"),
         state: "authenticated",
       },
       {
