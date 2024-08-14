@@ -2,8 +2,9 @@
 import CircleIcon from "@mui/icons-material/Circle";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
-import QrCodeIcon from "@mui/icons-material/QrCode";
+
 import SearchIcon from "@mui/icons-material/Search";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import {
   AppBar,
   Avatar,
@@ -35,6 +36,7 @@ import PostItem from "src/components/post-item";
 import TagItem from "src/components/tag";
 import { useAuthContext } from "src/providers/auth";
 import { Post } from "src/api/post/types";
+import qrIcon from "src/assets/icons/qr.png";
 
 const GroupDetailsPage = () => {
   const { userData } = useAuthContext();
@@ -175,16 +177,17 @@ const GroupDetailsPage = () => {
                 </Button>
               )}
               <Button
+                startIcon={<PersonAddAlt1Icon />}
                 sx={{ borderRadius: 4 }}
                 size="medium"
-                color="info"
+                color="success"
                 fullWidth
                 variant="contained"
               >
                 Share
               </Button>
               <IconButton>
-                <QrCodeIcon color="info" fontSize="large" />
+                <img src={qrIcon} />
               </IconButton>
             </Stack>
           </Stack>
@@ -211,12 +214,20 @@ const GroupDetailsPage = () => {
             >
               <Stack
                 width={"100%"}
-                gap={2}
+                justifyContent={"space-between"}
                 alignItems={"center"}
                 direction={"row"}
               >
-                <Avatar src={userData.data?.user.picture} />
-                <Typography>Write something...</Typography>
+                <Stack gap={2} alignItems={"center"} direction={"row"}>
+                  <Avatar src={userData.data?.user.picture} />
+                  <Typography>Write something...</Typography>
+                </Stack>
+                <Button
+                  onClick={() => navigate(`/create-post/${groupId}`)}
+                  variant="outlined"
+                >
+                  Post
+                </Button>
               </Stack>
             </ListItemButton>
             {posts.isFetching ? (

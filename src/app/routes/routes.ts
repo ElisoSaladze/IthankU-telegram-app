@@ -63,6 +63,11 @@ export const routes = [
     ],
   }),
   buildRoute({
+    path: "thank-you",
+    factory: () => import("src/pages/appreciate/thanku"),
+    state: "authenticated",
+  }),
+  buildRoute({
     path: "scan-qr-code",
     factory: () => import("src/pages/appreciate/scanner"),
     state: "authenticated",

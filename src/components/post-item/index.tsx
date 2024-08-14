@@ -11,6 +11,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  IconButton,
   Skeleton,
   Stack,
   Typography,
@@ -122,7 +123,9 @@ const PostItem = ({ post, isDetails = false }: Props) => {
             (post.hasLiked ? (
               <FavoriteIcon color="primary" />
             ) : (
-              <FavoriteBorderIcon />
+              <IconButton onClick={() => navigate(`/appreciate/${post._id}`)}>
+                <FavoriteBorderIcon />
+              </IconButton>
             ))}
           <LikesItem likes={post.likes} />
           <Typography fontSize={"small"}>{post.likesCount} likes</Typography>
