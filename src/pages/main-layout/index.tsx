@@ -144,8 +144,8 @@ const HomePage = () => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Box>
-        <Box paddingY={8}>
+      <Box height={"100%"}>
+        <Box height={"100%"} paddingY={8}>
           <Suspense fallback={<Loader />}>
             <Outlet />
           </Suspense>

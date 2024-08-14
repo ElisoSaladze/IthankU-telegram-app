@@ -26,7 +26,10 @@ const AppreciateComponent = ({ show, setShow }: Props) => {
     >
       {appreciate && (
         <Button
-          onClick={() => navigate("/scan-qr-code")}
+          onClick={() => {
+            navigate("/scan-qr-code");
+            setShow(false);
+          }}
           color="info"
           sx={{
             alignSelf: "flex-start",
@@ -40,6 +43,10 @@ const AppreciateComponent = ({ show, setShow }: Props) => {
       )}
       {getApprectiation && (
         <Button
+          onClick={() => {
+            navigate("/get-appreciate", { state: { isAdvanced: false } });
+            setShow(false);
+          }}
           color="info"
           sx={{
             alignSelf: "flex-start",
@@ -98,6 +105,12 @@ const AppreciateComponent = ({ show, setShow }: Props) => {
       {getApprectiation && (
         <Button
           color="info"
+          onClick={() => {
+            navigate("/get-appreciate/qr-options", {
+              state: { isAdvanced: true },
+            });
+            setShow(false);
+          }}
           sx={{
             alignSelf: "flex-start",
             fontSize: 12,

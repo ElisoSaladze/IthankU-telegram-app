@@ -16,10 +16,10 @@ const PostPage = () => {
   });
 
   return (
-    <Stack p={2}>
+    <Stack marginTop={6} p={2}>
       <BackButtonAppBar pageName="Post" />
       {post.isFetching || post.isLoading ? (
-        <Box mt={2}>
+        <Box>
           <Skeleton
             variant="rectangular"
             width="100%"
