@@ -16,7 +16,7 @@ const PrivatePostPage = () => {
   });
 
   return (
-    <Stack>
+    <Stack marginTop={6}>
       <BackButtonAppBar pageName="Post" />
       <Typography>Continue Reading?</Typography>
       <Typography>

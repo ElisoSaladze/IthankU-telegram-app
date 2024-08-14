@@ -65,7 +65,7 @@ const NewGroupDetails = () => {
       <Box zIndex={2} mt={12}>
         <PfpComponent onChange={(file) => setValue("image", file)} isEditable />
       </Box>
-      <Stack marginTop={1} paddingX={2}>
+      <Stack marginTop={1} gap={1}>
         <Typography width={"100%"}>Group Name</Typography>
         <ControlledTextField required fullWidth control={control} name="name" />
         <Typography width={"100%"}>Description</Typography>
