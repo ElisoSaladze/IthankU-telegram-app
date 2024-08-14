@@ -58,9 +58,11 @@ const HomePage = () => {
           ))}
         </Stack>
       ) : (
-        posts.data?.data.map((post: Post, index: number) => (
-          <PostItem isDetails={false} key={index} post={post} />
-        ))
+        <Stack gap={2} width={"100%"} marginBottom={10}>
+          {posts.data?.data.map((post: Post, index: number) => (
+            <PostItem isDetails={false} key={index} post={post} />
+          ))}
+        </Stack>
       )}
     </Stack>
   );

@@ -78,6 +78,21 @@ export const routes = [
     state: "authenticated",
   }),
   buildRoute({
+    path: "get-appreciate",
+    factory: () => import("src/pages/get-appreciate/index"),
+    state: "authenticated",
+  }),
+  buildRoute({
+    path: "get-appreciate/qr-options",
+    factory: () => import("src/pages/get-appreciate/qr-options"),
+    state: "authenticated",
+  }),
+  buildRoute({
+    path: "scan-qr-code",
+    factory: () => import("src/pages/appreciate/scanner"),
+    state: "authenticated",
+  }),
+  buildRoute({
     path: "/",
     factory: () => import("src/pages/main-layout/index"),
     state: "authenticated",
@@ -143,26 +158,6 @@ export const routes = [
       {
         path: "more/pending-transactions",
         factory: () => import("src/pages/pending-transactions/index"),
-        state: "authenticated",
-      },
-      {
-        path: "appreciate",
-        factory: () => import("src/pages/appreciate/index"),
-        state: "authenticated",
-      },
-      {
-        path: "get-appreciate",
-        factory: () => import("src/pages/get-appreciate/index"),
-        state: "authenticated",
-      },
-      {
-        path: "get-appreciate/qr-options",
-        factory: () => import("src/pages/get-appreciate/qr-options"),
-        state: "authenticated",
-      },
-      {
-        path: "scan-qr-code",
-        factory: () => import("src/pages/appreciate/scanner"),
         state: "authenticated",
       },
     ],
