@@ -14,6 +14,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import nav from "src/assets/images/nav.png";
 import groupsIcon from "src/assets/icons/groups.svg";
 import homeIcon from "src/assets/icons/home.svg";
 import mapIcon from "src/assets/icons/map.svg";
@@ -25,8 +26,6 @@ import homeIconSelected from "src/assets/icons/selectedHome.svg";
 import mapIconSelected from "src/assets/icons/selectedMap.svg";
 import moreIconSelected from "src/assets/icons/selectedMore.svg";
 import ituIcon from "src/assets/images/itu.svg";
-import nav from "src/assets/images/nav.svg";
-
 import React, { Suspense, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Loader from "src/components/loader";
@@ -82,7 +81,12 @@ const HomePage = () => {
   };
 
   return (
-    <Box height={"100vh"} overflow={"auto"} position={"relative"}>
+    <Box
+      height={"100vh"}
+      display={"flex"}
+      flexDirection={"column"}
+      position={"relative"}
+    >
       <AppBar
         sx={{
           position: "fixed",
@@ -90,6 +94,7 @@ const HomePage = () => {
           left: 0,
           right: 0,
           backgroundColor: "white",
+          zIndex: theme.zIndex.drawer + 1,
         }}
       >
         <Toolbar>
@@ -108,7 +113,7 @@ const HomePage = () => {
           <IconButton
             sx={{
               visibility:
-                activeIndex == 4 || activeIndex == 1 ? "hidden" : "visible",
+                activeIndex === 4 || activeIndex === 1 ? "hidden" : "visible",
             }}
             onClick={handleClick}
           >
@@ -144,8 +149,8 @@ const HomePage = () => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Box height={"100%"}>
-        <Box height={"100%"} paddingY={8}>
+      <Box height={'100%'}>
+        <Box paddingTop={8} height={"100%"}>
           <Suspense fallback={<Loader />}>
             <Outlet />
           </Suspense>
@@ -160,7 +165,6 @@ const HomePage = () => {
           backgroundImage: showAppreciate ? `url(${nav})` : "",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
-          backgroundPosition: "top",
           position: "fixed",
           bottom: 0,
           left: 0,
@@ -170,6 +174,7 @@ const HomePage = () => {
           boxShadow: showAppreciate
             ? "none"
             : "0px 1px 10.4px -2px rgba(0, 0, 0, 0.25)",
+          zIndex: theme.zIndex.drawer,
         }}
         elevation={3}
       >
