@@ -14,6 +14,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import nav from "src/assets/images/nav.svg";
 import groupsIcon from "src/assets/icons/groups.svg";
 import homeIcon from "src/assets/icons/home.svg";
 import mapIcon from "src/assets/icons/map.svg";
@@ -25,8 +26,6 @@ import homeIconSelected from "src/assets/icons/selectedHome.svg";
 import mapIconSelected from "src/assets/icons/selectedMap.svg";
 import moreIconSelected from "src/assets/icons/selectedMore.svg";
 import ituIcon from "src/assets/images/itu.svg";
-import nav from "src/assets/images/nav.svg";
-
 import React, { Suspense, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Loader from "src/components/loader";
@@ -170,7 +169,7 @@ const HomePage = () => {
           backgroundImage: showAppreciate ? `url(${nav})` : "",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
-          position: "fixed",
+          position: "sticky",
           bottom: 0,
           left: 0,
           right: 0,
