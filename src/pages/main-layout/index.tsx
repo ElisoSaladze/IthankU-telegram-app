@@ -153,7 +153,6 @@ const HomePage = () => {
       <Box
         component="main"
         flexGrow={1}
-        paddingY={8}
         overflow={"auto"}
         display={"flex"}
         flexDirection={"column"}
