@@ -87,70 +87,72 @@ const HomePage = () => {
       flexDirection={"column"}
       position={"relative"}
     >
-      <AppBar
-        sx={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: "white",
-          zIndex: theme.zIndex.drawer + 1,
-        }}
-      >
-        <Toolbar>
-          <img src={ituIcon} />
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography
-              fontWeight={500}
-              variant="h6"
-              component="div"
-              sx={{ textAlign: "center", color: "black", fontSize: 20 }}
-            >
-              {getPageName()}
-            </Typography>
-          </Box>
+      {activeIndex !== 3 && (
+        <AppBar
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: "white",
+            zIndex: theme.zIndex.drawer + 1,
+          }}
+        >
+          <Toolbar>
+            <img src={ituIcon} />
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography
+                fontWeight={500}
+                variant="h6"
+                component="div"
+                sx={{ textAlign: "center", color: "black", fontSize: 20 }}
+              >
+                {getPageName()}
+              </Typography>
+            </Box>
 
-          <IconButton
-            sx={{
-              visibility:
-                activeIndex === 4 || activeIndex === 1 ? "hidden" : "visible",
-            }}
-            onClick={handleClick}
-          >
-            <AddCircleOutlineIcon fontSize="large" color="primary" />
-          </IconButton>
-
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
-          >
-            <MenuItem onClick={() => navigate("/create-post")}>
-              Create Post
-            </MenuItem>
-            <Divider
+            <IconButton
               sx={{
-                backgroundColor: theme.palette.primary.main,
-                "&.MuiDivider-root": {
-                  margin: "0 !important",
-                },
+                visibility:
+                  activeIndex === 4 || activeIndex === 1 ? "hidden" : "visible",
               }}
-            />
-            <MenuItem onClick={() => navigate("/create-group/details")}>
-              Create Group
-            </MenuItem>
-          </Menu>
-          <IconButton>
-            <img src={notificationsIcon} />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Box height={'100%'}>
-        <Box paddingTop={8} height={"100%"}>
+              onClick={handleClick}
+            >
+              <AddCircleOutlineIcon fontSize="large" color="primary" />
+            </IconButton>
+
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem onClick={() => navigate("/create-post")}>
+                Create Post
+              </MenuItem>
+              <Divider
+                sx={{
+                  backgroundColor: theme.palette.primary.main,
+                  "&.MuiDivider-root": {
+                    margin: "0 !important",
+                  },
+                }}
+              />
+              <MenuItem onClick={() => navigate("/create-group/details")}>
+                Create Group
+              </MenuItem>
+            </Menu>
+            <IconButton>
+              <img src={notificationsIcon} />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      )}
+      <Box height={"100%"}>
+        <Box paddingTop={activeIndex !== 3 ? 8 : 0} height={"100%"}>
           <Suspense fallback={<Loader />}>
             <Outlet />
           </Suspense>

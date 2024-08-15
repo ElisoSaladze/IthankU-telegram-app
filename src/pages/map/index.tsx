@@ -3,8 +3,17 @@ import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import MapSvg from "src/assets/icons/map.svg";
 import { getUsersByLocation } from "src/api/listing";
 import { LocationQueryParams, User } from "src/api/listing/types";
-import { Box, Button, Modal, Slider, Typography } from "@mui/material";
-
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Modal,
+  Slider,
+  Stack,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 const GOOGLE_MAP_API_KEY = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
 
 const MapPage = () => {
@@ -106,7 +115,35 @@ const MapPage = () => {
   }
 
   return (
-    <>
+    <Stack height={"100%"} overflow={"hidden"}>
+      <AppBar>
+        <Toolbar>
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography
+              fontWeight={500}
+              variant="h6"
+              component="div"
+              sx={{ textAlign: "center", color: "black", fontSize: 20 }}
+            >
+              People nearby
+            </Typography>
+          </Box>
+          <IconButton
+            onClick={() => setModalOpen(true)}
+            sx={{
+              backgroundColor: "info.main",
+              color: "white",
+              borderRadius: "12px",
+              "&:hover": {
+                backgroundColor: "info.main",
+              },
+            }}
+            size="small"
+          >
+            <FilterAltOutlinedIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
       <GoogleMap
         mapContainerStyle={{ width: "100%", height: "100%" }}
         center={userLocation}
@@ -131,21 +168,14 @@ const MapPage = () => {
           <UserMarker key={user._id} user={user} />
         ))}
       </GoogleMap>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => setModalOpen(true)}
-        style={{ position: "absolute", top: 100, right: 16 }}
-      >
-        Open Settings
-      </Button>
+
       <SettingsModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         radius={radius}
         onRadiusChange={handleRadiusChange}
       />
-    </>
+    </Stack>
   );
 };
 
