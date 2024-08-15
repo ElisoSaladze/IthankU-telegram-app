@@ -14,7 +14,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import nav from "src/assets/images/nav.svg";
+import nav from "src/assets/images/nav.png";
 import groupsIcon from "src/assets/icons/groups.svg";
 import homeIcon from "src/assets/icons/home.svg";
 import mapIcon from "src/assets/icons/map.svg";
@@ -149,16 +149,12 @@ const HomePage = () => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Box
-        component="main"
-        flexGrow={1}
-        overflow={"auto"}
-        display={"flex"}
-        flexDirection={"column"}
-      >
-        <Suspense fallback={<Loader />}>
-          <Outlet />
-        </Suspense>
+      <Box height={'100%'}>
+        <Box paddingTop={8} height={"100%"}>
+          <Suspense fallback={<Loader />}>
+            <Outlet />
+          </Suspense>
+        </Box>
         <AppreciateComponent
           show={showAppreciate}
           setShow={setShowAppreciate}
@@ -169,7 +165,7 @@ const HomePage = () => {
           backgroundImage: showAppreciate ? `url(${nav})` : "",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
-          position: "sticky",
+          position: "fixed",
           bottom: 0,
           left: 0,
           right: 0,
