@@ -2,7 +2,7 @@ import { del, get, post } from "src/lib/request/request";
 import { PostsResponse } from "../post/types";
 import { GroupDetailsResponse, GroupsResponse } from "./types";
 import { globalAccessToken } from "src/providers/auth";
-
+const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
 export const getGroups = async () => get<GroupsResponse>(`api/groups`);
 
 export const getGroupDetails = async (groupId: string) =>
@@ -19,7 +19,7 @@ export const leaveGroup = async (groupId: string) =>
 
 export const createGroup = async (body: FormData) => {
   try {
-    const response = await fetch(`api/groups`, {
+    const response = await fetch(`${VITE_APP_API_URL}api/groups`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${globalAccessToken}`,

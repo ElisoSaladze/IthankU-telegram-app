@@ -46,3 +46,11 @@ export type CurrentUser = Author & {
     count: number;
   }[];
 };
+
+export type LocationQueryParams = {
+  latitude: number;
+  longitude: number;
+  radius: number;
+  area?: string;
+  hashtag?: string;
+};

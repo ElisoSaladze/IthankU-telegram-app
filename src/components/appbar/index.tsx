@@ -4,8 +4,9 @@ import notificationsIcon from "src/assets/icons/notifications.svg";
 import { useNavigate } from "react-router-dom";
 type Props = {
   pageName: string;
+  color?: string;
 };
-const BackButtonAppBar = ({ pageName }: Props) => {
+const BackButtonAppBar = ({ pageName, color = "white" }: Props) => {
   const navigate = useNavigate();
   return (
     <AppBar
@@ -14,7 +15,7 @@ const BackButtonAppBar = ({ pageName }: Props) => {
         top: 0,
         left: 0,
         right: 0,
-        backgroundColor: "white",
+        backgroundColor: color,
       }}
     >
       <Toolbar>

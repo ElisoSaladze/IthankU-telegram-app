@@ -33,6 +33,7 @@ const ScanQrCodePage = () => {
         marginX={2}
       >
         <Stack
+          width={"100%"}
           borderRadius={4}
           alignItems={"center"}
           padding={1}
