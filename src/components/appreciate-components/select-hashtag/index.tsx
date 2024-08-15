@@ -66,7 +66,7 @@ const HashtagSelect = ({ onSelect, defaultSelected }: Props) => {
             <Typography fontSize={10} color={"secondary"}>
               optional
             </Typography>
-            <Typography>Area</Typography>
+            <Typography>Hashtag</Typography>
           </Stack>
 
           <Stack
@@ -93,7 +93,7 @@ const HashtagSelect = ({ onSelect, defaultSelected }: Props) => {
                 </IconButton>
               </>
             ) : (
-              <Typography fontSize={14}>Select shade</Typography>
+              <Typography fontSize={14}>Select hashtag</Typography>
             )}
           </Stack>
         </Stack>

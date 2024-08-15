@@ -11,7 +11,7 @@ const UsersList = () => {
 
   if (isFetching || isLoading) return <Loader />;
   return (
-    <Stack marginY={1} gap={1}>
+    <Stack paddingBottom={10} marginY={1} gap={1}>
       {/* {data?.users.map(user => (
         <ListItemButton key={user._id} sx={{ width: '100%', borderRadius: 5 }}>
           <Stack

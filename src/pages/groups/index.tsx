@@ -33,7 +33,7 @@ const GroupsPage = () => {
   });
   const navigate = useNavigate();
   return (
-    <Stack marginX={2}>
+    <Stack marginX={2} paddingBottom={2}>
       <Stack
         marginTop={2}
         justifyContent={"space-between"}
@@ -91,7 +91,7 @@ const GroupsPage = () => {
           ))}
         </Stack>
       ) : (
-        <Stack marginY={1} gap={1}>
+        <Stack marginY={1} gap={1} marginBottom={10}>
           {data?.data.map((group: Group, i: number) => (
             <GroupItem key={i} group={group} />
           ))}
