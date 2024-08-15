@@ -82,7 +82,12 @@ const HomePage = () => {
   };
 
   return (
-    <Box height={"100vh"} overflow={"auto"} position={"relative"}>
+    <Box
+      height={"100vh"}
+      display={"flex"}
+      flexDirection={"column"}
+      position={"relative"}
+    >
       <AppBar
         sx={{
           position: "fixed",
@@ -90,6 +95,7 @@ const HomePage = () => {
           left: 0,
           right: 0,
           backgroundColor: "white",
+          zIndex: theme.zIndex.drawer + 1,
         }}
       >
         <Toolbar>
@@ -108,7 +114,7 @@ const HomePage = () => {
           <IconButton
             sx={{
               visibility:
-                activeIndex == 4 || activeIndex == 1 ? "hidden" : "visible",
+                activeIndex === 4 || activeIndex === 1 ? "hidden" : "visible",
             }}
             onClick={handleClick}
           >
@@ -144,12 +150,17 @@ const HomePage = () => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Box height={"100%"}>
-        <Box height={"100%"} paddingY={8}>
-          <Suspense fallback={<Loader />}>
-            <Outlet />
-          </Suspense>
-        </Box>
+      <Box
+        component="main"
+        flexGrow={1}
+        paddingY={8}
+        overflow={"auto"}
+        display={"flex"}
+        flexDirection={"column"}
+      >
+        <Suspense fallback={<Loader />}>
+          <Outlet />
+        </Suspense>
         <AppreciateComponent
           show={showAppreciate}
           setShow={setShowAppreciate}
@@ -160,7 +171,6 @@ const HomePage = () => {
           backgroundImage: showAppreciate ? `url(${nav})` : "",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
-          backgroundPosition: "top",
           position: "fixed",
           bottom: 0,
           left: 0,
@@ -170,6 +180,7 @@ const HomePage = () => {
           boxShadow: showAppreciate
             ? "none"
             : "0px 1px 10.4px -2px rgba(0, 0, 0, 0.25)",
+          zIndex: theme.zIndex.drawer,
         }}
         elevation={3}
       >
