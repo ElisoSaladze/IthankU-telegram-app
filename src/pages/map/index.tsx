@@ -14,12 +14,12 @@ import {
   Typography,
 } from "@mui/material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-const GOOGLE_MAP_API_KEY = import.meta.env.VITE_APP_GOOGLE_MAP_API_KEY;
+// const GOOGLE_MAP_API_KEY = import.meta.env.VITE_APP_GOOGLE_MAP_API_KEY;
 
 const MapPage = () => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: GOOGLE_MAP_API_KEY,
+    googleMapsApiKey: "AIzaSyDsf_MC31bfKI8JwasA5WebPrCl2TDqoHc",
   });
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
