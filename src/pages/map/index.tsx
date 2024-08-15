@@ -14,10 +14,10 @@ import {
   Typography,
 } from "@mui/material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-const GOOGLE_MAP_API_KEY = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
+const GOOGLE_MAP_API_KEY = import.meta.env.VITE_APP_GOOGLE_MAP_API_KEY;
 
 const MapPage = () => {
-  console.log(import.meta.env.VITE_GOOGLE_MAP_API_KEY);
+  console.log(import.meta.env.VITE_APP_GOOGLE_MAP_API_KEY);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: GOOGLE_MAP_API_KEY,
