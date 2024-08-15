@@ -70,26 +70,29 @@ const UserDetailsPage = () => {
       {user.data?.user.topShades.length! > 0 && (
         <>
           <Typography>Areas</Typography>
-
-          {user.data?.user.topShades.map((shade: any) => (
-            <Chip
-              key={shade._id}
-              label={shade.shade}
-              variant="outlined"
-              deleteIcon={<Typography>shade.points.toString()</Typography>}
-            />
-          ))}
+          <Stack flexWrap={"wrap"} gap={0.5} direction={"row"}>
+            {user.data?.user.topShades.map((shade) => (
+              <Chip
+                key={shade._id}
+                label={shade.shade}
+                variant="outlined"
+                deleteIcon={<Typography>shade.points.toString()</Typography>}
+              />
+            ))}
+          </Stack>
         </>
       )}
       {user.data?.user.topHashtags.length! > 0 && (
         <>
           <Typography>Hashtags</Typography>
-          {user.data?.user.topHashtags.map(
-            (hashtag, i) =>
-              hashtag.hashtag && (
-                <Chip key={i} label={hashtag.hashtag} variant="outlined" />
-              )
-          )}
+          <Stack flexWrap={"wrap"} gap={0.5} direction={"row"}>
+            {user.data?.user.topHashtags.map(
+              (hashtag, i) =>
+                hashtag.hashtag && (
+                  <Chip key={i} label={hashtag.hashtag} variant="outlined" />
+                )
+            )}
+          </Stack>
         </>
       )}
     </Stack>
