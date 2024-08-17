@@ -10,8 +10,6 @@ const cookies = new Cookies();
 
 export const checkUser = async () => {
   const { initDataRaw } = retrieveLaunchParams();
-
-  console.warn("initDataRaw:", initDataRaw);
   const initDataRawEncoded = encodeURIComponent(initDataRaw || "");
   return post<AuthUserResponse>(
     `api/auth/telegram?initDataRaw=${initDataRawEncoded}`
