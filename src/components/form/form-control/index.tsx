@@ -2,19 +2,19 @@ import {
   FormControl as MuiFormControl,
   FormHelperText,
   InputLabel,
-} from '@mui/material'
-import { forwardRef } from 'react'
+} from "@mui/material";
+import { forwardRef } from "react";
 
 export type FormControlProps = {
-  children: React.ReactNode
-  htmlFor?: string
-  label?: string
-  helperText?: React.ReactNode
-  error?: boolean
-  required?: boolean
-  disabled?: boolean
-  fullWidth?: boolean
-}
+  children: React.ReactNode;
+  htmlFor?: string;
+  label?: string;
+  helperText?: React.ReactNode;
+  error?: boolean;
+  required?: boolean;
+  disabled?: boolean;
+  fullWidth?: boolean;
+};
 
 /**
  * Type definition for the props accepted by the FormControl component.
@@ -62,13 +62,13 @@ export const FormControl = forwardRef<HTMLDivElement, FormControlProps>(
             htmlFor={props.htmlFor}
             required={props.required}
             sx={{
-              transform: 'none',
-              color: props.disabled ? 'text.disabled' : 'text.primary',
+              transform: "none",
+              color: props.disabled ? "text.disabled" : "text.primary",
               ml: 2,
               mb: 0.5,
-              position: 'static',
-              fontSize: '14px',
-              lineHeight: '17px',
+              position: "static",
+              fontSize: "14px",
+              lineHeight: "17px",
               fontWeight: 400,
               zIndex: 0,
             }}
@@ -84,14 +84,14 @@ export const FormControl = forwardRef<HTMLDivElement, FormControlProps>(
           sx={{
             mt: 0.5,
             ml: 2,
-            fontSize: '10',
+            fontSize: "10",
             fontWeight: 600,
-            color: theme => theme.palette.error.main,
+            color: (theme) => theme.palette.error.main,
           }}
         >
-          {props.helperText || ''}
+          {props.helperText || ""}
         </FormHelperText>
       </MuiFormControl>
-    )
-  },
-)
+    );
+  }
+);
