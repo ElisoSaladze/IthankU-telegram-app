@@ -31,7 +31,7 @@ const MorePage = () => {
 
   return (
     <Stack marginX={2} gap={1.5}>
-      <ListItemButton onClick={() => navigate(`details/${curr.user._id}`)}>
+      <ListItemButton onClick={() => navigate(`${curr.user._id}`)}>
         <Stack
           width={"100%"}
           justifyContent={"space-between"}
@@ -100,7 +100,7 @@ const MorePage = () => {
           name="Listing"
         />
         <NavigationItem
-          onClick={() => navigate("transactions")}
+          onClick={() => navigate("transactions/incoming")}
           icon={transactions}
           name="Transactions"
         />

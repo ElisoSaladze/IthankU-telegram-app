@@ -20,7 +20,7 @@ const GroupItem = ({ group }: Props) => {
         padding: 1,
         boxShadow: "0px 0px 8.2px -1px #00000026",
       }}
-      onClick={() => navigate(`/group/${group._id}`)}
+      onClick={() => navigate(`/groups/${group._id}`)}
     >
       <Stack
         sx={{ width: "100%" }}
