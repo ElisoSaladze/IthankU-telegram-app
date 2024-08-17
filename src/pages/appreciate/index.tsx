@@ -19,10 +19,9 @@ const AppreciatePage = () => {
   const { control, setValue, handleSubmit } = useForm<AppreciateUserInput>({
     defaultValues: {
       _id: postAuthor,
-      postId: appreciateId,
+      postId: String(postAuthor).length > 0 ? appreciateId : undefined,
     },
   });
-
   const { data: appreciateData } = useQuery({
     queryKey: ["appreciateData", appreciateId],
     queryFn: () => getAppreciateUser({ appreciateId: appreciateId as string }),
@@ -30,6 +29,7 @@ const AppreciatePage = () => {
     onSuccess: (data) => {
       if (data?.data.area) setValue("shade", data.data.area);
       if (data?.data.hashtag) setValue("hashtag", data.data.hashtag);
+      setValue("_id", data.data.code);
     },
   });
 
@@ -45,11 +45,7 @@ const AppreciatePage = () => {
     }
   );
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-    return mutation.mutate(data);
-  });
-
+  const onSubmit = handleSubmit((data) => mutation.mutate(data));
   return (
     <Stack marginTop={10}>
       <BackButtonAppBar pageName="" />

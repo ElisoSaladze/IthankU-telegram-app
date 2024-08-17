@@ -3,14 +3,16 @@
 import { Button, Chip, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
-import { Params, useParams } from "react-router-dom";
+import { Params, useNavigate, useParams } from "react-router-dom";
 import { getUser } from "src/api/listing";
 import BackButtonAppBar from "src/components/appbar";
+import Loader from "src/components/loader";
 
 import PfpComponent from "src/components/pfp-component";
 import { useAuthContext } from "src/providers/auth";
 
 const UserDetailsPage = () => {
+  const navigate = useNavigate();
   const { userData } = useAuthContext();
   const { userId } = useParams<Params>();
   const isCurrent = userData.data?.user._id === userId;
@@ -19,6 +21,8 @@ const UserDetailsPage = () => {
     queryKey: ["postDetails", userId],
     queryFn: () => getUser(userId!),
   });
+
+  if (user.isLoading || user.isFetching) return <Loader />;
 
   return (
     <Stack marginTop={8} gap={1} marginX={2}>
@@ -44,7 +48,13 @@ const UserDetailsPage = () => {
           </Stack>
         </Stack>
         {!isCurrent && (
-          <Button size="large" variant="contained" fullWidth>
+          <Button
+            onClick={() => navigate(`/appreciate/${userId}`)}
+            color="warning"
+            size="large"
+            variant="contained"
+            fullWidth
+          >
             Appreciate
           </Button>
         )}

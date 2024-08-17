@@ -43,6 +43,13 @@ const ThemeProvider = ({ children }: Props) => {
               backgroundColor: "#1e9441",
             },
           },
+          containedWarning: {
+            backgroundColor: "white",
+            color: "#21A54D",
+            "&:hover": {
+              backgroundColor: "white",
+            },
+          },
           containedSecondary: {
             backgroundColor: "#E7E7E7",
             color: "#000000",
