@@ -10,10 +10,10 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { getHashtags, Hashtag } from "src/api/hashtag/api";
+import { Hashtag } from "src/api/hashtag/api";
 import TagItem from "src/components/tag";
 import { useEffect, useState } from "react";
+import { useFetchItemsContext } from "src/providers/hashtag-shade";
 type Props = {
   onSelect?: (hashtag: Hashtag | null) => void;
   defaultSelected?: string;
@@ -21,16 +21,7 @@ type Props = {
 const HashtagSelect = ({ onSelect, defaultSelected }: Props) => {
   const [selectedHashtag, setSelectedHashtag] = useState<Hashtag | null>(null);
 
-  const {
-    data: hashtags,
-    isLoading,
-    isError,
-    isFetching,
-  } = useQuery({
-    queryKey: ["hashtags"],
-    queryFn: getHashtags,
-  });
-
+  const { hashtags, hashtagsLoading, hashtagsError } = useFetchItemsContext();
   useEffect(() => {
     if (defaultSelected && hashtags?.data) {
       const initialHashtag = hashtags.data.find(
@@ -50,8 +41,8 @@ const HashtagSelect = ({ onSelect, defaultSelected }: Props) => {
     }
   };
 
-  if (isLoading || isFetching) return <Skeleton width={"100%"} height={60} />;
-  if (isError) return <Typography>Failed to load shades</Typography>;
+  if (hashtagsLoading) return <Skeleton width={"100%"} height={60} />;
+  if (hashtagsError) return <Typography>Failed to load shades</Typography>;
 
   return (
     <Accordion>
@@ -100,7 +91,7 @@ const HashtagSelect = ({ onSelect, defaultSelected }: Props) => {
       </AccordionSummary>
       <AccordionDetails>
         <Stack width={"100%"} gap={0.5} direction={"row"} flexWrap={"wrap"}>
-          {hashtags.data!.map((hashtag) => (
+          {hashtags?.data!.map((hashtag) => (
             <TagItem
               onClick={() => handleSelectHashtag(hashtag)}
               key={hashtag._id}

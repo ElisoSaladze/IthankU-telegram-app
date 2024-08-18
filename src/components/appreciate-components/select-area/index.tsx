@@ -9,10 +9,10 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { getShades, Shade } from "src/api/shade";
+import { Shade } from "src/api/shade";
 import ShadeComponent from "src/components/shade-component";
 import { useEffect, useState } from "react";
+import { useFetchItemsContext } from "src/providers/hashtag-shade";
 type Props = {
   onSelect?: (shade: Shade | null) => void;
   defaultSelected?: string;
@@ -20,15 +20,7 @@ type Props = {
 const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
   const [selectedShade, setSelectedShade] = useState<Shade | null>(null);
 
-  const {
-    data: shades,
-    isLoading,
-    isError,
-    isFetching,
-  } = useQuery({
-    queryKey: ["shades"],
-    queryFn: async () => getShades(),
-  });
+  const { shades, shadesLoading, shadesError } = useFetchItemsContext();
 
   const handleSelectShade = (shade: Shade) => {
     if (selectedShade?.en === shade.en) {
@@ -51,8 +43,8 @@ const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
     }
   }, [defaultSelected, shades?.data]);
 
-  if (isLoading || isFetching) return <Skeleton width={"100%"} height={60} />;
-  if (isError) return <Typography>Failed to load shades</Typography>;
+  if (shadesLoading) return <Skeleton width={"100%"} height={60} />;
+  if (shadesError) return <Typography>Failed to load shades</Typography>;
 
   return (
     <Accordion>
@@ -104,7 +96,7 @@ const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
       </AccordionSummary>
       <AccordionDetails>
         <Stack width={"100%"} gap={0.5} direction={"row"} flexWrap={"wrap"}>
-          {shades.data!.map((shade) => (
+          {shades?.data.map((shade) => (
             <ShadeComponent
               key={shade._id}
               selectable

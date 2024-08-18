@@ -1,15 +1,16 @@
 import { Button, Stack, Typography } from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 import { useState } from "react";
 import { useFieldArray } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { telegramSignUp } from "src/api/auth/api";
 import { TelegramSignUpRequestBody } from "src/api/auth/types";
-import { getShades, Shade } from "src/api/shade";
+import { Shade } from "src/api/shade";
 import Loader from "src/components/loader";
 import ShadeComponent from "src/components/shade-component";
 import { useAuthContext } from "src/providers/auth";
+import { useFetchItemsContext } from "src/providers/hashtag-shade";
 
 const InterestsPage = () => {
   const navigate = useNavigate();
@@ -20,11 +21,7 @@ const InterestsPage = () => {
   });
 
   const [selectedShades, setSelectedShades] = useState<string[]>([]);
-
-  const shades = useQuery({
-    queryKey: ["shades"],
-    queryFn: async () => getShades(),
-  });
+  const { shades, shadesLoading } = useFetchItemsContext();
 
   const handleSelectShade = (shadeName: string) => {
     if (selectedShades.includes(shadeName)) {
@@ -45,7 +42,6 @@ const InterestsPage = () => {
       navigate("/join-group");
     },
     onError: (error) => {
-      // eslint-disable-next-line no-console
       console.error(error);
     },
   });
@@ -75,11 +71,11 @@ const InterestsPage = () => {
         <Typography textAlign={"center"}>
           Choose the area that excites you the most.
         </Typography>
-        {shades.isFetching ? (
+        {shadesLoading ? (
           <Loader />
         ) : (
           <Stack gap={0.5} direction={"row"} flexWrap={"wrap"}>
-            {shades.data?.data.map((shade: Shade) => (
+            {shades?.data.map((shade: Shade) => (
               <ShadeComponent
                 key={shade._id}
                 selectable
