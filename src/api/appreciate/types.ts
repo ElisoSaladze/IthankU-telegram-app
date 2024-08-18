@@ -4,6 +4,7 @@ export type AppreciateUserInput = {
   shade?: string;
   hashtag?: string;
   comment?: string;
+  mobileNumber?: string;
 };
 
 export type GetAppreciateUserInput = {

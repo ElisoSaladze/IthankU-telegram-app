@@ -13,16 +13,19 @@ import { ControlledTextArea } from "src/components/form/controlled/controlled-te
 const AppreciatePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { postAuthor } = location.state || {};
+  const { postAuthor, phoneNumber } = location.state || {};
   console.log(postAuthor);
   const { appreciateId } = useParams<Params>();
   const { control, setValue, handleSubmit } = useForm<AppreciateUserInput>({
     defaultValues: {
       _id: postAuthor,
-      postId: appreciateId,
+      postId:
+        !phoneNumber && String(postAuthor).length > 0
+          ? appreciateId
+          : undefined,
+      mobileNumber: phoneNumber ? appreciateId : undefined,
     },
   });
-
   const { data: appreciateData } = useQuery({
     queryKey: ["appreciateData", appreciateId],
     queryFn: () => getAppreciateUser({ appreciateId: appreciateId as string }),
@@ -30,6 +33,7 @@ const AppreciatePage = () => {
     onSuccess: (data) => {
       if (data?.data.area) setValue("shade", data.data.area);
       if (data?.data.hashtag) setValue("hashtag", data.data.hashtag);
+      setValue("_id", data.data.code);
     },
   });
 
@@ -45,11 +49,7 @@ const AppreciatePage = () => {
     }
   );
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-    return mutation.mutate(data);
-  });
-
+  const onSubmit = handleSubmit((data) => mutation.mutate(data));
   return (
     <Stack marginTop={10}>
       <BackButtonAppBar pageName="" />

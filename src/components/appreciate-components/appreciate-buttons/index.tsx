@@ -91,6 +91,10 @@ const AppreciateComponent = ({ show, setShow }: Props) => {
       </Box>
       {appreciate && (
         <Button
+          onClick={() => {
+            navigate("/phone-number-appreciate");
+            setShow(false);
+          }}
           color="info"
           sx={{
             alignSelf: "flex-start",

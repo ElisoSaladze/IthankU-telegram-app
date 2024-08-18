@@ -53,6 +53,11 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
     },
     ref
   ) => {
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === "Enter") {
+        (event.target as HTMLInputElement).blur(); // Unfocus the input field
+      }
+    };
     return (
       <FormControl
         htmlFor={htmlFor}
@@ -75,7 +80,9 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
           }}
           inputProps={{
             maxLength: 150,
+            enterKeyHint: "Done",
           }}
+          onKeyDown={handleKeyDown}
           {...(disableAutofill
             ? {
                 inputProps: textFieldProps.inputProps,

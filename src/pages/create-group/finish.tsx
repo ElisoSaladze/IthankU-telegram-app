@@ -33,7 +33,7 @@ const FinishNewGroup = () => {
       for (const tag of data.tags) formData.append("tags", tag.value);
       return createGroup(formData);
     },
-    onSuccess: (data) => navigate(`/group/${data.data._id}`),
+    onSuccess: (data) => navigate(`/groups/${data.data._id}`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       console.error(error);

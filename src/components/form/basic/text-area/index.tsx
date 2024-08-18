@@ -1,14 +1,17 @@
 import {
   TextField as MuiTextField,
   TextFieldProps as MuiTextFieldProps,
-} from '@mui/material'
-import { FormControl, FormControlProps } from 'src/components/form/form-control'
-import { forwardRef } from 'react'
+} from "@mui/material";
+import {
+  FormControl,
+  FormControlProps,
+} from "src/components/form/form-control";
+import { forwardRef } from "react";
 
-export type TextAreaProps = Omit<FormControlProps, 'children'> &
+export type TextAreaProps = Omit<FormControlProps, "children"> &
   MuiTextFieldProps & {
-    disableAutofill?: boolean
-  }
+    disableAutofill?: boolean;
+  };
 
 export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
   (
@@ -21,7 +24,7 @@ export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
       disableAutofill,
       ...textFieldProps
     },
-    ref,
+    ref
   ) => {
     return (
       <FormControl
@@ -46,6 +49,6 @@ export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
             : undefined)}
         />
       </FormControl>
-    )
-  },
-)
+    );
+  }
+);

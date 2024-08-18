@@ -36,7 +36,7 @@ export const routes = [
     state: "authenticated",
   }),
   buildRoute({
-    path: "/group/:groupId",
+    path: "/groups/:groupId",
     factory: () => import("src/pages/group-details/index"),
     state: "authenticated",
   }),
@@ -68,6 +68,11 @@ export const routes = [
     state: "authenticated",
   }),
   buildRoute({
+    path: "phone-number-appreciate",
+    factory: () => import("src/pages/appreciate/phone-number"),
+    state: "authenticated",
+  }),
+  buildRoute({
     path: "scan-qr-code",
     factory: () => import("src/pages/appreciate/scanner"),
     state: "authenticated",
@@ -90,6 +95,16 @@ export const routes = [
   buildRoute({
     path: "scan-qr-code",
     factory: () => import("src/pages/appreciate/scanner"),
+    state: "authenticated",
+  }),
+  buildRoute({
+    path: "transactions/:transactionId",
+    factory: () => import("src/pages/transaction-details/index"),
+    state: "authenticated",
+  }),
+  buildRoute({
+    path: "more/:userId",
+    factory: () => import("src/pages/user-details/index"),
     state: "authenticated",
   }),
   buildRoute({
@@ -144,15 +159,22 @@ export const routes = [
         path: "more/transactions",
         factory: () => import("src/pages/transactions/index"),
         state: "authenticated",
+        children: [
+          {
+            path: "incoming",
+            factory: () => import("src/pages/transactions/incoming"),
+            state: "authenticated",
+          },
+          {
+            path: "outgoing",
+            factory: () => import("src/pages/transactions/outgoing"),
+            state: "authenticated",
+          },
+        ],
       },
       {
         path: "more/language",
         factory: () => import("src/pages/language/index"),
-        state: "authenticated",
-      },
-      {
-        path: "more/details/:userId",
-        factory: () => import("src/pages/current-user-details/index"),
         state: "authenticated",
       },
       {
