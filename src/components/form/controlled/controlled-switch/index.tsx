@@ -24,6 +24,7 @@ export const ControlledSwitch = <
   required,
   rules,
   name,
+  onChange,
 }: ControlledRadioProps<TFieldValues, TName>) => {
   const { field, fieldState } = useController({
     name,
@@ -33,13 +34,19 @@ export const ControlledSwitch = <
       required: isRequired(required),
     },
   });
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    field.onChange(event); // Invoke original onChange
+    if (onChange) {
+      onChange(event, checked); // Invoke provided onChange
+    }
+  };
   return (
     <Switch
       error={Boolean(fieldState.error)}
       helperText={fieldState.error?.message || helperText}
       label={label}
       checked={field.value || false}
-      onChange={field.onChange}
+      onChange={handleChange}
       disabled={disabled}
       defaultChecked={defaultChecked}
     />
