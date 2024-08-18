@@ -3,17 +3,9 @@ import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import MapSvg from "src/assets/icons/map.svg";
 import { getUsersByLocation } from "src/api/listing";
 import { LocationQueryParams, User } from "src/api/listing/types";
-import {
-  AppBar,
-  Box,
-  IconButton,
-  Modal,
-  Slider,
-  Stack,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import { AppBar, Box, Stack, Toolbar, Typography } from "@mui/material";
+
+import FilterDrawer from "src/components/filter-drawer";
 // const GOOGLE_MAP_API_KEY = import.meta.env.VITE_APP_GOOGLE_MAP_API_KEY;
 
 const MapPage = () => {
@@ -27,7 +19,7 @@ const MapPage = () => {
   const [locationLoaded, setLocationLoaded] = useState(false);
   const [circle, setCircle] = useState<google.maps.Circle | null>(null);
   const [nearbyUsers, setNearbyUsers] = useState<User[]>([]);
-  const [modalOpen, setModalOpen] = useState(false);
+
   const [radius, setRadius] = useState(1000); // Default to 1 km = 1000 meters
 
   const onLoad = useCallback(
@@ -61,7 +53,7 @@ const MapPage = () => {
       const locationParams: LocationQueryParams = {
         latitude: lat,
         longitude: lng,
-        radius: radius / 1000, // Convert to km for API request
+        radius: radius / 1000,
       };
       try {
         const users = await getUsersByLocation(locationParams);
@@ -128,20 +120,7 @@ const MapPage = () => {
               People nearby
             </Typography>
           </Box>
-          <IconButton
-            onClick={() => setModalOpen(true)}
-            sx={{
-              backgroundColor: "info.main",
-              color: "white",
-              borderRadius: "12px",
-              "&:hover": {
-                backgroundColor: "info.main",
-              },
-            }}
-            size="small"
-          >
-            <FilterAltOutlinedIcon />
-          </IconButton>
+          <FilterDrawer radius={radius} onRadiusChange={handleRadiusChange} />
         </Toolbar>
       </AppBar>
       <GoogleMap
@@ -168,13 +147,6 @@ const MapPage = () => {
           <UserMarker key={user._id} user={user} />
         ))}
       </GoogleMap>
-
-      <SettingsModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        radius={radius}
-        onRadiusChange={handleRadiusChange}
-      />
     </Stack>
   );
 };
@@ -193,43 +165,5 @@ const UserMarker: React.FC<{ user: User }> = ({ user }) => {
     />
   );
 };
-
-const SettingsModal: React.FC<{
-  open: boolean;
-  onClose: () => void;
-  radius: number;
-  onRadiusChange: (event: Event, newValue: number | number[]) => void;
-}> = ({ open, onClose, radius, onRadiusChange }) => (
-  <Modal
-    open={open}
-    onClose={onClose}
-    aria-labelledby="radius-slider-title"
-    aria-describedby="radius-slider-description"
-  >
-    <Box
-      sx={{
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: "white",
-        padding: 2,
-      }}
-    >
-      <Typography id="radius-slider-title" variant="h6">
-        Set Radius (km)
-      </Typography>
-      <Slider
-        value={radius / 1000}
-        onChange={onRadiusChange}
-        min={1}
-        max={25}
-        step={1}
-        valueLabelDisplay="auto"
-        aria-labelledby="radius-slider-title"
-      />
-    </Box>
-  </Modal>
-);
 
 export default MapPage;
