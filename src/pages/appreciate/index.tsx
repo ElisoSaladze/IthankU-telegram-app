@@ -13,13 +13,17 @@ import { ControlledTextArea } from "src/components/form/controlled/controlled-te
 const AppreciatePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { postAuthor } = location.state || {};
+  const { postAuthor, phoneNumber } = location.state || {};
   console.log(postAuthor);
   const { appreciateId } = useParams<Params>();
   const { control, setValue, handleSubmit } = useForm<AppreciateUserInput>({
     defaultValues: {
       _id: postAuthor,
-      postId: String(postAuthor).length > 0 ? appreciateId : undefined,
+      postId:
+        !phoneNumber && String(postAuthor).length > 0
+          ? appreciateId
+          : undefined,
+      mobileNumber: phoneNumber ? appreciateId : undefined,
     },
   });
   const { data: appreciateData } = useQuery({

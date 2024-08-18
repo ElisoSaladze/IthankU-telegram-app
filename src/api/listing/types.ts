@@ -45,6 +45,7 @@ export type CurrentUser = Author & {
     hashtag: string;
     count: number;
   }[];
+  phoneNumber: string | null;
 };
 
 export type LocationQueryParams = {
