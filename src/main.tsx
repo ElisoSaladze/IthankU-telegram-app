@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./providers/auth.ts";
 import ThemeProvider from "./providers/theme-provider.tsx";
+import { GetUserDetailsProvider } from "./providers/user-data.ts";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,9 +22,11 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
+          <GetUserDetailsProvider>
+            <ThemeProvider>
+              <App />
+            </ThemeProvider>
+          </GetUserDetailsProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>

@@ -14,24 +14,41 @@ import transactions from "src/assets/icons/transactions.svg";
 
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { AuthUser, useAuthContext } from "src/providers/auth";
+
 import { ControlledSwitch } from "src/components/form/controlled/controlled-switch";
 import NavigationItem from "src/components/navigation-item";
+import { useGetUserDetailsContext } from "src/providers/user-data";
+import Loader from "src/components/loader";
+import { useMutation } from "@tanstack/react-query";
+import {
+  updateAccountVisibility,
+  updateLocationVisibility,
+} from "src/api/auth/api";
+import { useAuthContext } from "src/providers/auth";
 
 const MorePage = () => {
-  const { currentUser } = useAuthContext();
-  const curr = currentUser as AuthUser;
+  const { userData } = useAuthContext();
+  const { user, isLoading, isFetching } = useGetUserDetailsContext();
   const navigate = useNavigate();
-  const { control } = useForm({
+  const { control, watch } = useForm({
     defaultValues: {
-      private: false,
-      showOnMap: curr.user.isLocationPublic,
+      private: user?.user.isPrivate,
+      showOnMap: user?.user.isLocationPublic,
     },
   });
 
+  const { mutate: updateVisibility } = useMutation({
+    mutationFn: (isPrivate: boolean) => updateAccountVisibility(isPrivate),
+  });
+
+  const { mutate: updateLocation } = useMutation({
+    mutationFn: (isPrivate: boolean) => updateLocationVisibility(isPrivate),
+  });
+
+  if (isLoading && isFetching) return <Loader />;
   return (
     <Stack marginX={2} gap={1.5}>
-      <ListItemButton onClick={() => navigate(`${curr.user._id}`)}>
+      <ListItemButton onClick={() => navigate(`${userData.data!.user._id}`)}>
         <Stack
           width={"100%"}
           justifyContent={"space-between"}
@@ -39,16 +56,16 @@ const MorePage = () => {
           alignItems={"center"}
         >
           <Stack gap={1.5} direction={"row"} alignItems={"center"}>
-            <Avatar src={curr.user.picture} sx={{ width: 65, height: 65 }} />
+            <Avatar src={user?.user.picture} sx={{ width: 65, height: 65 }} />
             <Stack>
-              <Typography fontSize={20}>{curr.user.name}</Typography>
+              <Typography fontSize={20}>{user?.user.name}</Typography>
               <Typography fontSize={14} color={"secondary.dark"}>
-                {curr.user.email}
+                {user?.user.email}
               </Typography>
             </Stack>
           </Stack>
           <Avatar sx={{ bgcolor: "primary.main" }}>
-            <Typography color="white">{curr.user.physicalPoints}</Typography>
+            <Typography color="white">{user?.user.generalRating}</Typography>
           </Avatar>
         </Stack>
       </ListItemButton>
@@ -74,7 +91,11 @@ const MorePage = () => {
             </Stack>
           </Stack>
 
-          <ControlledSwitch name="private" control={control} />
+          <ControlledSwitch
+            onChange={() => updateVisibility(watch("private")!)}
+            name="private"
+            control={control}
+          />
         </Stack>
 
         <Stack
@@ -91,7 +112,11 @@ const MorePage = () => {
               </Typography>
             </Stack>
           </Stack>
-          <ControlledSwitch name="showOnMap" control={control} />
+          <ControlledSwitch
+            onChange={() => updateLocation(watch("showOnMap")!)}
+            name="showOnMap"
+            control={control}
+          />
         </Stack>
         <Divider />
         <NavigationItem

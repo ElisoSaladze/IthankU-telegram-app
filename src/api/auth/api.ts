@@ -3,7 +3,7 @@ import { retrieveLaunchParams } from "@telegram-apps/sdk";
 import Cookies from "universal-cookie";
 
 import { TelegramSignUpRequestBody } from "./types";
-import { post } from "src/lib/request/request";
+import { patch, post } from "src/lib/request/request";
 import { AuthUserResponse } from "src/providers/auth";
 
 const cookies = new Cookies();
@@ -28,3 +28,12 @@ export const reissueToken = async () =>
 
 export const telegramSignUp = async (body: TelegramSignUpRequestBody) =>
   post<AuthUserResponse>(`auth/telegram`, body);
+
+export const updateUserBio = async (body: { bio: string }) =>
+  post("users/bio", body);
+
+export const updateLocationVisibility = async (body: boolean) =>
+  patch("users/location", { body });
+
+export const updateAccountVisibility = async (body: boolean) =>
+  patch("users/privacy", { body });
