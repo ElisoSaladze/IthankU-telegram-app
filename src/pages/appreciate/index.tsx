@@ -3,7 +3,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { useForm } from "react-hook-form";
 import { Params, useLocation, useNavigate, useParams } from "react-router-dom";
-import { appreciateUser, getAppreciateUser } from "src/api/appreciate/api";
+import {
+  appreciateUser,
+  appreciateWithMobile,
+  getAppreciateUser,
+} from "src/api/appreciate/api";
 import { AppreciateUserInput } from "src/api/appreciate/types";
 import BackButtonAppBar from "src/components/appbar";
 import AreaSelect from "src/components/appreciate-components/select-area";
@@ -29,7 +33,7 @@ const AppreciatePage = () => {
   const { data: appreciateData } = useQuery({
     queryKey: ["appreciateData", appreciateId],
     queryFn: () => getAppreciateUser({ appreciateId: appreciateId as string }),
-    enabled: !!appreciateId,
+    enabled: !!appreciateId && !phoneNumber,
     onSuccess: (data) => {
       if (data?.data.area) setValue("shade", data.data.area);
       if (data?.data.hashtag) setValue("hashtag", data.data.hashtag);
@@ -49,7 +53,21 @@ const AppreciatePage = () => {
     }
   );
 
-  const onSubmit = handleSubmit((data) => mutation.mutate(data));
+  const withPhoneNumber = useMutation(
+    (data: AppreciateUserInput) => appreciateWithMobile(data),
+    {
+      onSuccess: () => {
+        navigate("/thank-you");
+      },
+      onError: (error) => {
+        console.error("Failed to send appreciation", error);
+      },
+    }
+  );
+
+  const onSubmit = handleSubmit((data) =>
+    phoneNumber ? withPhoneNumber.mutate(data) : mutation.mutate(data)
+  );
   return (
     <Stack marginTop={10}>
       <BackButtonAppBar pageName="" />
@@ -57,7 +75,7 @@ const AppreciatePage = () => {
         <AreaSelect
           defaultSelected={appreciateData?.data.area}
           onSelect={(shade) =>
-            shade ? setValue("shade", shade._id) : setValue("shade", "")
+            shade ? setValue("shade", shade.en) : setValue("shade", "")
           }
         />
         <HashtagSelect

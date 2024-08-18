@@ -21,3 +21,6 @@ export const getAppreciateUser = async ({
 export const getQRCode = async (body: GetAppreciateUserInput) => {
   return await post<GetAppreciateQRCode>(`appreciations/request`, body);
 };
+
+export const appreciateWithMobile = async (body: AppreciateUserInput) =>
+  post("transactions/pending", body);

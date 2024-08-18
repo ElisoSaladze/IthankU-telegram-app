@@ -33,7 +33,7 @@ export const updateUserBio = async (body: { bio: string }) =>
   post("users/bio", body);
 
 export const updateLocationVisibility = async (body: boolean) =>
-  patch("users/location", { body });
+  post("users/location", { body });
 
 export const updateAccountVisibility = async (body: boolean) =>
   patch("users/privacy", { body });
