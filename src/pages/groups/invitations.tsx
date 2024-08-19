@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, CircularProgress } from "@mui/material";
+import { Box, Typography, CircularProgress, Stack } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import InvitationItem from "src/components/invitation-component";
 import { getInvitations } from "src/api/group";
@@ -8,9 +8,9 @@ import { useAuthContext } from "src/providers/auth";
 const Invitation: React.FC = () => {
   const { userData } = useAuthContext();
   const userId = userData.data?.user._id || "";
-  console.log(userId);
+
   const {
-    data: groups,
+    data: invitations,
     isLoading,
     isError,
   } = useQuery({
@@ -55,21 +55,24 @@ const Invitation: React.FC = () => {
   }
 
   return (
-    <Box p={2}>
+    <Stack alignItems={"center"} p={2}>
       <Typography variant="h6" gutterBottom>
         Invitation
       </Typography>
-      <Box>
-        {groups?.data.map((group) => (
+
+      {invitations?.data.length > 0 ? (
+        invitations?.data.map((invitation) => (
           <InvitationItem
-            key={group._id}
-            group={group}
+            key={invitation._id}
+            group={invitation.group}
             onAccept={handleAccept}
             onDecline={handleDecline}
           />
-        ))}
-      </Box>
-    </Box>
+        ))
+      ) : (
+        <Typography>You do not have any invitation</Typography>
+      )}
+    </Stack>
   );
 };
 

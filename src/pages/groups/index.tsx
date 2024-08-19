@@ -75,7 +75,7 @@ const GroupsPage = () => {
             Create Group
           </MenuItem>
         </Menu>
-        <IconButton onClick={() => navigate("/groups/settings")}>
+        <IconButton onClick={() => navigate("group-settings")}>
           <img src={settingsIcon} />
         </IconButton>
       </Stack>

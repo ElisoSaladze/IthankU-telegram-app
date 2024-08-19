@@ -1,7 +1,8 @@
-import { Box, Typography, List, CircularProgress } from "@mui/material";
-import GroupItem from "src/components/join-group-item";
+import { Typography, CircularProgress, Stack } from "@mui/material";
+
 import { useQuery } from "@tanstack/react-query";
 import { userGroups } from "src/api/group";
+import GroupItem from "src/components/group-item";
 
 const Following = () => {
   const {
@@ -16,16 +17,15 @@ const Following = () => {
   if (isLoading) return <CircularProgress />;
   if (isError) return <div>Error</div>;
   return (
-    <Box p={2}>
+    <Stack p={2} paddingBottom={10} gap={1} alignItems={"center"}>
       <Typography variant="h6" gutterBottom>
         Following
       </Typography>
-      <List>
-        {groups.data.map((group) => (
-          <GroupItem key={group._id} group={group} />
-        ))}
-      </List>
-    </Box>
+
+      {groups.data.map((group) => (
+        <GroupItem key={group._id} group={group} />
+      ))}
+    </Stack>
   );
 };
 
