@@ -35,6 +35,18 @@ export type InviteCodeResponse = {
     inviteCode: string;
   };
 };
+
+export type UserToInvite = {
+  _id: string;
+  name: string;
+  picture: string;
+};
+
+export type InviteUser = {
+  groupId: string;
+  inviteeId: string;
+};
 export type GroupsResponse = ApiResponse<Group[]>;
 export type InvitationsResponse = ApiResponse<Invitation[]>;
 export type GroupDetailsResponse = ApiResponse<GroupDetails>;
+export type UsersToInviteResponse = ApiResponse<UserToInvite[]>;

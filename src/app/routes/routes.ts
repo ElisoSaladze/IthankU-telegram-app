@@ -41,6 +41,11 @@ export const routes = [
     state: "authenticated",
   }),
   buildRoute({
+    path: "/invite-user/:groupId",
+    factory: () => import("src/pages/group-details/invite-users"),
+    state: "authenticated",
+  }),
+  buildRoute({
     path: "/groups/details/:groupId",
     factory: () => import("src/pages/group-details/index"),
     state: "authenticated",

@@ -5,6 +5,8 @@ import {
   GroupsResponse,
   InvitationsResponse,
   InviteCodeResponse,
+  InviteUser,
+  UsersToInviteResponse,
 } from "./types";
 import { globalAccessToken } from "src/providers/auth";
 const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
@@ -35,6 +37,12 @@ export const declineInvitation = async (inviteId: string) =>
 
 export const getInvitationCode = async (groupId: string) =>
   post<InviteCodeResponse>(`api/groups/${groupId}/share`);
+
+export const inviteUser = async (body: InviteUser) =>
+  post("api/groups/invite", body);
+
+export const getUsersToInvite = async (groupId: string) =>
+  get<UsersToInviteResponse>(`api/groups/${groupId}/users-to-invite`);
 
 export const createGroup = async (body: FormData) => {
   try {
