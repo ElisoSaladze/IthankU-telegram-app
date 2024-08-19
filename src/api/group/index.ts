@@ -1,6 +1,10 @@
-import { del, get, post } from "src/lib/request/request";
+import { del, get, patch, post } from "src/lib/request/request";
 import { PostsResponse } from "../post/types";
-import { GroupDetailsResponse, GroupsResponse } from "./types";
+import {
+  GroupDetailsResponse,
+  GroupsResponse,
+  InvitationsResponse,
+} from "./types";
 import { globalAccessToken } from "src/providers/auth";
 const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
 export const getGroups = async () => get<GroupsResponse>(`api/groups`);
@@ -16,6 +20,17 @@ export const joinGroup = async (groupId: string) =>
 
 export const leaveGroup = async (groupId: string) =>
   del(`api/groups/${groupId}/leave`);
+
+export const userGroups = async () => get<GroupsResponse>(`users/groups`);
+
+export const getInvitations = async (userId: string) =>
+  get<InvitationsResponse>(`api/groups/invitations/${userId}`);
+
+export const acceptInvitation = async (inviteId: string) =>
+  patch(`api/groups/invitations/${inviteId}/accept`);
+
+export const declineInvitation = async (inviteId: string) =>
+  patch(`api/groups/invitations/${inviteId}/decline`);
 
 export const createGroup = async (body: FormData) => {
   try {

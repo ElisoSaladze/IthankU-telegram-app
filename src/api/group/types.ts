@@ -10,6 +10,13 @@ export type Group = {
   membersCount: number;
 };
 
+export type Invitation = {
+  _id: string;
+  group: Group;
+  status: string;
+  createdAt: string;
+};
+
 export type GroupDetails = {
   _id: string;
   name: string;
@@ -25,4 +32,5 @@ export type GroupDetails = {
 };
 
 export type GroupsResponse = ApiResponse<Group[]>;
+export type InvitationsResponse = ApiResponse<Invitation[]>;
 export type GroupDetailsResponse = ApiResponse<GroupDetails>;
