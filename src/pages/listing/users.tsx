@@ -4,8 +4,10 @@ import { getUsers } from "src/api/listing";
 import Loader from "src/components/loader";
 import ShadeComponent from "src/components/shade-component";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { useNavigate } from "react-router-dom";
 
 const UsersList = () => {
+  const navigate = useNavigate();
   const { isFetching, isLoading, data } = useQuery({
     queryKey: ["listing-users"],
     queryFn: async () => getUsers(),
@@ -16,6 +18,7 @@ const UsersList = () => {
     <Stack paddingBottom={10} marginY={1} gap={1}>
       {data!.users.map((user) => (
         <ListItemButton
+          onClick={() => navigate(`/more/${user._id}`)}
           key={user._id}
           sx={{
             width: "100%",

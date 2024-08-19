@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Chip, Stack, Typography } from "@mui/material";
+import { Button, Chip, IconButton, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 import { Params, useNavigate, useParams } from "react-router-dom";
@@ -10,7 +10,8 @@ import Loader from "src/components/loader";
 
 import PfpComponent from "src/components/pfp-component";
 import { useAuthContext } from "src/providers/auth";
-
+import whatsapp from "src/assets/icons/Whatsapp.svg";
+// import telegram from "src/assets/icons/Telegram.svg";
 const UserDetailsPage = () => {
   const navigate = useNavigate();
   const { userData } = useAuthContext();
@@ -43,7 +44,15 @@ const UserDetailsPage = () => {
               {user.data?.user.email}
             </Typography>
             <Stack direction={"row"}>
-              {user.data?.user.linkedAccounts.map((acc: any) => acc.type)}
+              {user.data?.user.linkedAccounts.map((acc: any) =>
+                acc.type === "whatsapp" ? (
+                  <IconButton onClick={() => window.open(acc.value)}>
+                    <img width={30} src={whatsapp} />
+                  </IconButton>
+                ) : (
+                  ""
+                )
+              )}
             </Stack>
           </Stack>
         </Stack>
