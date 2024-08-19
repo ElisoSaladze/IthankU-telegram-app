@@ -34,7 +34,7 @@ const CustomAccordion = ({ title, children, expanded, onChange }: Props) => {
     <Accordion expanded={expanded} onChange={onChange} sx={style}>
       <AccordionSummary
         sx={{ padding: 0 }}
-        expandIcon={expanded ? <RemoveIcon /> : <AddIcon />}
+        expandIcon={expanded ? <RemoveIcon color="primary" /> : <AddIcon />}
       >
         <Typography color={expanded ? "primary" : "black"}>{title}</Typography>
       </AccordionSummary>
