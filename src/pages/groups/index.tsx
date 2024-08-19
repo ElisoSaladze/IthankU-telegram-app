@@ -13,7 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getGroups } from "src/api/group";
+import { userGroups } from "src/api/group";
 import GroupItem from "src/components/group-item";
 import { Group } from "src/api/group/types";
 import settingsIcon from "src/assets/icons/settings.svg";
@@ -29,7 +29,7 @@ const GroupsPage = () => {
   };
   const { data, isLoading } = useQuery({
     queryKey: ["groups"],
-    queryFn: async () => getGroups(),
+    queryFn: async () => userGroups(),
   });
   const navigate = useNavigate();
   return (
@@ -75,7 +75,7 @@ const GroupsPage = () => {
             Create Group
           </MenuItem>
         </Menu>
-        <IconButton>
+        <IconButton onClick={() => navigate("group-settings")}>
           <img src={settingsIcon} />
         </IconButton>
       </Stack>

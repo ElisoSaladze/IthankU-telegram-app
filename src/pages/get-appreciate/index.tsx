@@ -1,5 +1,12 @@
 import { useLocation } from "react-router-dom";
-import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Snackbar,
+  Stack,
+  Typography,
+} from "@mui/material";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import ShareIcon from "@mui/icons-material/Share";
 import { useQuery } from "@tanstack/react-query";
@@ -8,8 +15,11 @@ import BackButtonAppBar from "src/components/appbar";
 import { useAuthContext } from "src/providers/auth";
 import Loader from "src/components/loader";
 import back from "src/assets/images/itu.png";
+import { useState } from "react";
+import { handleShare } from "src/helpers";
 
 function QRCodePage() {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const { userData } = useAuthContext();
   const location = useLocation();
   const { area, hashtag } = location.state || {};
@@ -26,14 +36,11 @@ function QRCodePage() {
     ? `https://web.itu-net.com/appreciate/${qrCode.data}`
     : "";
 
-  const handleShare = () => {
-    alert("Share functionality here");
-  };
-
   const handleCopy = () => {
-    if (qrCode) {
-      navigator.clipboard.writeText(appreciationUrl);
-    }
+    const textToCopy = `Thank me by QR: ${appreciationUrl}`;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      setSnackbarOpen(true);
+    });
   };
 
   if (isLoading) {
@@ -58,7 +65,7 @@ function QRCodePage() {
         }}
       />
       <Stack gap={1} padding={2}>
-        <Typography textAlign={'center'} variant="h6">
+        <Typography textAlign={"center"} variant="h6">
           One time Code: <span style={{ color: "green" }}>{qrCode.data}</span>
         </Typography>
         <Stack
@@ -97,7 +104,13 @@ function QRCodePage() {
             fullWidth
             variant="contained"
             startIcon={<ShareIcon />}
-            onClick={handleShare}
+            onClick={() =>
+              handleShare(
+                appreciationUrl,
+                "Thank me by QR",
+                ""
+              )
+            }
           >
             Share
           </Button>
@@ -112,6 +125,13 @@ function QRCodePage() {
           </Button>
         </Stack>
       </Stack>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => setSnackbarOpen(false)}
+        message="Link copied to clipboard!"
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
     </Stack>
   );
 }

@@ -70,7 +70,7 @@ const GroupDetailsPage = () => {
   };
   const navigate = useNavigate();
   return (
-    <Stack>
+    <Stack height={"100vh"}>
       <AppBar
         sx={{
           position: "fixed",
@@ -177,6 +177,7 @@ const GroupDetailsPage = () => {
                 </Button>
               )}
               <Button
+                onClick={() => navigate(`/invite-user/${groupId}`)}
                 startIcon={<PersonAddAlt1Icon />}
                 sx={{ borderRadius: 4 }}
                 size="medium"
@@ -186,7 +187,17 @@ const GroupDetailsPage = () => {
               >
                 Share
               </Button>
-              <IconButton>
+              <IconButton
+                onClick={() =>
+                  navigate(`/invitation-qr/${groupId}`, {
+                    state: {
+                      groupName: data?.data.name,
+                      image: data?.data.groupImage!,
+                      background: data?.data.groupCover!,
+                    },
+                  })
+                }
+              >
                 <img src={qrIcon} />
               </IconButton>
             </Stack>

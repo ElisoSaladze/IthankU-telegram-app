@@ -5,8 +5,13 @@ import { useNavigate } from "react-router-dom";
 type Props = {
   pageName: string;
   color?: string;
+  showNotif?: boolean;
 };
-const BackButtonAppBar = ({ pageName, color = "white" }: Props) => {
+const BackButtonAppBar = ({
+  pageName,
+  color = "white",
+  showNotif = true,
+}: Props) => {
   const navigate = useNavigate();
   return (
     <AppBar
@@ -33,9 +38,11 @@ const BackButtonAppBar = ({ pageName, color = "white" }: Props) => {
             {pageName}
           </Typography>
         </Box>
-        <IconButton>
-          <img src={notificationsIcon} />
-        </IconButton>
+        {showNotif && (
+          <IconButton>
+            <img src={notificationsIcon} />
+          </IconButton>
+        )}
       </Toolbar>
     </AppBar>
   );

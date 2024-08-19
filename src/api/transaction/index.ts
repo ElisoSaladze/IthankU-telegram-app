@@ -7,3 +7,6 @@ export const getUserTransactions = async (userId: string) =>
 
 export const getTranasctionDetails = async (transactionId: string) =>
   get<TransactionData>(`transactions/${transactionId}`);
+
+export const getPendingTransactions = async () =>
+  get<UserTransactionsResponse>(`transactions/pending`);

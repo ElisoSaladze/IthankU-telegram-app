@@ -76,7 +76,7 @@ const FinishNewGroup = () => {
             borderTopRightRadius: 10,
           }}
         />
-        <Box zIndex={2} mt={6}>
+        <Box bgcolor={"white"} p={1} zIndex={2} mt={6}>
           <Avatar
             sx={{ height: 120, width: 120 }}
             src={watch("image") ? URL.createObjectURL(watch("image")!) : ""}

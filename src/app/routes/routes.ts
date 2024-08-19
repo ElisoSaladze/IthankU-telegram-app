@@ -36,7 +36,17 @@ export const routes = [
     state: "authenticated",
   }),
   buildRoute({
-    path: "/groups/:groupId",
+    path: "/invitation-qr/:groupId",
+    factory: () => import("src/pages/group-details/invitation-qr"),
+    state: "authenticated",
+  }),
+  buildRoute({
+    path: "/invite-user/:groupId",
+    factory: () => import("src/pages/group-details/invite-users"),
+    state: "authenticated",
+  }),
+  buildRoute({
+    path: "/groups/details/:groupId",
     factory: () => import("src/pages/group-details/index"),
     state: "authenticated",
   }),
@@ -121,6 +131,21 @@ export const routes = [
       {
         path: "groups",
         factory: () => import("src/pages/groups/index"),
+        state: "authenticated",
+      },
+      {
+        path: "groups/group-settings",
+        factory: () => import("src/pages/groups/group-settings"),
+        state: "authenticated",
+      },
+      {
+        path: "groups/group-settings/followings",
+        factory: () => import("src/pages/groups/following"),
+        state: "authenticated",
+      },
+      {
+        path: "groups/group-settings/invitations",
+        factory: () => import("src/pages/groups/invitations"),
         state: "authenticated",
       },
       {

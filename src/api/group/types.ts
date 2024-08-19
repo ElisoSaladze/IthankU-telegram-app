@@ -10,6 +10,13 @@ export type Group = {
   membersCount: number;
 };
 
+export type Invitation = {
+  _id: string;
+  group: Group;
+  status: string;
+  createdAt: string;
+};
+
 export type GroupDetails = {
   _id: string;
   name: string;
@@ -23,6 +30,23 @@ export type GroupDetails = {
   isUserJoined: boolean;
   users?: Author[];
 };
+export type InviteCodeResponse = {
+  data: {
+    inviteCode: string;
+  };
+};
 
+export type UserToInvite = {
+  _id: string;
+  name: string;
+  picture: string;
+};
+
+export type InviteUser = {
+  groupId: string;
+  inviteeId: string;
+};
 export type GroupsResponse = ApiResponse<Group[]>;
+export type InvitationsResponse = ApiResponse<Invitation[]>;
 export type GroupDetailsResponse = ApiResponse<GroupDetails>;
+export type UsersToInviteResponse = ApiResponse<UserToInvite[]>;
