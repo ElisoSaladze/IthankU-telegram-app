@@ -14,7 +14,7 @@ const Invitation: React.FC = () => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["groups"],
+    queryKey: ["get-invitations"],
     queryFn: async () => getInvitations(userId),
   });
 
@@ -61,7 +61,7 @@ const Invitation: React.FC = () => {
       </Typography>
 
       {invitations?.data.length > 0 ? (
-        invitations?.data.map((invitation) => (
+        invitations!.data.map((invitation) => (
           <InvitationItem
             key={invitation._id}
             group={invitation.group}
