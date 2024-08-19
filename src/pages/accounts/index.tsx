@@ -1,4 +1,5 @@
 import {
+  Box,
   Divider,
   IconButton,
   InputAdornment,
@@ -17,14 +18,24 @@ import AddIcon from "@mui/icons-material/Add";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
 import { updateUserBio } from "src/api/auth/api";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { userGroups } from "src/api/group";
+import LikesItem from "src/components/likes";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { useNavigate } from "react-router-dom";
 
 const Accounts = () => {
+  const navigate = useNavigate();
   const { control, isLoading, isFetching, handleSubmit } =
     useGetUserDetailsContext();
   const { fields: socials } = useFieldArray({
     control,
     name: "linkedAccounts",
+  });
+
+  const { data, isLoading: groupsLoading } = useQuery({
+    queryKey: ["groups"],
+    queryFn: async () => userGroups(),
   });
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentField, setCurrentField] = useState<string | null>(null);
@@ -75,7 +86,7 @@ const Accounts = () => {
 
   return (
     <Stack gap={1} paddingX={2} alignItems={"center"}>
-      <Typography fontSize={24}>Accounts</Typography>
+      <Typography fontSize={20}>Accounts</Typography>
 
       <Typography fontSize={12} alignSelf={"flex-start"}>
         About me
@@ -87,7 +98,7 @@ const Accounts = () => {
         control={control}
         name="bio"
         multiline
-        rows={3}
+        rows={2}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -165,10 +176,38 @@ const Accounts = () => {
         </IconButton>
       </Stack>
 
-      {/* <Typography fontSize={12} alignSelf={"flex-start"}>
+      <Typography fontSize={12} alignSelf={"flex-start"}>
         Groups
       </Typography>
-      <Stack></Stack> */}
+      <Box
+        sx={{
+          width: "100%",
+        }}
+        onClick={() => navigate("/groups")}
+      >
+        <Stack
+          alignItems={"center"}
+          width={"100%"}
+          justifyContent={"space-between"}
+          direction={"row"}
+        >
+          {groupsLoading ? (
+            <Typography>...</Typography>
+          ) : (
+            <LikesItem
+              size="medium"
+              likes={data!.data
+                .map((data) => ({
+                  _id: data._id,
+                  picture: data.groupImage,
+                  name: data.name,
+                }))
+                .slice(0, 5)}
+            />
+          )}
+          <ArrowForwardIosIcon />
+        </Stack>
+      </Box>
 
       <Menu
         sx={{
