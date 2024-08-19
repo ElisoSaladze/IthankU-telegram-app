@@ -30,7 +30,11 @@ export type GroupDetails = {
   isUserJoined: boolean;
   users?: Author[];
 };
-
+export type InviteCodeResponse = {
+  data: {
+    inviteCode: string;
+  };
+};
 export type GroupsResponse = ApiResponse<Group[]>;
 export type InvitationsResponse = ApiResponse<Invitation[]>;
 export type GroupDetailsResponse = ApiResponse<GroupDetails>;
