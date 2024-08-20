@@ -54,7 +54,7 @@ const TransactionsPage = () => {
         justifyContent={"flex-end"}
       >
         <Button
-          onClick={() => navigate("/more/pending-transactions")}
+          onClick={() => navigate("/more/pending-transactions/incoming")}
           sx={{ padding: 0 }}
         >
           <Typography

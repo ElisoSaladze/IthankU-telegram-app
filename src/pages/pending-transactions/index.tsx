@@ -1,28 +1,36 @@
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {
   Button,
   Stack,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
-} from '@mui/material'
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const PendingTransactionsPage = () => {
-  const [list, setList] = useState('incoming')
-  const navigate = useNavigate()
+  const location = useLocation();
+  const [list, setList] = useState("incoming");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const pathSegment = location.pathname.split("/")[3];
+    setList(pathSegment);
+  }, [location.pathname]);
+
   const handleListChange = (
     event: React.MouseEvent<HTMLElement>,
-    newList: string,
+    newList: string
   ) => {
     if (newList !== null) {
-      setList(newList)
+      setList(newList);
+      navigate(newList);
     }
-  }
+  };
   return (
-    <Stack justifyContent={'center'}>
-      <Typography marginBottom={2} textAlign={'center'}>
+    <Stack paddingX={2} justifyContent={"center"}>
+      <Typography marginBottom={2} textAlign={"center"}>
         Pending Transactions
       </Typography>
       <Stack>
@@ -39,27 +47,28 @@ const PendingTransactionsPage = () => {
       </Stack>
       <Stack></Stack>
       <Stack
-        direction={'row'}
-        alignItems={'center'}
-        justifyContent={'flex-end'}
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"flex-end"}
       >
         <Button
-          onClick={() => navigate('/more/transactions')}
+          onClick={() => navigate("/more/transactions/incoming")}
           sx={{ padding: 0 }}
         >
           <Typography
-            sx={{ textDecoration: 'underline' }}
-            textAlign={'end'}
-            fontSize={'small'}
+            sx={{ textDecoration: "underline" }}
+            textAlign={"end"}
+            fontSize={"small"}
             color="primary"
           >
             See All Transactions
           </Typography>
-          <ArrowForwardIosIcon color="primary" sx={{ height: '10px' }} />
+          <ArrowForwardIosIcon color="primary" sx={{ height: "10px" }} />
         </Button>
       </Stack>
+      <Outlet />
     </Stack>
-  )
-}
+  );
+};
 
-export default PendingTransactionsPage
+export default PendingTransactionsPage;

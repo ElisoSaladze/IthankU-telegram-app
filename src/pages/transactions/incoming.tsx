@@ -8,8 +8,7 @@ const IncomingTransactions = () => {
   const { userData } = useAuthContext();
   const { data: transactions } = useQuery({
     queryKey: ["transactions"],
-    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-    queryFn: () => getUserTransactions(userData.data?.user._id!),
+    queryFn: () => getUserTransactions(userData.data!.user._id),
   });
   return (
     <Stack gap={1}>

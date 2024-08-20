@@ -206,6 +206,18 @@ export const routes = [
         path: "more/pending-transactions",
         factory: () => import("src/pages/pending-transactions/index"),
         state: "authenticated",
+        children: [
+          {
+            path: "incoming",
+            factory: () => import("src/pages/pending-transactions/incoming"),
+            state: "authenticated",
+          },
+          {
+            path: "outgoing",
+            factory: () => import("src/pages/pending-transactions/outgoing"),
+            state: "authenticated",
+          },
+        ],
       },
     ],
   }),
