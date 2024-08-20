@@ -2,6 +2,7 @@ import {
   Button,
   Drawer,
   IconButton,
+  InputAdornment,
   Slider,
   Stack,
   Typography,
@@ -12,7 +13,9 @@ import { useFetchItemsContext } from "src/providers/hashtag-shade";
 import ShadeComponent from "../shade-component";
 import { Shade } from "src/api/shade";
 import CustomAccordion from "./accordion";
-
+import { ControlledTextField } from "../form/controlled/controlled-text-field";
+import { useForm } from "react-hook-form";
+import NearMeIcon from "@mui/icons-material/NearMe";
 type Props = {
   radius: number;
   onRadiusChange: (event: Event, newValue: number | number[]) => void;
@@ -24,6 +27,14 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
   const [expandedAccordion, setExpandedAccordion] = useState<string | false>(
     false
   );
+  const { control } = useForm({
+    defaultValues: {
+      area: "",
+      hashtag: "",
+      location: "",
+      distance: 1,
+    },
+  });
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setIsOpen(newOpen);
@@ -87,19 +98,55 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
                   ))}
             </Stack>
           </CustomAccordion>
+          {selectedShade && (
+            <ShadeComponent
+              color={selectedShade?.color}
+              name={selectedShade.en}
+            />
+          )}
           <CustomAccordion
             title="Hashtags"
             expanded={expandedAccordion === "hashtags"}
             onChange={handleAccordionChange("hashtags")}
           >
-            <Typography></Typography>
+            <ControlledTextField
+              placeholder="Enter the hashtag"
+              InputProps={{
+                sx: {
+                  backgroundColor: "rgba(240, 240, 240, 1)",
+                  "& fieldset": {
+                    border: "none", // Remove the border
+                  },
+                },
+              }}
+              fullWidth
+              control={control}
+              name="hashtag"
+            />
           </CustomAccordion>
           <CustomAccordion
             title="Location"
             expanded={expandedAccordion === "location"}
             onChange={handleAccordionChange("location")}
           >
-            <Typography></Typography>
+            <ControlledTextField
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <NearMeIcon />
+                  </InputAdornment>
+                ),
+                sx: {
+                  backgroundColor: "rgba(240, 240, 240, 1)",
+                  "& fieldset": {
+                    border: "none", // Remove the border
+                  },
+                },
+              }}
+              fullWidth
+              control={control}
+              name="location"
+            />
           </CustomAccordion>
           <CustomAccordion
             title="Distance"
@@ -116,6 +163,14 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
               aria-labelledby="radius-slider-title"
             />
           </CustomAccordion>
+          <Stack gap={1} direction={"row"}>
+            <Button size="medium" fullWidth color="primary" variant="contained">
+              Show in listing
+            </Button>
+            <Button size="medium" fullWidth color="info" variant="contained">
+              Show on the map
+            </Button>
+          </Stack>
         </Stack>
       </Drawer>
     </Stack>
