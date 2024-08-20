@@ -1,75 +1,70 @@
-import React from 'react';
-import { Box, Typography, Avatar, Button, Chip } from '@mui/material';
-import { Group } from 'src/api/group/types';
+import React from "react";
+import { Box, Typography, Avatar, Button, Stack } from "@mui/material";
+import { Group } from "src/api/group/types";
+import ShadeComponent from "../shade-component";
+import { useMutation } from "@tanstack/react-query";
+import { acceptInvitation, declineInvitation } from "src/api/group";
 
 type InvitationItemProps = {
   group: Group;
-  onAccept: (groupId: string) => void;
-  onDecline: (groupId: string) => void;
+  refetch: () => void;
+  id: string;
 };
 
-const InvitationItem: React.FC<InvitationItemProps> = ({ group, onAccept, onDecline }) => {
+const InvitationItem: React.FC<InvitationItemProps> = ({
+  group,
+  refetch,
+  id,
+}) => {
+  const { mutate: accept } = useMutation({
+    mutationKey: ["accept-invitation"],
+    mutationFn: () => acceptInvitation(id),
+    onSuccess: refetch,
+  });
+
+  const { mutate: decline } = useMutation({
+    mutationKey: ["accept-invitation"],
+    mutationFn: () => declineInvitation(id),
+    onSuccess: refetch,
+  });
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="space-between"
-      p={2}
-      borderRadius="16px"
-      boxShadow={2}
-      bgcolor="#fff"
-      style={{ marginBottom: '16px', maxWidth: '500px' }}
+    <Stack
+      gap={1}
+      alignItems={"center"}
+      direction={"row"}
+      sx={{
+        width: "100%",
+        borderRadius: 5,
+        padding: 1,
+        boxShadow: "0px 0px 8.2px -1px #00000026",
+      }}
     >
-      <Box display="flex" alignItems="center">
+      <Box>
         <Avatar
+          sx={{ width: 70, height: 70, borderRadius: 4 }}
           variant="rounded"
           src={group.groupImage}
-          alt={group.name}
-          sx={{
-            width: 72,
-            height: 72,
-            borderRadius: '16px',
-            marginRight: '16px',
-          }}
         />
-        <Box>
-          <Typography variant="h6">{group.name}</Typography>
-          <Box display="flex" alignItems="center" marginTop="8px">
-            <Chip
-              label={group.name}
-              size="small"
-              sx={{
-                marginRight: '8px',
-                backgroundColor: group.shade,
-                color: 'white',
-              }}
-            />
-            <Chip
-              label="Computers"
-              size="small"
-              sx={{
-                marginRight: '8px',
-                backgroundColor: group.shade,
-                color: 'white',
-              }}
-            />
-          </Box>
-        </Box>
       </Box>
-      <Box display="flex" alignItems="center">
-        <Button
-          variant="contained"
-          color="success"
-          sx={{ marginRight: '8px' }}
-          onClick={() => onAccept(group._id)}
-        >
-          Accept
-        </Button>
-        <Button variant="outlined" color="inherit" onClick={() => onDecline(group._id)}>
-          Decline
-        </Button>
-      </Box>
-    </Box>
+      <Stack gap={0.5} width={"100%"}>
+        <Typography>{group.name}</Typography>
+
+        <ShadeComponent color={group.shade} name={group.shade} />
+        <Stack gap={1} direction={"row"}>
+          <Button onClick={() => accept()} fullWidth variant="contained">
+            Accept
+          </Button>
+          <Button
+            onClick={() => decline()}
+            fullWidth
+            variant="contained"
+            color="secondary"
+          >
+            Decline
+          </Button>
+        </Stack>
+      </Stack>
+    </Stack>
   );
 };
 

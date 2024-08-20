@@ -1,11 +1,10 @@
-import React from "react";
 import { Box, Typography, CircularProgress, Stack } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import InvitationItem from "src/components/invitation-component";
 import { getInvitations } from "src/api/group";
 import { useAuthContext } from "src/providers/auth";
 
-const Invitation: React.FC = () => {
+const Invitation = () => {
   const { userData } = useAuthContext();
   const userId = userData.data?.user._id || "";
 
@@ -13,18 +12,11 @@ const Invitation: React.FC = () => {
     data: invitations,
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ["get-invitations"],
     queryFn: async () => getInvitations(userId),
   });
-
-  const handleAccept = (groupId: string) => {
-    console.log("Accept invitation", groupId);
-  };
-
-  const handleDecline = (groupId: string) => {
-    console.log("Decline invitation", groupId);
-  };
 
   if (isLoading) {
     return (
@@ -63,10 +55,10 @@ const Invitation: React.FC = () => {
       {invitations?.data.length > 0 ? (
         invitations!.data.map((invitation) => (
           <InvitationItem
+            id={invitation._id}
+            refetch={() => refetch()}
             key={invitation._id}
             group={invitation.group}
-            onAccept={handleAccept}
-            onDecline={handleDecline}
           />
         ))
       ) : (
