@@ -37,3 +37,7 @@ export const updateLocationVisibility = async (body: boolean) =>
 
 export const updateAccountVisibility = async (body: boolean) =>
   patch("users/privacy", { body });
+
+export const changePfp = (picture: string) => patch("users", { picture });
+
+export const changeName = (name: string) => patch("users", { name });

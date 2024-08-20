@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Chip, IconButton, Stack, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { Params, useNavigate, useParams } from "react-router-dom";
 import { getUser } from "src/api/listing";
@@ -11,8 +11,13 @@ import Loader from "src/components/loader";
 import PfpComponent from "src/components/pfp-component";
 import { useAuthContext } from "src/providers/auth";
 import whatsapp from "src/assets/icons/Whatsapp.svg";
+import { changeName, changePfp } from "src/api/auth/api";
+import { ControlledTextField } from "src/components/form/controlled/controlled-text-field";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 // import telegram from "src/assets/icons/Telegram.svg";
 const UserDetailsPage = () => {
+  const [isEditable, setIsEditable] = useState(false);
   const navigate = useNavigate();
   const { userData } = useAuthContext();
   const { userId } = useParams<Params>();
@@ -23,6 +28,20 @@ const UserDetailsPage = () => {
     queryFn: () => getUser(userId!),
   });
 
+  const { mutate: newProfile } = useMutation({
+    mutationKey: ["new-profile"],
+    mutationFn: (picture: string) => changePfp(picture),
+  });
+
+  const { mutate: editName } = useMutation({
+    mutationKey: ["new-profile"],
+    mutationFn: (name: string) => changeName(name),
+  });
+  const { control } = useForm({
+    defaultValues: {
+      name: user.data?.user.name,
+    },
+  });
   if (user.isLoading || user.isFetching) return <Loader />;
 
   return (
@@ -31,15 +50,39 @@ const UserDetailsPage = () => {
       <Stack borderRadius={5} bgcolor="#222222" p={1} gap={1}>
         <Stack gap={1} direction={"row"} alignItems={"center"}>
           <PfpComponent
+            onChange={(newImage) => newProfile(URL.createObjectURL(newImage))}
             showEditIcon={false}
             size={[80, 80]}
             imageUrl={user.data?.user.picture}
-            isEditable={true}
+            isEditable={isCurrent}
           />
           <Stack>
-            <Typography fontSize={20} color={"white"}>
-              {user.data?.user.name}
-            </Typography>
+            {isCurrent ? (
+              <ControlledTextField
+                disabled={!isEditable}
+                InputProps={{
+                  sx: {
+                    padding: 0,
+                    color: "white",
+                    "& .MuiInputBase-input.Mui-disabled": {
+                      color: "white",
+                      WebkitTextFillColor: "white",
+                    },
+                    "& fieldset": {
+                      border: "none",
+                      color: "white",
+                    },
+                  },
+                }}
+                onClick={() => setIsEditable(true)}
+                control={control}
+                name="name"
+              />
+            ) : (
+              <Typography fontSize={20} color={"white"}>
+                {user.data?.user.name}
+              </Typography>
+            )}
             <Typography fontSize={14} color={"white"}>
               {user.data?.user.email}
             </Typography>
