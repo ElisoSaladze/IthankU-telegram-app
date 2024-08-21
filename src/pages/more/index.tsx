@@ -46,20 +46,22 @@ const MorePage = () => {
   });
 
   if (isLoading && isFetching) return <Loader />;
+
   return (
-    <Stack marginX={2} gap={1.5}>
+    <Stack mx={3} gap={1.5}>
       <ListItemButton onClick={() => navigate(`${userData.data!.user._id}`)}>
         <Stack
-          width={"100%"}
-          justifyContent={"space-between"}
-          direction={"row"}
-          alignItems={"center"}
+          width={1}
+          justifyContent="space-between"
+          direction="row"
+          alignItems="center"
+          gap={1}
         >
-          <Stack gap={1.5} direction={"row"} alignItems={"center"}>
+          <Stack gap={1.5} direction="row" alignItems="center">
             <Avatar src={user?.user.picture} sx={{ width: 65, height: 65 }} />
             <Stack>
               <Typography fontSize={20}>{user?.user.name}</Typography>
-              <Typography fontSize={14} color={"secondary.dark"}>
+              <Typography fontSize={14} color="secondary.dark">
                 {user?.user.email}
               </Typography>
             </Stack>
@@ -77,15 +79,15 @@ const MorePage = () => {
         />
         <Divider />
         <Stack
-          alignItems={"center"}
-          direction={"row"}
-          justifyContent={"space-between"}
+          alignItems="center"
+          direction="row"
+          justifyContent="space-between"
         >
-          <Stack p={0.5} alignItems={"center"} spacing={1} direction={"row"}>
+          <Stack p={0.5} alignItems="center" spacing={1} direction="row">
             <img width={21} src={privateIcon} />
             <Stack>
               <Typography>Private account</Typography>
-              <Typography fontSize={"small"} color={"secondary.dark"}>
+              <Typography fontSize="small" color="secondary.dark">
                 your account is now visible in listing
               </Typography>
             </Stack>
@@ -99,15 +101,15 @@ const MorePage = () => {
         </Stack>
 
         <Stack
-          alignItems={"center"}
-          direction={"row"}
-          justifyContent={"space-between"}
+          alignItems="center"
+          direction="row"
+          justifyContent="space-between"
         >
-          <Stack p={0.5} alignItems={"center"} spacing={1} direction={"row"}>
+          <Stack p={0.5} alignItems="center" spacing={1} direction="row">
             <img width={21} src={mapIcon} />
             <Stack>
               <Typography>Show my location on map</Typography>
-              <Typography fontSize={"small"} color={"secondary.dark"}>
+              <Typography fontSize="small" color="secondary.dark">
                 Your account is now visible on map
               </Typography>
             </Stack>

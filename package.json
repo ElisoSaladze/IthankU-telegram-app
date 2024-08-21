@@ -30,6 +30,7 @@
     "react-international-phone": "^4.3.0",
     "react-lazy-with-preload": "^2.2.1",
     "react-router-dom": "^6.26.0",
+    "ts-pattern": "^5.3.1",
     "universal-cookie": "^7.2.0"
   },
   "devDependencies": {
