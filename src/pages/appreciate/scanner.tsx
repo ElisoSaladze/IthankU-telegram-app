@@ -43,7 +43,6 @@ const ScanQrCodePage = () => {
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
           }}
-          marginTop={10}
         >
           <Typography fontSize={32}>
             Scan{" "}

@@ -63,7 +63,7 @@ const Following = () => {
                   variant="rounded"
                   src={group.groupImage || defaultImageUrl}
                 />
-                <Avatar
+                {/* <Avatar
                   sx={{
                     height: 35,
                     width: 35,
@@ -76,7 +76,7 @@ const Following = () => {
                   <Typography fontSize={10} color="white">
                     {group.membersCount}
                   </Typography>
-                </Avatar>
+                </Avatar> */}
               </Box>
               <Stack gap={0.5}>
                 <Typography fontSize={15} fontWeight={600}>

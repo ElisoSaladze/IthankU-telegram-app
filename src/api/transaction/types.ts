@@ -1,4 +1,5 @@
 import { Author } from "src/api/post/types";
+import { Shade } from "../shade";
 
 export type Transaction = {
   _id: string;
@@ -10,6 +11,7 @@ export type Transaction = {
   comment: string;
   sender?: Author;
   receiver?: Author;
+  shadeInfo: Shade;
 };
 
 export type UserTransactionsResponse = {
