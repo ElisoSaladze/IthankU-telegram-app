@@ -1,5 +1,7 @@
 import { Button, IconButton, Stack, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 import {
   createSearchParams,
@@ -8,12 +10,13 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { changePfp } from "src/api/auth/api";
+import { changeName, changePfp } from "src/api/auth/api";
 import { getUser } from "src/api/listing";
 import { paths } from "src/app/routes";
 import { IconLocation } from "src/assets/icons";
 import BackButtonAppBar from "src/components/appbar";
 import { ChipComponent } from "src/components/chip-component";
+import { ControlledTextField } from "src/components/form/controlled/controlled-text-field";
 import Loader from "src/components/loader";
 
 import PfpComponent from "src/components/pfp-component";
@@ -23,6 +26,7 @@ import { useGetUserDetailsContext } from "src/providers/user-data";
 import { match, P } from "ts-pattern";
 
 const UserDetailsPage = () => {
+  const [isEditable, setIsEditable] = useState(false);
   const navigate = useNavigate();
   const { refetch } = useGetUserDetailsContext();
   const { userData } = useAuthContext();
@@ -34,9 +38,20 @@ const UserDetailsPage = () => {
     queryFn: () => getUser(userId!),
   });
 
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      name: $user.data?.user.name,
+    },
+  });
   const { mutate: changeProfile } = useMutation({
     mutationKey: ["newPfp"],
     mutationFn: (img: string) => changePfp(img),
+    onSuccess: () => refetch(),
+  });
+
+  const { mutate: changeUserName } = useMutation({
+    mutationKey: ["newName"],
+    mutationFn: (name: string) => changeName(name),
     onSuccess: () => refetch(),
   });
 
@@ -104,9 +119,42 @@ const UserDetailsPage = () => {
                     onChange={handleImageChange}
                   />
                   <Stack>
-                    <Typography fontSize={20} fontWeight={700} color="white">
-                      {user.name}
-                    </Typography>
+                    {isCurrent && isEditable ? (
+                      <ControlledTextField
+                        onBlur={handleSubmit((data) => {
+                          changeUserName(data.name!);
+                          setIsEditable(false);
+                          $user.refetch();
+                          refetch();
+                        })}
+                        InputProps={{
+                          sx: {
+                            color: "white",
+                            padding: 0,
+                            paddingRight: 1.5,
+                            "& fieldset": {
+                              border: "none",
+                            },
+                          },
+                        }}
+                        control={control}
+                        name="name"
+                      />
+                    ) : (
+                      <Typography
+                        onClick={() => {
+                          if (isCurrent) {
+                            setIsEditable(true);
+                          }
+                        }}
+                        fontSize={20}
+                        fontWeight={700}
+                        color="white"
+                      >
+                        {user.name}
+                      </Typography>
+                    )}
+
                     <Typography fontSize={14} color={"white"}>
                       {user.email}
                     </Typography>
