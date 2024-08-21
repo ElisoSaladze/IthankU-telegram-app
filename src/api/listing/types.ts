@@ -1,10 +1,16 @@
 import { Author } from "../post/types";
+import { Shade } from "../shade";
 
 export type ListingApiResponse = {
   totalPages: number;
   totalResults: number;
   page: number;
   users: User[];
+};
+
+type Location = {
+  type: string;
+  coordinates?: [number, number];
 };
 
 export type User = Author & {
@@ -20,15 +26,13 @@ type LinkedAccount = {
   type: string;
   value: string;
 };
-type Location = {
-  type: string;
-  coordinates?: [number, number];
-};
 
 type TopShade = {
   _id: string;
   shade: string;
   points: number;
+  user: string;
+  shadeInfo: Shade;
 };
 
 export type CurrentUser = Author & {
@@ -39,6 +43,7 @@ export type CurrentUser = Author & {
   topShades: TopShade[];
   generalRating: number;
   placemark: string;
+  location: Location | null;
   isLocationPublic: boolean;
   bio: string;
   topHashtags: {

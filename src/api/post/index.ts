@@ -22,7 +22,6 @@ export const createPost = async (body: FormData) => {
     if (!response.ok) {
       // Read and log error response body
       const errorDetails = await response.text();
-      // eslint-disable-next-line no-console
       console.error("Error details:", errorDetails);
       throw new Error(`Network response was not ok: ${response.statusText}`);
     }
@@ -30,7 +29,6 @@ export const createPost = async (body: FormData) => {
     // Parse and return the JSON response if successful
     return response.json();
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error("Error creating post:", error);
     throw error;
   }

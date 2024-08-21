@@ -6,13 +6,18 @@ import { TelegramSignUpRequestBody } from "./types";
 import { patch, post } from "src/lib/request/request";
 import { AuthUserResponse } from "src/providers/auth";
 
+const CURRENT_BOT = import.meta.env.VITE_APP_CURRENT_BOT;
+
 const cookies = new Cookies();
 
 export const checkUser = async () => {
   const { initDataRaw } = retrieveLaunchParams();
   const initDataRawEncoded = encodeURIComponent(initDataRaw || "");
+
+  console.log({ CURRENT_BOT });
+
   return post<AuthUserResponse>(
-    `api/auth/telegram?initDataRaw=${initDataRawEncoded}`
+    `api/auth/telegram?initDataRaw=${initDataRawEncoded}&bot=${CURRENT_BOT}`
   );
 };
 

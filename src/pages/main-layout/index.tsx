@@ -19,7 +19,6 @@ import groupsIcon from "src/assets/icons/groups.svg";
 import homeIcon from "src/assets/icons/home.svg";
 import mapIcon from "src/assets/icons/map.svg";
 import moreIcon from "src/assets/icons/more.svg";
-import notificationsIcon from "src/assets/icons/notifications.svg";
 import qrCodeIcon from "src/assets/icons/qr.svg";
 import groupsIconSelected from "src/assets/icons/selectedGroups.svg";
 import homeIconSelected from "src/assets/icons/selectedHome.svg";
@@ -30,6 +29,7 @@ import React, { Suspense, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Loader from "src/components/loader";
 import AppreciateComponent from "src/components/appreciate-components/appreciate-buttons";
+import { IconNotification } from "src/assets/icons";
 
 const useActiveIndex = () => {
   const location = useLocation();
@@ -81,31 +81,26 @@ const HomePage = () => {
   };
 
   return (
-    <Box
-      height={"100vh"}
-      display={"flex"}
-      flexDirection={"column"}
-      position={"relative"}
-    >
+    <Box height="100vh" display="flex" flexDirection="column">
       {activeIndex !== 3 && (
         <AppBar
           sx={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            backgroundColor: "white",
+            bgcolor: "white",
             zIndex: theme.zIndex.drawer + 1,
+            mt: 3,
           }}
         >
-          <Toolbar>
+          <Toolbar sx={{ px: 3 }}>
             <img src={ituIcon} />
             <Box sx={{ flexGrow: 1 }}>
               <Typography
-                fontWeight={500}
                 variant="h6"
-                component="div"
-                sx={{ textAlign: "center", color: "black", fontSize: 20 }}
+                sx={{
+                  textAlign: "center",
+                  color: "black",
+                  fontSize: 20,
+                  fontWeight: 500,
+                }}
               >
                 {getPageName()}
               </Typography>
@@ -146,13 +141,13 @@ const HomePage = () => {
               </MenuItem>
             </Menu>
             <IconButton>
-              <img src={notificationsIcon} />
+              <IconNotification sx={{ color: "info.main" }} />
             </IconButton>
           </Toolbar>
         </AppBar>
       )}
-      <Box height={"100%"}>
-        <Box paddingTop={activeIndex !== 3 ? 8 : 0} height={"100%"}>
+      <Box height={1}>
+        <Box height={1}>
           <Suspense fallback={<Loader />}>
             <Outlet />
           </Suspense>

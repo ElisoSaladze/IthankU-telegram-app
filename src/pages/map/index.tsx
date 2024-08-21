@@ -107,7 +107,7 @@ const MapPage = () => {
   }
 
   return (
-    <Stack height={"100%"} overflow={"hidden"}>
+    <Stack height={1} overflow="hidden">
       <AppBar>
         <Toolbar>
           <Box sx={{ flexGrow: 1 }}>

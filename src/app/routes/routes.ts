@@ -1,12 +1,14 @@
 import { buildRoute } from "src/app/lazy-routing/build-route";
+import { paths } from "./paths";
+
 export const routes = [
   buildRoute({
-    path: "introduce-yourself",
+    path: paths.introduceYourself,
     factory: () => import("src/pages/introduce-yourself/index"),
     state: "unauthenticated",
   }),
   buildRoute({
-    path: "interests",
+    path: paths.interests,
     factory: () => import("src/pages/interests/index"),
     state: "unauthenticated",
   }),
@@ -113,8 +115,13 @@ export const routes = [
     state: "authenticated",
   }),
   buildRoute({
-    path: "more/:userId",
-    factory: () => import("src/pages/user-details/index"),
+    path: paths.userDetails,
+    factory: () => import("src/pages/user-details"),
+    state: "authenticated",
+  }),
+  buildRoute({
+    path: paths.userLocation,
+    factory: () => import("src/pages/user-details/location"),
     state: "authenticated",
   }),
   buildRoute({
