@@ -1,5 +1,5 @@
-const outgoing = () => {
+const Outgoing = () => {
   return <div>outgoing</div>;
 };
 
-export default outgoing;
+export default Outgoing;
