@@ -25,6 +25,7 @@ import {
   updateLocationVisibility,
 } from "src/api/auth/api";
 import { useAuthContext } from "src/providers/auth";
+import { paths } from "src/app/routes";
 
 const MorePage = () => {
   const { userData } = useAuthContext();
@@ -73,7 +74,7 @@ const MorePage = () => {
       </ListItemButton>
       <Stack>
         <NavigationItem
-          onClick={() => navigate("accounts")}
+          onClick={() => navigate(paths.accounts)}
           icon={accounts}
           name="Accounts"
         />
@@ -122,17 +123,17 @@ const MorePage = () => {
         </Stack>
         <Divider />
         <NavigationItem
-          onClick={() => navigate("listing/groups-list")}
+          onClick={() => navigate(paths.groupsList)}
           icon={listing}
           name="Listing"
         />
         <NavigationItem
-          onClick={() => navigate("transactions/incoming")}
+          onClick={() => navigate(paths.incomingTransactions)}
           icon={transactions}
           name="Transactions"
         />
         <NavigationItem
-          onClick={() => navigate("language")}
+          onClick={() => navigate(paths.language)}
           icon={language}
           name="Language"
         />

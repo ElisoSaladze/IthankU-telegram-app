@@ -8,17 +8,27 @@ import {
 } from "@mui/material";
 import { Transaction } from "src/api/transaction/types";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { useNavigate } from "react-router-dom";
+import { generatePath, useNavigate } from "react-router-dom";
+import CircleIcon from "@mui/icons-material/Circle";
+import { paths } from "src/app/routes";
 
 type Props = {
   transaction: Transaction;
 };
 
 const TransactionItem = ({ transaction }: Props) => {
+  const transactionId = transaction._id;
+
   const navigate = useNavigate();
   return (
     <ListItemButton
-      onClick={() => navigate(`/transactions/${transaction._id}`)}
+      onClick={() =>
+        navigate({
+          pathname: generatePath(paths.transactions, {
+            transactionId,
+          }),
+        })
+      }
       sx={{
         width: "100%",
         borderRadius: 5,
@@ -43,7 +53,14 @@ const TransactionItem = ({ transaction }: Props) => {
               Area:{" "}
               <Chip
                 sx={{ padding: 0, height: "auto" }}
-                label={transaction.shade}
+                label={
+                  <Stack gap={0.5} alignItems={"center"} direction={"row"}>
+                    <CircleIcon
+                      sx={{ color: transaction.shadeInfo.color, fontSize: 16 }}
+                    />{" "}
+                    {transaction.shadeInfo.en}
+                  </Stack>
+                }
                 variant="outlined"
               />
             </Typography>

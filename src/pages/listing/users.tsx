@@ -4,7 +4,8 @@ import { getUsers } from "src/api/listing";
 import Loader from "src/components/loader";
 import ShadeComponent from "src/components/shade-component";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { useNavigate } from "react-router-dom";
+import { generatePath, useNavigate } from "react-router-dom";
+import { paths } from "src/app/routes";
 
 const UsersList = () => {
   const navigate = useNavigate();
@@ -18,7 +19,10 @@ const UsersList = () => {
     <Stack paddingBottom={10} marginY={1} gap={1}>
       {data!.users.map((user) => (
         <ListItemButton
-          onClick={() => navigate(`/more/${user._id}`)}
+          onClick={() => {
+            const userId = user._id;
+            navigate(generatePath(paths.userDetails, { userId }));
+          }}
           key={user._id}
           sx={{
             width: "100%",

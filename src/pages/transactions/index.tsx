@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { paths } from "src/app/routes";
 
 const TransactionsPage = () => {
   const location = useLocation();
@@ -54,7 +55,7 @@ const TransactionsPage = () => {
         justifyContent={"flex-end"}
       >
         <Button
-          onClick={() => navigate("/more/pending-transactions/incoming")}
+          onClick={() => navigate(paths.incomingPendingTransactions)}
           sx={{ padding: 0 }}
         >
           <Typography

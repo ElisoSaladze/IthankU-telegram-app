@@ -10,6 +10,7 @@ import {
 
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { paths } from "src/app/routes";
 import {
   useCreateGroupContext,
   CreateGroupProvider,
@@ -23,15 +24,15 @@ const CreateGroup = () => {
 
   const navigateToNextStep = () => {
     if (activePath === "details") {
-      navigate("group-interests");
+      navigate(paths.createGroupInterests);
     } else if (activePath === "group-interests") {
-      navigate("final");
+      navigate(paths.createGroupFinal);
     }
   };
 
   useEffect(() => {
     if (!isFormValid()) {
-      navigate("/create-group/details");
+      navigate(paths.createGroupDetails);
     }
   }, [isFormValid, navigate]);
 
@@ -51,7 +52,7 @@ const CreateGroup = () => {
         >
           <IconButton
             onClick={() =>
-              activePath === "details" ? navigate("/home") : navigate(-1)
+              activePath === "details" ? navigate(paths.home) : navigate(-1)
             }
           >
             <ArrowBackIosIcon

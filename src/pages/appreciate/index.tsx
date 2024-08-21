@@ -9,6 +9,7 @@ import {
   getAppreciateUser,
 } from "src/api/appreciate/api";
 import { AppreciateUserInput } from "src/api/appreciate/types";
+import { paths } from "src/app/routes";
 import BackButtonAppBar from "src/components/appbar";
 import AreaSelect from "src/components/appreciate-components/select-area";
 import HashtagSelect from "src/components/appreciate-components/select-hashtag";
@@ -45,7 +46,7 @@ const AppreciatePage = () => {
     (data: AppreciateUserInput) => appreciateUser(data),
     {
       onSuccess: () => {
-        navigate("/thank-you");
+        navigate(paths.thankYou);
       },
       onError: (error) => {
         console.error("Failed to send appreciation", error);
@@ -57,7 +58,7 @@ const AppreciatePage = () => {
     (data: AppreciateUserInput) => appreciateWithMobile(data),
     {
       onSuccess: () => {
-        navigate("/thank-you");
+        navigate(paths.thankYou);
       },
       onError: (error) => {
         console.error("Failed to send appreciation", error);
@@ -69,9 +70,9 @@ const AppreciatePage = () => {
     phoneNumber ? withPhoneNumber.mutate(data) : mutation.mutate(data)
   );
   return (
-    <Stack marginTop={10}>
+    <Stack mx={2}>
       <BackButtonAppBar pageName="" />
-      <Stack gap={2} paddingX={2}>
+      <Stack marginTop={2} gap={2}>
         <AreaSelect
           defaultSelected={appreciateData?.data.area}
           onSelect={(shade) =>

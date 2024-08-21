@@ -30,6 +30,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Loader from "src/components/loader";
 import AppreciateComponent from "src/components/appreciate-components/appreciate-buttons";
 import { IconNotification } from "src/assets/icons";
+import { paths } from "src/app/routes";
 
 const useActiveIndex = () => {
   const location = useLocation();
@@ -81,7 +82,7 @@ const HomePage = () => {
   };
 
   return (
-    <Box height="100vh" display="flex" flexDirection="column">
+    <Box overflow={"auto"} height="100%" display="flex" flexDirection="column">
       {activeIndex !== 3 && (
         <AppBar
           sx={{
@@ -125,7 +126,7 @@ const HomePage = () => {
                 "aria-labelledby": "basic-button",
               }}
             >
-              <MenuItem onClick={() => navigate("/create-post")}>
+              <MenuItem onClick={() => navigate(paths.createPost)}>
                 Create Post
               </MenuItem>
               <Divider
@@ -136,7 +137,7 @@ const HomePage = () => {
                   },
                 }}
               />
-              <MenuItem onClick={() => navigate("/create-group/details")}>
+              <MenuItem onClick={() => navigate(paths.createGroupDetails)}>
                 Create Group
               </MenuItem>
             </Menu>
@@ -184,7 +185,7 @@ const HomePage = () => {
           showLabels
         >
           <BottomNavigationAction
-            onClick={() => navigate("home")}
+            onClick={() => navigate(paths.home)}
             icon={
               activeIndex === 0 ? (
                 <img src={homeIconSelected} />
@@ -195,7 +196,7 @@ const HomePage = () => {
             label="Home"
           />
           <BottomNavigationAction
-            onClick={() => navigate("groups")}
+            onClick={() => navigate(paths.groups)}
             icon={
               activeIndex === 1 ? (
                 <img src={groupsIconSelected} />
@@ -214,7 +215,7 @@ const HomePage = () => {
             <img src={qrCodeIcon} />
           </IconButton>
           <BottomNavigationAction
-            onClick={() => navigate("map")}
+            onClick={() => navigate(paths.map)}
             icon={
               activeIndex === 3 ? (
                 <img src={mapIconSelected} />
@@ -225,7 +226,7 @@ const HomePage = () => {
             label="Map"
           />
           <BottomNavigationAction
-            onClick={() => navigate("more")}
+            onClick={() => navigate(paths.more)}
             icon={
               activeIndex === 4 ? (
                 <img src={moreIconSelected} />

@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, generatePath } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -19,6 +19,7 @@ import { match, P } from "ts-pattern";
 import CopyableItem from "src/components/copyable-item";
 import Loader from "src/components/loader";
 import { getTranasctionDetails } from "src/api/transaction";
+import { paths } from "src/app/routes";
 
 const TransactionDetailsPage = () => {
   const { transactionId } = useParams<{ transactionId: string }>();
@@ -118,7 +119,10 @@ const TransactionDetailsPage = () => {
                   <Divider />
 
                   <ListItemButton
-                    onClick={() => navigate(`/more/${transaction.sender!._id}`)}
+                    onClick={() => {
+                      const senderId = transaction.sender!._id;
+                      navigate(generatePath(paths.more, { senderId }));
+                    }}
                   >
                     <Stack
                       width="100%"
@@ -137,9 +141,10 @@ const TransactionDetailsPage = () => {
                   <Divider />
 
                   <ListItemButton
-                    onClick={() =>
-                      navigate(`/more/${transaction.receiver!._id}`)
-                    }
+                    onClick={() => {
+                      const receiverId = transaction.receiver!._id;
+                      navigate(generatePath(paths.more, { receiverId }));
+                    }}
                   >
                     <Stack
                       width="100%"
@@ -188,7 +193,8 @@ const TransactionDetailsPage = () => {
               </Stack>
             </Stack>
           )
-        ).run()}
+        )
+        .run()}
     </>
   );
 };

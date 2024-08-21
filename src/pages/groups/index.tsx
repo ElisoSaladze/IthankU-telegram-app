@@ -17,6 +17,7 @@ import { userGroups } from "src/api/group";
 import GroupItem from "src/components/group-item";
 import { Group } from "src/api/group/types";
 import settingsIcon from "src/assets/icons/settings.svg";
+import { paths } from "src/app/routes";
 const GroupsPage = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -60,7 +61,7 @@ const GroupsPage = () => {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={() => navigate("/create-post")}>
+          <MenuItem onClick={() => navigate(paths.createPost)}>
             Create Post
           </MenuItem>
           <Divider
@@ -71,11 +72,11 @@ const GroupsPage = () => {
               },
             }}
           />
-          <MenuItem onClick={() => navigate("/create-group/details")}>
+          <MenuItem onClick={() => navigate(paths.createGroupDetails)}>
             Create Group
           </MenuItem>
         </Menu>
-        <IconButton onClick={() => navigate("group-settings")}>
+        <IconButton onClick={() => navigate(paths.groupSettings)}>
           <img src={settingsIcon} />
         </IconButton>
       </Stack>

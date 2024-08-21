@@ -1,6 +1,7 @@
 import { Button, Stack } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { paths } from "src/app/routes";
 import BackButtonAppBar from "src/components/appbar";
 import AreaSelect from "src/components/appreciate-components/select-area";
 import HashtagSelect from "src/components/appreciate-components/select-hashtag";
@@ -11,7 +12,9 @@ function AdvancedSelectionPage() {
   const navigate = useNavigate();
 
   const handleCreateQRCode = () => {
-    navigate("/get-appreciate", { state: { area, hashtag, isAdvanced: true } });
+    navigate(paths.getAppreciate, {
+      state: { area, hashtag, isAdvanced: true },
+    });
   };
 
   return (
