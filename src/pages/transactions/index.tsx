@@ -30,7 +30,7 @@ const TransactionsPage = () => {
   };
 
   return (
-    <Stack margin={2} justifyContent={"center"}>
+    <Stack paddingBottom={10} margin={2} justifyContent={"center"}>
       <Typography marginBottom={2} textAlign={"center"}>
         Transactions
       </Typography>
