@@ -1,16 +1,15 @@
 import { Button, Stack, Typography } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { useState } from "react";
 import { useFieldArray } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { telegramSignUp } from "src/api/auth/api";
 import { TelegramSignUpRequestBody } from "src/api/auth/types";
-import { Shade } from "src/api/shade";
+import { getShades, Shade } from "src/api/shade";
 import Loader from "src/components/loader";
 import ShadeComponent from "src/components/shade-component";
 import { useAuthContext } from "src/providers/auth";
-import { useFetchItemsContext } from "src/providers/hashtag-shade";
 
 const InterestsPage = () => {
   const navigate = useNavigate();
@@ -21,7 +20,11 @@ const InterestsPage = () => {
   });
 
   const [selectedShades, setSelectedShades] = useState<string[]>([]);
-  const { shades, shadesLoading } = useFetchItemsContext();
+
+  const shades = useQuery({
+    queryKey: ["shades"],
+    queryFn: async () => getShades(),
+  });
 
   const handleSelectShade = (shadeName: string) => {
     if (selectedShades.includes(shadeName)) {
@@ -71,11 +74,11 @@ const InterestsPage = () => {
         <Typography textAlign={"center"}>
           Choose the area that excites you the most.
         </Typography>
-        {shadesLoading ? (
+        {shades.isFetching ? (
           <Loader />
         ) : (
           <Stack gap={0.5} direction={"row"} flexWrap={"wrap"}>
-            {shades?.data.map((shade: Shade) => (
+            {shades.data?.data.map((shade: Shade) => (
               <ShadeComponent
                 key={shade._id}
                 selectable

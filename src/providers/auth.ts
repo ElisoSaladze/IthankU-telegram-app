@@ -15,6 +15,7 @@ import { keys } from "src/api/keys";
 type NotAuthUser = {
   state: "unauthenticated";
 };
+
 type UserType = {
   email: string;
   isLocationPublic: boolean;
@@ -25,6 +26,7 @@ type UserType = {
   role: string;
   _id: string;
 };
+
 export type AuthUserResponse = {
   accessToken: string;
   refreshToken: string;
