@@ -1,4 +1,5 @@
 import { Author } from "../post/types";
+import { Shade } from "../shade";
 import { ApiResponse } from "../types";
 
 export type Group = {
@@ -8,6 +9,7 @@ export type Group = {
   groupImage?: string;
   shade: string;
   membersCount: number;
+  shadeInfo: Shade;
 };
 
 export type Invitation = {

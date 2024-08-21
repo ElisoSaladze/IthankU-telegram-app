@@ -47,7 +47,10 @@ const GroupItem = ({ group }: Props) => {
             <Typography fontSize={15} fontWeight={600}>
               {group.name}
             </Typography>
-            <ShadeComponent color="green" name={group.shade} />
+            <ShadeComponent
+              color={group.shadeInfo?.color}
+              name={group.shadeInfo?.en}
+            />
             <Stack direction={"row"}>
               {group.tags?.map((tag, i) => (
                 <TagItem key={i} tag={tag} />
