@@ -24,11 +24,9 @@ const GroupItem = ({ group }: Props) => {
         boxShadow: "0px 0px 8.2px -1px #00000026",
       }}
       onClick={() =>
-        navigate({
-          pathname: generatePath(paths.groupDetails, {
+        navigate(generatePath(paths.groupDetails, {
             groupId,
-          }),
-        })
+        }))
       }
     >
       <Stack
