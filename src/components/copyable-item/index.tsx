@@ -31,10 +31,10 @@ const CopyableItem = ({
         }
       >
         <Stack
-          width={"100%"}
-          flexWrap={"wrap"}
-          direction={"row"}
-          justifyContent={"space-between"}
+          width="100%"
+          flexWrap="wrap"
+          direction="row"
+          justifyContent="space-between"
         >
           {title.length > 0 && <Typography fontSize={14}>{title}</Typography>}
           <Typography color={contentColor} fontSize={14}>
