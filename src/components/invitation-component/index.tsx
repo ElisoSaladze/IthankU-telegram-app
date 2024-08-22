@@ -33,7 +33,7 @@ const InvitationItem: React.FC<InvitationItemProps> = ({
       alignItems={"center"}
       direction={"row"}
       sx={{
-        width: "100%",
+        width: 1,
         borderRadius: 5,
         padding: 1,
         boxShadow: "0px 0px 8.2px -1px #00000026",
