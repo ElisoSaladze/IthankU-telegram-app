@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useFetchItemsContext } from "src/providers/hashtag-shade";
 import ShadeComponent from "../shade-component";
@@ -17,7 +17,6 @@ import { ControlledTextField } from "../form/controlled/controlled-text-field";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { NearMe } from "@mui/icons-material";
-import { Autocomplete, LoadScript } from "@react-google-maps/api";
 type Props = {
   radius: number;
   onRadiusChange: (event: Event, newValue: number | number[]) => void;
