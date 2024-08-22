@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useFetchItemsContext } from "src/providers/hashtag-shade";
 import ShadeComponent from "../shade-component";
@@ -15,19 +15,22 @@ import { Shade } from "src/api/shade";
 import CustomAccordion from "./accordion";
 import { ControlledTextField } from "../form/controlled/controlled-text-field";
 import { useForm } from "react-hook-form";
-import NearMeIcon from "@mui/icons-material/NearMe";
+import { useNavigate } from "react-router-dom";
+import { NearMe } from "@mui/icons-material";
+import { Autocomplete, LoadScript } from "@react-google-maps/api";
 type Props = {
   radius: number;
   onRadiusChange: (event: Event, newValue: number | number[]) => void;
 };
 
 const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
+  const navigate = useNavigate();
   const [selectedShade, setSelectedShade] = useState<Shade | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<string | false>(
     false
   );
-  const { control } = useForm({
+  const { control, getValues } = useForm({
     defaultValues: {
       area: "",
       hashtag: "",
@@ -53,6 +56,52 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
   };
 
   const { shades, shadesLoading } = useFetchItemsContext();
+
+  const generateQueryString = (
+    radius: number,
+    area: string,
+    hashtag: string,
+    selectedShade: Shade | null
+  ) => {
+    const radiusKm = radius / 1000; // Convert meters to kilometers
+    const queryParams = new URLSearchParams();
+
+    if (radiusKm > 0) {
+      queryParams.append("radius", radiusKm.toString());
+    }
+    if (selectedShade?.en || area) {
+      queryParams.append("shade", selectedShade?.en ?? area);
+    }
+    if (hashtag) {
+      queryParams.append("hashtag", hashtag);
+    }
+
+    return queryParams.toString();
+  };
+
+  const handleShowInListing = () => {
+    const { area, hashtag } = getValues();
+    const queryString = generateQueryString(
+      radius,
+      area,
+      hashtag,
+      selectedShade
+    );
+    setIsOpen(false);
+    navigate(`/more/listing/users-list${queryString ? `?${queryString}` : ""}`);
+  };
+
+  const handleShowInMap = () => {
+    const { area, hashtag } = getValues();
+    const queryString = generateQueryString(
+      radius,
+      area,
+      hashtag,
+      selectedShade
+    );
+    setIsOpen(false);
+    navigate(`/map${queryString ? `?${queryString}` : ""}`);
+  };
 
   return (
     <Stack>
@@ -129,17 +178,18 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
             expanded={expandedAccordion === "location"}
             onChange={handleAccordionChange("location")}
           >
+            {/* TODO: implement location autocomplete */}
             <ControlledTextField
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <NearMeIcon />
+                    <NearMe />
                   </InputAdornment>
                 ),
                 sx: {
                   backgroundColor: "rgba(240, 240, 240, 1)",
                   "& fieldset": {
-                    border: "none", // Remove the border
+                    border: "none",
                   },
                 },
               }}
@@ -164,10 +214,22 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
             />
           </CustomAccordion>
           <Stack gap={1} direction={"row"}>
-            <Button size="medium" fullWidth color="primary" variant="contained">
+            <Button
+              size="medium"
+              fullWidth
+              color="primary"
+              variant="contained"
+              onClick={handleShowInListing}
+            >
               Show in listing
             </Button>
-            <Button size="medium" fullWidth color="info" variant="contained">
+            <Button
+              size="medium"
+              fullWidth
+              color="info"
+              variant="contained"
+              onClick={handleShowInMap}
+            >
               Show on the map
             </Button>
           </Stack>

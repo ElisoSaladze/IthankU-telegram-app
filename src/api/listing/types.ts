@@ -14,6 +14,7 @@ export type User = Author & {
   location: Location | null;
   generalRating: number;
   topShades?: TopShade[];
+  topHashtags?: TopHashtag[];
 };
 
 type LinkedAccount = {
@@ -29,6 +30,11 @@ type TopShade = {
   _id: string;
   shade: string;
   points: number;
+};
+
+type TopHashtag = {
+  hashtag: string;
+  count: number;
 };
 
 export type CurrentUser = Author & {
@@ -53,5 +59,11 @@ export type LocationQueryParams = {
   longitude: number;
   radius: number;
   area?: string;
+  hashtag?: string;
+};
+
+export type UserQueryParams = {
+  radius?: string;
+  shade?: string;
   hashtag?: string;
 };

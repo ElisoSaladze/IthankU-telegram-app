@@ -1,4 +1,3 @@
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import {
   Box,
   IconButton,
@@ -9,6 +8,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import FilterDrawer from "src/components/filter-drawer";
 
 const Listing = () => {
   const location = useLocation();
@@ -51,7 +51,7 @@ const Listing = () => {
           }}
           size="small"
         >
-          <FilterAltOutlinedIcon />
+          <FilterDrawer radius={2} onRadiusChange={() => console.log()} />
         </IconButton>
       </Stack>
       <Stack spacing={1}>
