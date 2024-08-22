@@ -20,6 +20,7 @@ import CopyableItem from "src/components/copyable-item";
 import Loader from "src/components/loader";
 import { getTranasctionDetails } from "src/api/transaction";
 import { paths } from "src/app/routes";
+import { TransactionBackground } from "src/assets/images/transaction-backround";
 
 const TransactionDetailsPage = () => {
   const { transactionId } = useParams<{ transactionId: string }>();
@@ -67,18 +68,7 @@ const TransactionDetailsPage = () => {
                   zIndex: -1,
                 }}
               >
-                <svg
-                  width="414"
-                  height="314"
-                  viewBox="0 0 414 314"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0 0H414V79.5C405.659 132.017 369.674 175.968 319.836 194.51L0 313.5V0Z"
-                    fill={transaction.shadeInfo?.color}
-                  />
-                </svg>
+                <TransactionBackground fill={transaction.shadeInfo.color} />
               </Box>
 
               <Stack justifyContent="center" gap={1} marginTop={5} marginX={2}>

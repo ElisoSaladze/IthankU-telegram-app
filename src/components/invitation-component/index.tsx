@@ -50,19 +50,19 @@ const InvitationItem: React.FC<InvitationItemProps> = ({
         <Typography>{group.name}</Typography>
 
         <ShadeComponent color={group.shade} name={group.shade} />
-        <Stack gap={1} direction={"row"}>
+        <Box display={"flex"} gap={1}>
           <Button onClick={() => accept()} fullWidth variant="contained">
             Accept
           </Button>
           <Button
-            onClick={decline}
+            onClick={() => decline()}
             fullWidth
             variant="contained"
             color="secondary"
           >
             Decline
           </Button>
-        </Stack>
+        </Box>
       </Stack>
     </Stack>
   );
