@@ -47,7 +47,6 @@ const TransactionsPage = () => {
           <ToggleButton value="outgoing">Outgoing</ToggleButton>
         </ToggleButtonGroup>
       </Stack>
-      <Stack></Stack>
       <Stack
         marginBottom={1}
         direction={"row"}
