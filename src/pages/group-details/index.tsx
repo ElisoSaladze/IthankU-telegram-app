@@ -35,39 +35,58 @@ import Loader from "src/components/loader";
 import PostItem from "src/components/post-item";
 import TagItem from "src/components/tag";
 import { useAuthContext } from "src/providers/auth";
-import { Post } from "src/api/post/types";
 import qrIcon from "src/assets/icons/qr.png";
+import { qk } from "src/api/query-keys";
+import { Post } from "src/api/posts";
 
 const GroupDetailsPage = () => {
   const { userData } = useAuthContext();
   const { groupId } = useParams<Params>();
+
+  const args = { groupId: groupId! };
+
   const { data, isFetching, refetch } = useQuery({
-    queryKey: ["groupDetails", groupId],
-    queryFn: () => getGroupDetails(groupId!),
-  });
-  const posts = useQuery({
-    queryKey: ["groupPosts", groupId],
-    queryFn: () => getGroupPosts(groupId!),
+    queryKey: qk.groups.details.toKeyWithArgs(args),
+    queryFn: () => getGroupDetails(args),
   });
 
-  const join = useMutation({
-    mutationKey: ["join-group"],
-    mutationFn: () => joinGroup(groupId!),
-    onSuccess: () => refetch(),
+  const posts = useQuery({
+    queryKey: qk.groups.posts.toKeyWithArgs(args),
+    queryFn: () => getGroupPosts(args),
+  });
+
+  const $joinGroup = useMutation({
+    mutationFn: joinGroup,
   });
 
   const handleJoinGroup = () => {
-    join.mutate();
+    $joinGroup.mutate(
+      { groupId: groupId! },
+      {
+        onSuccess: () => {
+          refetch();
+        },
+      }
+    );
   };
-  const leave = useMutation({
-    mutationKey: ["join-group"],
-    mutationFn: () => leaveGroup(groupId!),
-    onSuccess: () => refetch(),
+
+  const $leaveGroup = useMutation({
+    mutationFn: leaveGroup,
   });
 
   const handleLeaveGroup = () => {
-    leave.mutate();
+    $leaveGroup.mutate(
+      {
+        groupId: groupId!,
+      },
+      {
+        onSuccess: () => {
+          refetch();
+        },
+      }
+    );
   };
+
   const navigate = useNavigate();
   return (
     <Stack height={"100vh"}>

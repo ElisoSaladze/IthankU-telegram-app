@@ -3,7 +3,7 @@ import { retrieveLaunchParams } from "@telegram-apps/sdk";
 import Cookies from "universal-cookie";
 
 import { TelegramSignUpRequestBody } from "./types";
-import { patch, post } from "src/lib/request/request";
+import { patch, post } from "src/lib/_request/request";
 import { AuthUserResponse } from "src/providers/auth";
 
 const CURRENT_BOT = import.meta.env.VITE_APP_CURRENT_BOT;

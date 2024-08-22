@@ -1,5 +1,5 @@
-import { Author } from "../post/types";
-import { Shade } from "../shade";
+import { Author } from "../posts/types";
+import { Shade } from "../shades/shades.api";
 
 export type ListingApiResponse = {
   totalPages: number;

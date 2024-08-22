@@ -1,4 +1,4 @@
-import { get, post } from "src/lib/request/request";
+import { get, post } from "src/lib/_request/request";
 import {
   AppreciateQRCode,
   AppreciateUserInput,
@@ -9,6 +9,12 @@ import {
 export const appreciateUser = async (body: AppreciateUserInput) => {
   return await post(`transactions`, body);
 };
+
+// export const appreciateUser = async (body: AppreciateUserInput) => {
+//   return await request("/transactions").post({
+//     body,
+//   });
+// };
 
 export const getAppreciateUser = async ({
   appreciateId,

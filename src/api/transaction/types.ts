@@ -1,5 +1,5 @@
-import { Author } from "src/api/post/types";
-import { Shade } from "../shade";
+import { Author } from "src/api/posts/types";
+import { Shade } from "../shades/shades.api";
 
 export type Transaction = {
   _id: string;

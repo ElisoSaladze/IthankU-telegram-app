@@ -2,7 +2,7 @@ import { Box, Stack } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 import { Params, useParams } from "react-router-dom";
-import { getPost } from "src/api/post";
+import { getPost } from "src/api/posts";
 import PostItem from "src/components/post-item";
 
 import BackButtonAppBar from "src/components/appbar";

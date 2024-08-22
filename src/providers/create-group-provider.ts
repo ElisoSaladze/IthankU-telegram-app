@@ -1,6 +1,6 @@
 import constate from "constate";
 import { useForm } from "react-hook-form";
-import { Visibility } from "src/api/post/types";
+import { Visibility } from "src/api/posts/types";
 
 export type CreateGroupRequest = {
   name: string;

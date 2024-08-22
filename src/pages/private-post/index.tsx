@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import Loader from "src/components/loader";
 import PostItem from "src/components/post-item";
-import { getPost } from "src/api/post";
+import { getPost } from "src/api/posts";
 import BackButtonAppBar from "src/components/appbar";
 import { match, P } from "ts-pattern";
 

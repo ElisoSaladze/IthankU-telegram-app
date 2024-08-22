@@ -5,7 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useState } from "react";
 import { useFieldArray } from "react-hook-form";
-import { getShades, Shade } from "src/api/shade";
+import { qk } from "src/api/query-keys";
+import { getShades, Shade } from "src/api/shades";
 import { ControlledTextField } from "src/components/form/controlled/controlled-text-field";
 import Loader from "src/components/loader";
 import ShadeComponent from "src/components/shade-component";
@@ -22,8 +23,8 @@ const NewGroupInterests = () => {
   const [selectedShade, setSelectedShade] = useState("");
 
   const shades = useQuery({
-    queryKey: ["shades"],
-    queryFn: async () => getShades(),
+    queryKey: qk.shades.toKey(),
+    queryFn: getShades,
   });
 
   const handleSelectShade = (shade: Shade) => {

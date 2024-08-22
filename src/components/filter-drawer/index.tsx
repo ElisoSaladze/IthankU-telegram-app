@@ -11,7 +11,7 @@ import { useState } from "react";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useFetchItemsContext } from "src/providers/hashtag-shade";
 import ShadeComponent from "../shade-component";
-import { Shade } from "src/api/shade";
+import { Shade } from "src/api/shades/shades.api";
 import CustomAccordion from "./accordion";
 import { ControlledTextField } from "../form/controlled/controlled-text-field";
 import { useForm } from "react-hook-form";

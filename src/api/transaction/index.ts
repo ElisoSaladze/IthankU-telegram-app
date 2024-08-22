@@ -1,4 +1,4 @@
-import { get, post } from "src/lib/request/request";
+import { get } from "src/lib/_request/request";
 
 import { TransactionData, UserTransactionsResponse } from "./types";
 

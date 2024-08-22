@@ -82,7 +82,7 @@ const HomePage = () => {
   };
 
   return (
-    <Box overflow={"auto"} height="100%" display="flex" flexDirection="column">
+    <Box overflow="auto" height="100%" display="flex" flexDirection="column">
       {activeIndex !== 3 && (
         <AppBar
           sx={{

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import constate from "constate";
 import { getHashtags } from "src/api/hashtag/api";
-import { getShades } from "src/api/shade";
+import { getShades } from "src/api/shades/shades.api";
 
 const getLocalStorageData = <T>(key: string): T | null => {
   const storedData = localStorage.getItem(key);

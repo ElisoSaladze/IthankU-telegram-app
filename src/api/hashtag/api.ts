@@ -1,4 +1,4 @@
-import { get } from "src/lib/request/request";
+import { get } from "src/lib/_request/request";
 import { ApiResponse } from "../types";
 
 export type Hashtag = {

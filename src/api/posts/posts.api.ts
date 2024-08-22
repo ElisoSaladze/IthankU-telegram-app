@@ -1,6 +1,6 @@
 import { globalAccessToken } from "src/providers/auth";
 import { PostDetails, PostsResponse } from "./types";
-import { get } from "src/lib/request/request";
+import { get } from "src/lib/_request/request";
 
 const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
 export const getPosts = async (page: number) =>

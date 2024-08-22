@@ -17,17 +17,22 @@ type Props = {
 };
 const GroupItem = ({ group }: Props) => {
   const [joined, setJoined] = useState(false);
-  const join = useMutation({
-    mutationKey: ["join-group"],
-    mutationFn: () => joinGroup(group._id),
-    onSuccess: () => setJoined(true),
+
+  const $joinGroup = useMutation({
+    mutationFn: joinGroup,
   });
 
   const handleJoinGroup = () => {
-    join.mutate();
-    if (join.isSuccess) {
-      setJoined(true);
-    }
+    $joinGroup.mutate(
+      {
+        groupId: group._id,
+      },
+      {
+        onSuccess: () => {
+          setJoined(true);
+        },
+      }
+    );
   };
   return (
     <Stack
@@ -48,7 +53,7 @@ const GroupItem = ({ group }: Props) => {
           <ShadeComponent color="green" name={group.shade} />
         </Stack>
       </Stack>
-      {join.isLoading ? (
+      {$joinGroup.isLoading ? (
         <CircularProgress />
       ) : !joined ? (
         <Button size="small" variant="outlined" onClick={handleJoinGroup}>

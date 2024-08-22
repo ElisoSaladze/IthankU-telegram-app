@@ -19,7 +19,7 @@ import {
 
 import { useState } from "react";
 import { generatePath, useNavigate } from "react-router-dom";
-import { Post } from "../../api/post/types";
+import { Post } from "../../api/posts/types";
 import { timeAgo } from "../../helpers";
 import TagItem from "../tag";
 import LikesItem from "../likes";

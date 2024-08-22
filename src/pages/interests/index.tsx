@@ -6,7 +6,7 @@ import { useFieldArray } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { telegramSignUp } from "src/api/auth/api";
 import { TelegramSignUpRequestBody } from "src/api/auth/types";
-import { getShades, Shade } from "src/api/shade";
+import { getShades, Shade } from "src/api/shades/shades.api";
 import { paths } from "src/app/routes";
 import Loader from "src/components/loader";
 import ShadeComponent from "src/components/shade-component";

@@ -1,5 +1,4 @@
-import { Author } from "../post/types";
-import { Shade } from "../shade";
+import { Shade } from "../shades/shades.api";
 import { ApiResponse } from "../types";
 
 export type Group = {
@@ -19,19 +18,19 @@ export type Invitation = {
   createdAt: string;
 };
 
-export type GroupDetails = {
-  _id: string;
-  name: string;
-  description: string;
-  tags?: string[];
-  shade: string;
-  groupPrivacy: "Public" | "Private";
-  groupImage?: string;
-  groupCover?: string;
-  membersCount: number;
-  isUserJoined: boolean;
-  users?: Author[];
-};
+// export type GroupDetails = {
+//   _id: string;
+//   name: string;
+//   description: string;
+//   tags?: string[];
+//   shade: string;
+//   groupPrivacy: "Public" | "Private";
+//   groupImage?: string;
+//   groupCover?: string;
+//   membersCount: number;
+//   isUserJoined: boolean;
+//   users?: Author[];
+// };
 export type InviteCodeResponse = {
   data: {
     inviteCode: string;
@@ -48,7 +47,8 @@ export type InviteUser = {
   groupId: string;
   inviteeId: string;
 };
+
 export type GroupsResponse = ApiResponse<Group[]>;
 export type InvitationsResponse = ApiResponse<Invitation[]>;
-export type GroupDetailsResponse = ApiResponse<GroupDetails>;
+// export type GroupDetailsResponse = ApiResponse<GroupDetails>;
 export type UsersToInviteResponse = ApiResponse<UserToInvite[]>;

@@ -5,7 +5,7 @@ import { Box, Stack, Typography } from "@mui/material";
 
 import { Control } from "react-hook-form";
 import { ControlledRadioGroup } from "src/components/form/controlled/controlled-radio-group";
-import { Visibility } from "src/api/post/types";
+import { Visibility } from "src/api/posts/types";
 
 type Props = {
   control: Control<any, any>;

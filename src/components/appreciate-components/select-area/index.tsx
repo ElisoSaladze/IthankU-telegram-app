@@ -9,7 +9,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Shade } from "src/api/shade";
+import { Shade } from "src/api/shades/shades.api";
 import ShadeComponent from "src/components/shade-component";
 import { useEffect, useState } from "react";
 import { useFetchItemsContext } from "src/providers/hashtag-shade";
