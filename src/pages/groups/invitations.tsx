@@ -56,7 +56,7 @@ const Invitation = () => {
         invitations!.data.map((invitation) => (
           <InvitationItem
             id={invitation._id}
-            refetch={() => refetch()}
+            refetch={refetch}
             key={invitation._id}
             group={invitation.group}
           />
