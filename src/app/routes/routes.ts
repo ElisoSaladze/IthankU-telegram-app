@@ -14,7 +14,7 @@ export const routes = [
   }),
   buildRoute({
     path: paths.onboarding,
-    factory: () => import("src/pages/onboarding/index"),
+    factory: () => import("src/pages/onboarding"),
     state: "unauthenticated",
   }),
   buildRoute({
