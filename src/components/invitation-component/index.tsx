@@ -55,7 +55,7 @@ const InvitationItem: React.FC<InvitationItemProps> = ({
             Accept
           </Button>
           <Button
-            onClick={() => decline()}
+            onClick={decline}
             fullWidth
             variant="contained"
             color="secondary"
