@@ -1,13 +1,7 @@
-import { Stack } from "@mui/material";
-// import { useQuery } from "@tanstack/react-query";
-// import { getPendingTransactions } from "src/api/transaction";
+import TransactionsList from "src/pages/pending-transactions/pending-transactions-list";
 
-const Incoming = () => {
-  // const { data: transactions } = useQuery({
-  //   queryKey: ["transactions"],
-  //   queryFn: () => getPendingTransactions(),
-  // });
-  return <Stack></Stack>;
+const IncomingPendingTransactions: React.FC = () => {
+  return <TransactionsList type="incoming" />;
 };
 
-export default Incoming;
+export default IncomingPendingTransactions;
