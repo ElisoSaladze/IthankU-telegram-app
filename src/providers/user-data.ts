@@ -6,28 +6,30 @@ import { useForm } from "react-hook-form";
 import { CurrentUser } from "src/api/listing/types";
 
 const useGetUserDetails = () => {
-  const { control, getValues, setValue, watch, reset, handleSubmit } = useForm<CurrentUser>({
-    defaultValues: {
-      isPrivate: false,
-      _id: "",
-      bio: "",
-      email: "",
-      generalRating: 0,
-      isLocationPublic: false,
-      linkedAccounts: [],
-      name: "",
-      physicalPoints: 0,
-      picture: "",
-      placemark: "",
-      topHashtags: [],
-      topShades: [],
-    },
-  });
+  const { control, getValues, setValue, watch, reset, handleSubmit } =
+    useForm<CurrentUser>({
+      defaultValues: {
+        isPrivate: false,
+        _id: "",
+        bio: "",
+        email: "",
+        generalRating: 0,
+        isLocationPublic: false,
+        linkedAccounts: [],
+        name: "",
+        physicalPoints: 0,
+        picture: "",
+        placemark: "",
+        topHashtags: [],
+        topShades: [],
+      },
+    });
   const { userData } = useAuthContext();
   const {
     data: user,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery({
     enabled: userData.isFetched,
     queryKey: ["user-info"],
@@ -47,6 +49,7 @@ const useGetUserDetails = () => {
     isLoading,
     isFetching,
     handleSubmit,
+    refetch
   } as const;
 };
 export const [GetUserDetailsProvider, useGetUserDetailsContext] =

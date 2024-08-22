@@ -18,11 +18,12 @@ import {
 } from "@mui/material";
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { generatePath, useNavigate } from "react-router-dom";
 import { Post } from "../../api/post/types";
 import { timeAgo } from "../../helpers";
 import TagItem from "../tag";
 import LikesItem from "../likes";
+import { paths } from "src/app/routes";
 
 type Props = {
   post: Post;
@@ -35,11 +36,20 @@ const PostItem = ({ post, isDetails = false }: Props) => {
   );
 
   const navigateToDetails = () => {
+    const postId = post._id;
     if (!isDetails) {
       if (post.visibility === "Public") {
-        navigate(`/post/${post._id}`);
+        navigate({
+          pathname: generatePath(paths.post, {
+            postId,
+          }),
+        });
       } else {
-        navigate(`/private-post/${post._id}`);
+        navigate({
+          pathname: generatePath(paths.privatePost, {
+            postId,
+          }),
+        });
       }
     }
   };

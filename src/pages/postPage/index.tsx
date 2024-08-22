@@ -1,4 +1,4 @@
-import { Box, Skeleton, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 import { Params, useParams } from "react-router-dom";
@@ -6,35 +6,29 @@ import { getPost } from "src/api/post";
 import PostItem from "src/components/post-item";
 
 import BackButtonAppBar from "src/components/appbar";
+import { match, P } from "ts-pattern";
+import Loader from "src/components/loader";
 
 const PostPage = () => {
   const { postId } = useParams<Params>();
 
-  const post = useQuery({
+  const $post = useQuery({
     queryKey: ["postDetails", postId],
     queryFn: () => getPost(postId!),
   });
 
   return (
-    <Stack marginTop={6} p={2}>
+    <Stack p={2}>
       <BackButtonAppBar pageName="Post" />
-      {post.isFetching || post.isLoading ? (
-        <Box>
-          <Skeleton
-            variant="rectangular"
-            width="100%"
-            height={60}
-            sx={{ mb: 2 }}
-          />
-          <Skeleton variant="text" width="60%" height={30} sx={{ mb: 1 }} />
-          <Skeleton variant="text" width="90%" height={20} sx={{ mb: 1 }} />
-          <Skeleton variant="rectangular" width="100%" height={194} />
-        </Box>
-      ) : post.data ? (
-        <PostItem isDetails={true} post={post.data.data} />
-      ) : (
-        <Box>Could not load</Box>
-      )}
+      {match($post)
+        .with({ isLoading: true, isFetching: true }, () => <Loader />)
+        .with({ isError: true }, () => <Box>Could not load</Box>)
+        .with({ isSuccess: true, data: P.select() }, ({ data }) => (
+          <PostItem isDetails={true} post={data} />
+        ))
+        .otherwise(() => (
+          <Box>Could not load</Box>
+        ))}
     </Stack>
   );
 };

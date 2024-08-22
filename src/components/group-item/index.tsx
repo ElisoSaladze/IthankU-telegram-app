@@ -2,16 +2,19 @@ import { Avatar, ListItemButton, Stack, Typography } from "@mui/material";
 
 import defaultImageUrl from "../../assets/images/itu-circle.png";
 
-import { useNavigate } from "react-router-dom";
+import { generatePath, useNavigate } from "react-router-dom";
 import { Group } from "../../api/group/types";
 import ShadeComponent from "../shade-component";
 import TagItem from "../tag";
+import { paths } from "src/app/routes";
 
 type Props = {
   group: Group;
 };
+
 const GroupItem = ({ group }: Props) => {
   const navigate = useNavigate();
+  const groupId = group._id;
   return (
     <ListItemButton
       sx={{
@@ -20,7 +23,11 @@ const GroupItem = ({ group }: Props) => {
         padding: 1,
         boxShadow: "0px 0px 8.2px -1px #00000026",
       }}
-      onClick={() => navigate(`/groups/details/${group._id}`)}
+      onClick={() =>
+        navigate(generatePath(paths.groupDetails, {
+            groupId,
+        }))
+      }
     >
       <Stack
         sx={{ width: "100%" }}
@@ -38,7 +45,10 @@ const GroupItem = ({ group }: Props) => {
             <Typography fontSize={15} fontWeight={600}>
               {group.name}
             </Typography>
-            <ShadeComponent color="green" name={group.shade} />
+            <ShadeComponent
+              color={group.shadeInfo?.color}
+              name={group.shadeInfo?.en}
+            />
             <Stack direction={"row"}>
               {group.tags?.map((tag, i) => (
                 <TagItem key={i} tag={tag} />

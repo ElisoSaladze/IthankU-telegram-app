@@ -85,7 +85,13 @@ const Accounts = () => {
   if (isLoading || isFetching) return <Loader />;
 
   return (
-    <Stack gap={1} px={2} alignItems={"center"}>
+    <Stack
+      mb={10}
+      height={"100%"}
+      gap={1}
+      px={2}
+      alignItems={"center"}
+    >
       <Typography fontSize={24}>Accounts</Typography>
 
       <Typography fontSize={12} alignSelf={"flex-start"}>

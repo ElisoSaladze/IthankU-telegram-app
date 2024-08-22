@@ -3,7 +3,7 @@ import {
   Avatar,
   Box,
   Button,
-//   CircularProgress,
+  //   CircularProgress,
   IconButton,
   Stack,
   Toolbar,
@@ -16,8 +16,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Params, useNavigate, useParams } from "react-router-dom";
 import IosShareIcon from "@mui/icons-material/IosShare";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getUsersToInvite, inviteUser } from "src/api/group";
+import { getInvitationCode, getUsersToInvite, inviteUser } from "src/api/group";
 import { InviteUser } from "src/api/group/types";
+import { handleShare } from "src/helpers";
 
 const InviteUserPage = () => {
   const { groupId } = useParams<Params>();
@@ -27,6 +28,16 @@ const InviteUserPage = () => {
       name: "",
     },
   });
+
+  const { data: invitationResponse } = useQuery({
+    enabled: !!groupId,
+    queryKey: ["invitation-qr"],
+    queryFn: () => getInvitationCode(groupId!),
+  });
+
+  const appreciationUrl = invitationResponse
+    ? `https://web.itu-net.com/appreciate/${invitationResponse.data.inviteCode}`
+    : "";
 
   const searchTerm = watch("name").toLowerCase();
 
@@ -162,6 +173,13 @@ const InviteUserPage = () => {
         ))}
       </Stack>
       <Button
+        onClick={() =>
+          handleShare(
+            appreciationUrl,
+            "Join our Group",
+            "Check out this link to join our group!"
+          )
+        }
         sx={{
           marginX: 2,
           position: "fixed",

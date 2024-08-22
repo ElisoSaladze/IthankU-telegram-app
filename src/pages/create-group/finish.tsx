@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 
-import { useNavigate } from "react-router-dom";
+import { generatePath, useNavigate } from "react-router-dom";
 import ShadeComponent from "src/components/shade-component";
 import TagItem from "src/components/tag";
 import {
@@ -16,6 +16,7 @@ import {
   CreateGroupRequest,
 } from "src/providers/create-group-provider";
 import { createGroup } from "src/api/group";
+import { paths } from "src/app/routes";
 
 const FinishNewGroup = () => {
   const { watch, handleSubmit } = useCreateGroupContext();
@@ -33,7 +34,10 @@ const FinishNewGroup = () => {
       for (const tag of data.tags) formData.append("tags", tag.value);
       return createGroup(formData);
     },
-    onSuccess: (data) => navigate(`/groups/${data.data._id}`),
+    onSuccess: (data) => {
+      const groupId = data.data._id;
+      navigate(generatePath(paths.groupDetails, { groupId }));
+    },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       console.error(error);
@@ -104,7 +108,7 @@ const FinishNewGroup = () => {
       </Stack>
       <Stack gap={1} maxWidth={380} width={"100%"} direction={"row"}>
         <Button
-          onClick={() => navigate("/home")}
+          onClick={() => navigate(paths.home)}
           size="large"
           fullWidth
           variant="contained"

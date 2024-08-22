@@ -2,6 +2,7 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { Box, Button, Fab, Stack } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { paths } from "src/app/routes";
 type Props = {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,7 +45,7 @@ const AppreciateComponent = ({ show, setShow }: Props) => {
       {getApprectiation && (
         <Button
           onClick={() => {
-            navigate("/get-appreciate", { state: { isAdvanced: false } });
+            navigate(paths.getAppreciate, { state: { isAdvanced: false } });
             setShow(false);
           }}
           color="info"
@@ -92,7 +93,7 @@ const AppreciateComponent = ({ show, setShow }: Props) => {
       {appreciate && (
         <Button
           onClick={() => {
-            navigate("/phone-number-appreciate");
+            navigate(paths.phoneNumberAppreciate);
             setShow(false);
           }}
           color="info"
@@ -110,7 +111,7 @@ const AppreciateComponent = ({ show, setShow }: Props) => {
         <Button
           color="info"
           onClick={() => {
-            navigate("/get-appreciate/qr-options", {
+            navigate(paths.qrOptions, {
               state: { isAdvanced: true },
             });
             setShow(false);

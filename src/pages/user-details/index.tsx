@@ -1,5 +1,7 @@
 import { Button, IconButton, Stack, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 import {
   createSearchParams,
@@ -8,27 +10,59 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
+import { changeName, changePfp } from "src/api/auth/api";
 import { getUser } from "src/api/listing";
 import { paths } from "src/app/routes";
 import { IconLocation } from "src/assets/icons";
 import BackButtonAppBar from "src/components/appbar";
 import { ChipComponent } from "src/components/chip-component";
+import { ControlledTextField } from "src/components/form/controlled/controlled-text-field";
 import Loader from "src/components/loader";
 
 import PfpComponent from "src/components/pfp-component";
+import { fileToBase64, formatNumber } from "src/helpers";
 import { useAuthContext } from "src/providers/auth";
+import { useGetUserDetailsContext } from "src/providers/user-data";
 import { match, P } from "ts-pattern";
 
 const UserDetailsPage = () => {
+  const [isEditable, setIsEditable] = useState(false);
   const navigate = useNavigate();
+  const { refetch } = useGetUserDetailsContext();
   const { userData } = useAuthContext();
   const { userId } = useParams<Params>();
   const isCurrent = userData.data?.user._id === userId;
 
   const $user = useQuery({
-    queryKey: ["postDetails", userId],
+    queryKey: ["userDetails", userId],
     queryFn: () => getUser(userId!),
   });
+
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      name: $user.data?.user.name,
+    },
+  });
+  const { mutate: changeProfile } = useMutation({
+    mutationKey: ["newPfp"],
+    mutationFn: (img: string) => changePfp(img),
+    onSuccess: () => refetch(),
+  });
+
+  const { mutate: changeUserName } = useMutation({
+    mutationKey: ["newName"],
+    mutationFn: (name: string) => changeName(name),
+    onSuccess: () => refetch(),
+  });
+
+  const handleImageChange = async (newImage: File) => {
+    try {
+      const base64Image = await fileToBase64(newImage);
+      changeProfile(base64Image);
+    } catch (error) {
+      console.error("Error converting image to Base64:", error);
+    }
+  };
 
   return (
     <>
@@ -41,7 +75,7 @@ const UserDetailsPage = () => {
         })
         .with({ isSuccess: true, data: P.select() }, ({ user }) => {
           return (
-            <Stack gap={1} mx={3} mt={3}>
+            <Stack height={"100%"} overflow="auto" gap={1} mx={3} mt={3}>
               <BackButtonAppBar pageName="Profile" />
               <Stack
                 borderRadius={5}
@@ -81,12 +115,46 @@ const UserDetailsPage = () => {
                     showEditIcon={false}
                     size={[80, 80]}
                     imageUrl={user.picture}
-                    isEditable={true}
+                    isEditable={isCurrent}
+                    onChange={handleImageChange}
                   />
                   <Stack>
-                    <Typography fontSize={20} fontWeight={700} color="white">
-                      {user.name}
-                    </Typography>
+                    {isCurrent && isEditable ? (
+                      <ControlledTextField
+                        onBlur={handleSubmit((data) => {
+                          changeUserName(data.name!);
+                          setIsEditable(false);
+                          $user.refetch();
+                          refetch();
+                        })}
+                        InputProps={{
+                          sx: {
+                            color: "white",
+                            padding: 0,
+                            paddingRight: 1.5,
+                            "& fieldset": {
+                              border: "none",
+                            },
+                          },
+                        }}
+                        control={control}
+                        name="name"
+                      />
+                    ) : (
+                      <Typography
+                        onClick={() => {
+                          if (isCurrent) {
+                            setIsEditable(true);
+                          }
+                        }}
+                        fontSize={20}
+                        fontWeight={700}
+                        color="white"
+                      >
+                        {user.name}
+                      </Typography>
+                    )}
+
                     <Typography fontSize={14} color={"white"}>
                       {user.email}
                     </Typography>
@@ -131,7 +199,7 @@ const UserDetailsPage = () => {
                 <Stack
                   alignItems="center"
                   justifyContent="center"
-                  width="50%"
+                  width={isCurrent ? "50%" : "100%"}
                   border={3}
                   borderColor="#0058A9"
                   bgcolor="#0058A9"
@@ -139,7 +207,7 @@ const UserDetailsPage = () => {
                   p={0.5}
                 >
                   <Typography fontSize={36} fontWeight={600} color="white">
-                    {user.generalRating}
+                    {formatNumber(user.generalRating)}
                   </Typography>
                   <Typography fontSize={14} fontWeight={500} color="white">
                     General score

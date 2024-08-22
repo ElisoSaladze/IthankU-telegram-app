@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { paths } from "src/app/routes";
 
 const TransactionsPage = () => {
   const location = useLocation();
@@ -30,7 +31,7 @@ const TransactionsPage = () => {
   };
 
   return (
-    <Stack margin={2} justifyContent={"center"}>
+    <Stack paddingBottom={10} margin={2} justifyContent={"center"}>
       <Typography marginBottom={2} textAlign={"center"}>
         Transactions
       </Typography>
@@ -54,7 +55,7 @@ const TransactionsPage = () => {
         justifyContent={"flex-end"}
       >
         <Button
-          onClick={() => navigate("/more/pending-transactions")}
+          onClick={() => navigate(paths.incomingPendingTransactions)}
           sx={{ padding: 0 }}
         >
           <Typography

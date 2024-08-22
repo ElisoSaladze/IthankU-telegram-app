@@ -8,6 +8,7 @@ import Loader from "src/components/loader";
 
 import { Group } from "src/api/group/types";
 import GroupItem from "src/components/join-group-item";
+import { paths } from "src/app/routes";
 
 const JoinGroupPage = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const JoinGroupPage = () => {
     >
       <Stack alignItems={"center"}>
         <Button
-          onClick={() => navigate("/home")}
+          onClick={() => navigate(paths.home)}
           sx={{ alignSelf: "end" }}
           color="secondary"
         >
@@ -55,7 +56,7 @@ const JoinGroupPage = () => {
         </Stack>
       </Stack>
       <Button
-        onClick={() => navigate('/create-group')}
+        onClick={() => navigate(paths.createGroup)}
         size="large"
         endIcon={<AddIcon fontSize="large" />}
         variant="contained"
