@@ -86,7 +86,7 @@ const Accounts = () => {
 
   return (
     <Stack
-      marginBottom={10}
+      mb={10}
       height={"100%"}
       gap={1}
       px={2}
