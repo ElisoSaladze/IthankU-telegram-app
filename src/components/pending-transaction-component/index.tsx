@@ -2,24 +2,25 @@ import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { acceptTransaction, declineTransaction } from "src/api/transaction";
 import ShadeComponent from "../shade-component";
+import { Shade } from "src/api/shade";
 
 type PendingTransactionItemProps = {
   transaction: {
     id: string;
     user: {
       name: string;
-      avatar: string;
+      avatar?: string;
     };
-    area: string;
+    area: Shade;
     hashtag: string;
   };
   refetch: () => void;
 };
 
-const PendingTransactionItem: React.FC<PendingTransactionItemProps> = ({
+const PendingTransactionItem = ({
   transaction,
   refetch,
-}) => {
+}: PendingTransactionItemProps) => {
   const { mutate: accept } = useMutation({
     mutationKey: ["accept-transaction"],
     mutationFn: () => acceptTransaction(transaction.id),
@@ -35,8 +36,8 @@ const PendingTransactionItem: React.FC<PendingTransactionItemProps> = ({
   return (
     <Stack
       gap={2}
-      alignItems={"center"}
-      direction={"row"}
+      alignItems="center"
+      direction="row"
       sx={{
         width: 1,
         borderRadius: 5,
@@ -49,15 +50,18 @@ const PendingTransactionItem: React.FC<PendingTransactionItemProps> = ({
         sx={{ width: 60, height: 60, borderRadius: "50%" }}
         src={transaction.user.avatar}
       />
-      <Stack gap={0.5} width={"100%"}>
+      <Stack gap={0.5} width={1}>
         <Typography variant="h6" fontWeight="bold">
           {transaction.user.name}
         </Typography>
-        <ShadeComponent color="green" name={transaction.area} />
+        <ShadeComponent
+          color={transaction.area.color}
+          name={transaction.area.en}
+        />
         <Typography variant="body2">
           Hashtag: <b>#{transaction.hashtag}</b>
         </Typography>
-        <Box display={"flex"} gap={2} mt={1}>
+        <Box display="flex" gap={2} mt={1}>
           <Button
             onClick={() => accept()}
             fullWidth

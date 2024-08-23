@@ -61,6 +61,7 @@ const TransactionDetailsPage = () => {
 
               <Box
                 sx={{
+                  width: "100%",
                   position: "fixed",
                   top: 0,
                   left: 0,
@@ -71,7 +72,7 @@ const TransactionDetailsPage = () => {
                 <TransactionBackground fill={transaction.shadeInfo.color} />
               </Box>
 
-              <Stack justifyContent="center" gap={1} marginTop={5} marginX={2}>
+              <Stack justifyContent="center" gap={1} mt={5} mx={2}>
                 <Typography color="white" textAlign="center">
                   {transaction.shade}
                 </Typography>

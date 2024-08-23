@@ -31,8 +31,8 @@ const TransactionsPage = () => {
   };
 
   return (
-    <Stack paddingBottom={10} margin={2} justifyContent={"center"}>
-      <Typography marginBottom={2} textAlign={"center"}>
+    <Stack pb={10} m={2} justifyContent="center">
+      <Typography mb={2} textAlign="center">
         Transactions
       </Typography>
       <Stack>
@@ -48,10 +48,10 @@ const TransactionsPage = () => {
         </ToggleButtonGroup>
       </Stack>
       <Stack
-        marginBottom={1}
-        direction={"row"}
-        alignItems={"center"}
-        justifyContent={"flex-end"}
+        mb={1}
+        direction="row"
+        alignItems="center"
+        justifyContent="flex-end"
       >
         <Button
           onClick={() => navigate(paths.incomingPendingTransactions)}
@@ -59,8 +59,8 @@ const TransactionsPage = () => {
         >
           <Typography
             sx={{ textDecoration: "underline" }}
-            textAlign={"end"}
-            fontSize={"small"}
+            textAlign="end"
+            fontSize="small"
             color="primary"
           >
             See Pending Transactions

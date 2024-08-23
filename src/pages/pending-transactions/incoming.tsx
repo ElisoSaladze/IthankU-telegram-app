@@ -1,6 +1,6 @@
 import TransactionsList from "src/pages/pending-transactions/pending-transactions-list";
 
-const IncomingPendingTransactions: React.FC = () => {
+const IncomingPendingTransactions = () => {
   return <TransactionsList type="incoming" />;
 };
 
