@@ -141,7 +141,9 @@ const HomePage = () => {
                 Create Group
               </MenuItem>
             </Menu>
-            <IconButton>
+            <IconButton
+              onClick={() => navigate(paths.incomingPendingTransactions)}
+            >
               <IconNotification sx={{ color: "info.main" }} />
             </IconButton>
           </Toolbar>

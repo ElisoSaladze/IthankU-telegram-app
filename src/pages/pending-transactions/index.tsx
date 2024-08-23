@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { paths } from "src/app/routes";
 
 const PendingTransactionsPage = () => {
   const location = useLocation();
@@ -29,8 +30,8 @@ const PendingTransactionsPage = () => {
     }
   };
   return (
-    <Stack paddingX={2} justifyContent={"center"}>
-      <Typography marginBottom={2} textAlign={"center"}>
+    <Stack px={2} justifyContent="center">
+      <Typography mb={2} textAlign="center">
         Pending Transactions
       </Typography>
       <Stack>
@@ -46,19 +47,15 @@ const PendingTransactionsPage = () => {
         </ToggleButtonGroup>
       </Stack>
       <Stack></Stack>
-      <Stack
-        direction={"row"}
-        alignItems={"center"}
-        justifyContent={"flex-end"}
-      >
+      <Stack direction="row" alignItems="center" justifyContent="flex-end">
         <Button
-          onClick={() => navigate("/more/transactions/incoming")}
+          onClick={() => navigate(paths.incomingTransactions)}
           sx={{ padding: 0 }}
         >
           <Typography
             sx={{ textDecoration: "underline" }}
-            textAlign={"end"}
-            fontSize={"small"}
+            textAlign="end"
+            fontSize="small"
             color="primary"
           >
             See All Transactions
