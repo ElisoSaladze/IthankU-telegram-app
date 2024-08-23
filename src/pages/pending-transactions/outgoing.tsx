@@ -1,5 +1,7 @@
-const Outgoing = () => {
-  return <div>outgoing</div>;
+import TransactionsList from "src/pages/pending-transactions/pending-transactions-list";
+
+const OutgoingPendingTransactions = () => {
+  return <TransactionsList type="outgoing" />;
 };
 
-export default Outgoing;
+export default OutgoingPendingTransactions;
