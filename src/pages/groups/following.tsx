@@ -29,7 +29,7 @@ const Following = () => {
   });
 
   return (
-    <Stack p={2} pb={10} gap={1} alignItems="center">
+    <Stack p={3} pb={10} gap={1} alignItems="center">
       <Typography variant="h6" gutterBottom>
         Following
       </Typography>

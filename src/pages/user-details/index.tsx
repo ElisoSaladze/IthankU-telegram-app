@@ -38,9 +38,9 @@ const UserDetailsPage = () => {
     queryFn: () => getUser(userId!),
   });
 
-  const { control, handleSubmit } = useForm({
+  const { control, setValue, handleSubmit } = useForm({
     defaultValues: {
-      name: $user.data?.user.name,
+      name: "",
     },
   });
   const { mutate: changeProfile } = useMutation({
@@ -145,6 +145,7 @@ const UserDetailsPage = () => {
                         onClick={() => {
                           if (isCurrent) {
                             setIsEditable(true);
+                            setValue("name", user.name || "");
                           }
                         }}
                         fontSize={20}

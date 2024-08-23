@@ -32,7 +32,7 @@ const Listing = () => {
   };
 
   return (
-    <Stack p={2} spacing={2}>
+    <Stack p={3} spacing={2}>
       <Stack
         alignItems={"center"}
         direction={"row"}

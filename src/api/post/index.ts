@@ -3,7 +3,8 @@ import { PostDetails, PostsResponse } from "./types";
 import { get } from "src/lib/request/request";
 
 const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
-export const getPosts = async () => get<PostsResponse>(`api/posts`);
+export const getPosts = async (page: number) =>
+  get<PostsResponse>(`api/posts?page=${page}`);
 
 export const getPost = async (postId: string) =>
   get<PostDetails>(`api/posts/${postId}`);
