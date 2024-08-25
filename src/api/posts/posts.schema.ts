@@ -21,7 +21,7 @@ export const TPost = z.object({
   likes: z.array(TAuthor),
   createdAt: z.string(),
   updatedAt: z.string(),
-  hasLiked: z.boolean(),
+  hasLiked: z.boolean().optional(),
   visibility: TVisibility,
   author: TAuthor.nullable().optional(),
 });
