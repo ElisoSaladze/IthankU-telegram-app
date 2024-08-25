@@ -3,7 +3,7 @@ import { GetInvitationsInput, GroupId } from './group';
 import { GetPostDetailsInput } from './posts';
 import { GetUserInput } from './users';
 import { GetAppreciateUser, GetAppreciateUserInput } from './appreciate';
-import { GetTransactionDetailsInput, GetUserTransactionsInput } from './transactions';
+import { GetPendingTransactionsInput, GetTransactionDetailsInput, GetUserTransactionsInput } from './transactions';
 
 /**
  * Same list can be displayed with the standard page pagination in one place (useQuery)
@@ -49,6 +49,6 @@ export const qk = buildModuleCacheKey({
   transactions: {
     userTransactions: (input: GetUserTransactionsInput) => [input],
     details: (input: GetTransactionDetailsInput) => [input],
-    pendingTransactions: null,
+    pendingTransactions: (input: GetPendingTransactionsInput) => [input],
   },
 });

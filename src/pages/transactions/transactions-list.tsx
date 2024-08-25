@@ -6,6 +6,8 @@ import { getUserTransactions } from 'src/api/transaction';
 import TransactionItem from 'src/components/transaction-item';
 import { useAuthContext } from 'src/providers/auth';
 import { match, P } from 'ts-pattern';
+import { qk } from '~/api/query-keys';
+import { getUserTransactions, TransactionType } from '~/api/transactions';
 
 const TransactionsList = ({ type }: { type: 'incoming' | 'outgoing' }) => {
   const [ref, inView] = useInView();

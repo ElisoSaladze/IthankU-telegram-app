@@ -2,6 +2,10 @@ import { z } from 'zod';
 import { TAuthor } from '../group';
 import { TShade } from '../shades';
 
+export const TTransactionType = z.union([z.literal('incoming'), z.literal('outgoing')]);
+
+export type TransactionType = z.infer<typeof TTransactionType>;
+
 export const TTransaction = z.object({
   _id: z.string(),
   amount: z.number(),
