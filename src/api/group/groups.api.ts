@@ -1,20 +1,18 @@
-import { get, patch, post } from "src/lib/_request/request";
+import { globalAccessToken } from 'src/providers/auth';
+import { request } from 'src/lib/request';
 import {
-  GroupsResponse,
-  InvitationsResponse,
-  InviteCodeResponse,
-  InviteUser,
-  UsersToInviteResponse,
-} from "./types";
-import { globalAccessToken } from "src/providers/auth";
-import { request } from "src/lib/request";
-import { TGroupDetailsResponse, TGroupsResponse } from "./groups.schema";
-import { TPostResponse } from "../posts";
+  TGroupDetailsResponse,
+  TGroupsResponse,
+  TInvitationCodeResponse,
+  TInvitationResponse,
+  TUserToInviteResponse,
+} from './groups.schema';
+import { TPostsResponse } from '../posts';
 
-const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
+const VITE_APP_API_URL = import.meta.env['VITE_APP_API_URL'];
 
 export const getGroups = async () => {
-  return await request("/api/groups").get({}, TGroupsResponse);
+  return await request('/api/groups').get({}, TGroupsResponse);
 };
 
 export type GroupId = {
@@ -22,29 +20,29 @@ export type GroupId = {
 };
 
 export const getGroupDetails = async ({ groupId }: GroupId) => {
-  return await request("/api/groups/:groupId").get(
+  return await request('/api/groups/:groupId').get(
     {
       params: {
         groupId,
       },
     },
-    TGroupDetailsResponse
+    TGroupDetailsResponse,
   );
 };
 
 export const getGroupPosts = async ({ groupId }: GroupId) => {
-  return await request("/api/posts/group/:groupId").get(
+  return await request('/api/posts/group/:groupId').get(
     {
       params: {
         groupId,
       },
     },
-    TPostResponse
+    TPostsResponse,
   );
 };
 
 export const joinGroup = async ({ groupId }: GroupId) => {
-  return request("api/groups/:groupId/join").post({
+  return request('/api/groups/:groupId/join').post({
     params: {
       groupId,
     },
@@ -52,37 +50,93 @@ export const joinGroup = async ({ groupId }: GroupId) => {
 };
 
 export const leaveGroup = async ({ groupId }: GroupId) => {
-  return request("api/groups/:groupId/leave").post({
+  return request('/api/groups/:groupId/leave').post({
     params: {
       groupId,
     },
   });
 };
 
-export const userGroups = async () => get<GroupsResponse>(`users/groups`);
+export const userGroups = async () => {
+  return await request('/users/groups').get({}, TGroupsResponse);
+};
 
-export const getInvitations = async (userId: string) =>
-  get<InvitationsResponse>(`api/groups/invitations/${userId}`);
+export type GetInvitationsInput = {
+  userId: string;
+};
 
-export const acceptInvitation = async (inviteId: string) =>
-  patch(`api/groups/invitations/${inviteId}/accept`);
+export const getInvitations = async ({ userId }: GetInvitationsInput) => {
+  return await request('/api/groups/invitations/:userId').get(
+    {
+      params: {
+        userId,
+      },
+    },
+    TInvitationResponse,
+  );
+};
 
-export const declineInvitation = async (inviteId: string) =>
-  patch(`api/groups/invitations/${inviteId}/decline`);
+export type InviteId = {
+  inviteId: string;
+};
 
-export const getInvitationCode = async (groupId: string) =>
-  post<InviteCodeResponse>(`api/groups/${groupId}/share`);
+export const acceptInvitation = async ({ inviteId }: InviteId) => {
+  return request('/api/groups/invitations/:inviteId/accept').patch({
+    params: {
+      inviteId,
+    },
+  });
+};
 
-export const inviteUser = async (body: InviteUser) =>
-  post("api/groups/invite", body);
+export const declineInvitation = async ({ inviteId }: InviteId) => {
+  return request('/api/groups/invitations/:inviteId/decline').patch({
+    params: {
+      inviteId,
+    },
+  });
+};
 
-export const getUsersToInvite = async (groupId: string) =>
-  get<UsersToInviteResponse>(`api/groups/${groupId}/users-to-invite`);
+export const getInvitationCode = async ({ groupId }: GroupId) => {
+  return request('/api/groups/:groupId/share').post(
+    {
+      params: {
+        groupId,
+      },
+    },
+    TInvitationCodeResponse,
+  );
+};
 
+export type InviteUserInput = {
+  groupId: string;
+  inviteeId: string;
+};
+
+export const inviteUser = async ({ groupId, inviteeId }: InviteUserInput) => {
+  return request('/api/groups/invite').post({
+    body: {
+      groupId,
+      inviteeId,
+    },
+  });
+};
+
+export const getUsersToInvite = async ({ groupId }: GroupId) => {
+  return await request('/api/groups/:groupId/users-to-invite').get(
+    {
+      params: {
+        groupId,
+      },
+    },
+    TUserToInviteResponse,
+  );
+};
+
+// TODO!
 export const createGroup = async (body: FormData) => {
   try {
     const response = await fetch(`${VITE_APP_API_URL}api/groups`, {
-      method: "POST",
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${globalAccessToken}`,
       },
@@ -94,14 +148,14 @@ export const createGroup = async (body: FormData) => {
       // Read and log error response body
       const errorDetails = await response.text();
 
-      console.error("Error details:", errorDetails);
+      console.error('Error details:', errorDetails);
       throw new Error(`Network response was not ok: ${response.statusText}`);
     }
 
     // Parse and return the JSON response if successful
     return response.json();
   } catch (error) {
-    console.error("Error creating post:", error);
+    console.error('Error creating post:', error);
     throw error;
   }
 };

@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { TAuthor, TVisibility } from "../group";
+import { z } from 'zod';
+import { TAuthor, TVisibility } from '../group';
 
 const TMedia = z.object({
   _id: z.string(),
@@ -12,7 +12,7 @@ export const TPost = z.object({
   content: z.string(),
   summary: z.string(),
   preview: z.string(),
-  group: z.string(),
+  group: z.string().nullable(),
   tags: z.array(z.string()),
   images: z.array(z.string()).optional(),
   files: z.any(),
@@ -28,4 +28,6 @@ export const TPost = z.object({
 
 export type Post = z.infer<typeof TPost>;
 
-export const TPostResponse = z.object({ data: z.array(TPost) });
+export const TPostsResponse = z.object({ data: z.array(TPost) });
+
+export const TPostDetailsResponse = z.object({ data: TPost });

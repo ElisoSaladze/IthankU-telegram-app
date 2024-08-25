@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import constate from "constate";
-import { getHashtags } from "src/api/hashtag/api";
-import { getShades } from "src/api/shades/shades.api";
+import { useQuery } from '@tanstack/react-query';
+import constate from 'constate';
+import { getShades } from 'src/api/shades/shades.api';
+import { getHashtags } from '~/api/hashtag';
+import { qk } from '~/api/query-keys';
 
 const getLocalStorageData = <T>(key: string): T | null => {
   const storedData = localStorage.getItem(key);
@@ -14,17 +15,17 @@ const setLocalStorageData = (key: string, data: unknown): void => {
 
 const useFetchItems = () => {
   const shadesQuery = useQuery({
-    queryKey: ["shades"],
+    queryKey: ['shades'],
     queryFn: getShades,
-    initialData: getLocalStorageData("shades"),
-    onSuccess: (data) => setLocalStorageData("shades", data),
+    initialData: getLocalStorageData('shades'),
+    onSuccess: (data) => setLocalStorageData('shades', data),
   });
 
   const hashtagsQuery = useQuery({
-    queryKey: ["hashtags"],
+    queryKey: qk.hashtags.toKey(),
     queryFn: getHashtags,
-    initialData: getLocalStorageData("hashtags"),
-    onSuccess: (data) => setLocalStorageData("hashtags", data),
+    initialData: getLocalStorageData('hashtags'),
+    onSuccess: (data) => setLocalStorageData('hashtags', data),
   });
 
   return {
@@ -37,5 +38,4 @@ const useFetchItems = () => {
   } as const;
 };
 
-export const [FetchItemsProvider, useFetchItemsContext] =
-  constate(useFetchItems);
+export const [FetchItemsProvider, useFetchItemsContext] = constate(useFetchItems);

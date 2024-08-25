@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const TShade = z.object({
   _id: z.string(),
@@ -8,6 +8,8 @@ export const TShade = z.object({
   ru: z.string(),
   ua: z.string(),
 });
+
+export type Shade = z.infer<typeof TShade>;
 
 export const TShadesResponse = z.object({
   data: z.array(TShade),

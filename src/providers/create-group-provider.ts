@@ -1,12 +1,12 @@
-import constate from "constate";
-import { useForm } from "react-hook-form";
-import { Visibility } from "src/api/posts/types";
+import constate from 'constate';
+import { useForm } from 'react-hook-form';
+import { Visibility } from '~/constants/enums';
 
 export type CreateGroupRequest = {
   name: string;
   description: string;
   shade: string;
-  privacy: "Public" | "Private";
+  privacy: 'Public' | 'Private';
   image?: File;
   cover?: File;
   currentTag: string;
@@ -16,13 +16,13 @@ export type CreateGroupRequest = {
   }[];
 };
 const defaultValues: CreateGroupRequest = {
-  name: "",
-  description: "",
+  name: '',
+  description: '',
   tags: [],
-  shade: "",
-  shadeColor: "",
+  shade: '',
+  shadeColor: '',
   privacy: Visibility.Public,
-  currentTag: "#",
+  currentTag: '#',
 };
 const useCreateGroup = () => {
   const { handleSubmit, setValue, control, watch } = useForm({
@@ -33,12 +33,9 @@ const useCreateGroup = () => {
 
   // Add form validation logic here
   const isFormValid = () => {
-    return (
-      formValues.name.trim() !== "" && formValues.description.trim() !== ""
-    );
+    return formValues.name.trim() !== '' && formValues.description.trim() !== '';
   };
 
   return { handleSubmit, setValue, control, watch, isFormValid } as const;
 };
-export const [CreateGroupProvider, useCreateGroupContext] =
-  constate(useCreateGroup);
+export const [CreateGroupProvider, useCreateGroupContext] = constate(useCreateGroup);

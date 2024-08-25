@@ -17,8 +17,8 @@ import { Params, useNavigate, useParams } from "react-router-dom";
 import IosShareIcon from "@mui/icons-material/IosShare";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getInvitationCode, getUsersToInvite, inviteUser } from "src/api/group";
-import { InviteUser } from "src/api/group/types";
 import { handleShare } from "src/helpers";
+import { qk } from "src/api/query-keys";
 
 const InviteUserPage = () => {
   const { groupId } = useParams<Params>();
@@ -30,9 +30,9 @@ const InviteUserPage = () => {
   });
 
   const { data: invitationResponse } = useQuery({
+    queryKey: qk.groups.getInvitationCode.toKeyWithArgs({ groupId: groupId! }),
+    queryFn: () => getInvitationCode({ groupId: groupId! }),
     enabled: !!groupId,
-    queryKey: ["invitation-qr"],
-    queryFn: () => getInvitationCode(groupId!),
   });
 
   const appreciationUrl = invitationResponse
@@ -42,22 +42,19 @@ const InviteUserPage = () => {
   const searchTerm = watch("name").toLowerCase();
 
   const { data: usersResponse } = useQuery({
+    queryKey: qk.groups.getUserToInvite.toKeyWithArgs({ groupId: groupId! }),
+    queryFn: () => getUsersToInvite({ groupId: groupId! }),
     enabled: !!groupId,
-    queryKey: ["invite-users"],
-    queryFn: () => getUsersToInvite(groupId!),
   });
 
   const filteredUsers = usersResponse?.data.filter((user) =>
     user.name.toLowerCase().includes(searchTerm)
   );
-  const {
-    mutate: invite,
-    // isSuccess,
-    // isLoading,
-  } = useMutation({
-    mutationKey: ["invite"],
-    mutationFn: (body: InviteUser) => inviteUser(body),
+
+  const $inviteUser = useMutation({
+    mutationFn: inviteUser,
   });
+
   return (
     <Stack
       overflow={"hidden"}
@@ -139,12 +136,12 @@ const InviteUserPage = () => {
       >
         {filteredUsers?.map((user) => (
           <Box
-            onClick={() =>
-              invite({
+            onClick={() => {
+              $inviteUser.mutate({
                 groupId: groupId!,
                 inviteeId: user._id,
-              })
-            }
+              });
+            }}
             key={user._id}
           >
             <Stack

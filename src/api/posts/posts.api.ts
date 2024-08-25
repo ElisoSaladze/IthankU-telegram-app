@@ -1,18 +1,41 @@
-import { globalAccessToken } from "src/providers/auth";
-import { PostDetails, PostsResponse } from "./types";
-import { get } from "src/lib/_request/request";
+import { globalAccessToken } from 'src/providers/auth';
+import { request } from '~/lib/request';
+import { TPostDetailsResponse, TPostsResponse } from './posts.schema';
 
-const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
-export const getPosts = async (page: number) =>
-  get<PostsResponse>(`api/posts?page=${page}`);
+const VITE_APP_API_URL = import.meta.env['VITE_APP_API_URL'];
 
-export const getPost = async (postId: string) =>
-  get<PostDetails>(`api/posts/${postId}`);
+export type GetPostsInput = {
+  page: number;
+};
 
+export const getPosts = async ({ page }: GetPostsInput) => {
+  const query = new URLSearchParams();
+
+  query.set('page', String(page));
+
+  return await request('/api/posts').get({}, TPostsResponse);
+};
+
+export type GetPostDetailsInput = {
+  postId: string;
+};
+
+export const getPost = async ({ postId }: GetPostDetailsInput) => {
+  return await request('/api/posts/:postId').get(
+    {
+      params: {
+        postId,
+      },
+    },
+    TPostDetailsResponse,
+  );
+};
+
+// TODO!
 export const createPost = async (body: FormData) => {
   try {
     const response = await fetch(`${VITE_APP_API_URL}api/posts`, {
-      method: "POST",
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${globalAccessToken}`,
       },
@@ -23,14 +46,14 @@ export const createPost = async (body: FormData) => {
     if (!response.ok) {
       // Read and log error response body
       const errorDetails = await response.text();
-      console.error("Error details:", errorDetails);
+      console.error('Error details:', errorDetails);
       throw new Error(`Network response was not ok: ${response.statusText}`);
     }
 
     // Parse and return the JSON response if successful
     return response.json();
   } catch (error) {
-    console.error("Error creating post:", error);
+    console.error('Error creating post:', error);
     throw error;
   }
 };

@@ -1,29 +1,24 @@
-import { Button, IconButton, Stack, Typography } from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Button, IconButton, Stack, Typography } from '@mui/material';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import {
-  createSearchParams,
-  generatePath,
-  Params,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
-import { changeName, changePfp } from "src/api/auth/api";
-import { getUser } from "src/api/listing";
-import { paths } from "src/app/routes";
-import { IconLocation } from "src/assets/icons";
-import BackButtonAppBar from "src/components/appbar";
-import { ChipComponent } from "src/components/chip-component";
-import { ControlledTextField } from "src/components/form/controlled/controlled-text-field";
-import Loader from "src/components/loader";
+import { createSearchParams, generatePath, Params, useNavigate, useParams } from 'react-router-dom';
+import { changeName, changePfp } from '~/api/auth/auth.api';
+import { paths } from 'src/app/routes';
+import { IconLocation } from 'src/assets/icons';
+import BackButtonAppBar from 'src/components/appbar';
+import { ChipComponent } from 'src/components/chip-component';
+import { ControlledTextField } from 'src/components/form/controlled/controlled-text-field';
+import Loader from 'src/components/loader';
 
-import PfpComponent from "src/components/pfp-component";
-import { fileToBase64, formatNumber } from "src/helpers";
-import { useAuthContext } from "src/providers/auth";
-import { useGetUserDetailsContext } from "src/providers/user-data";
-import { match, P } from "ts-pattern";
+import PfpComponent from 'src/components/pfp-component';
+import { fileToBase64, formatNumber } from 'src/helpers';
+import { useAuthContext } from 'src/providers/auth';
+import { useGetUserDetailsContext } from 'src/providers/user-data';
+import { match, P } from 'ts-pattern';
+import { qk } from '~/api/query-keys';
+import { getUser } from '~/api/users';
 
 const UserDetailsPage = () => {
   const [isEditable, setIsEditable] = useState(false);
@@ -34,8 +29,8 @@ const UserDetailsPage = () => {
   const isCurrent = userData.data?.user._id === userId;
 
   const $user = useQuery({
-    queryKey: ["userDetails", userId],
-    queryFn: () => getUser(userId!),
+    queryKey: qk.users.details.toKeyWithArgs({ userId: userId! }),
+    queryFn: () => getUser({ userId: userId! }),
   });
 
   const { control, setValue, handleSubmit } = useForm({
@@ -43,24 +38,30 @@ const UserDetailsPage = () => {
       name: "",
     },
   });
-  const { mutate: changeProfile } = useMutation({
-    mutationKey: ["newPfp"],
-    mutationFn: (img: string) => changePfp(img),
-    onSuccess: () => refetch(),
+
+  const $changePfp = useMutation({
+    mutationFn: changePfp,
   });
 
-  const { mutate: changeUserName } = useMutation({
-    mutationKey: ["newName"],
-    mutationFn: (name: string) => changeName(name),
-    onSuccess: () => refetch(),
+  const $changeName = useMutation({
+    mutationFn: changeName,
   });
 
   const handleImageChange = async (newImage: File) => {
     try {
       const base64Image = await fileToBase64(newImage);
-      changeProfile(base64Image);
+      $changePfp.mutate(
+        {
+          picture: base64Image,
+        },
+        {
+          onSuccess: () => {
+            refetch();
+          },
+        },
+      );
     } catch (error) {
-      console.error("Error converting image to Base64:", error);
+      console.error('Error converting image to Base64:', error);
     }
   };
 
@@ -75,19 +76,13 @@ const UserDetailsPage = () => {
         })
         .with({ isSuccess: true, data: P.select() }, ({ user }) => {
           return (
-            <Stack height={"100%"} overflow="auto" gap={1} mx={3} mt={3}>
+            <Stack height={'100%'} overflow="auto" gap={1} mx={3} mt={3}>
               <BackButtonAppBar pageName="Profile" />
-              <Stack
-                borderRadius={5}
-                bgcolor="info.main"
-                p={2}
-                gap={1}
-                position="relative"
-              >
+              <Stack borderRadius={5} bgcolor="info.main" p={2} gap={1} position="relative">
                 {user.location && (
                   <IconButton
                     sx={{
-                      position: "absolute",
+                      position: 'absolute',
                       top: 0,
                       right: 4,
                     }}
@@ -122,18 +117,27 @@ const UserDetailsPage = () => {
                     {isCurrent && isEditable ? (
                       <ControlledTextField
                         onBlur={handleSubmit((data) => {
-                          changeUserName(data.name!);
+                          $changeName.mutate(
+                            {
+                              name: data.name!,
+                            },
+                            {
+                              onSuccess: () => {
+                                refetch();
+                              },
+                            },
+                          );
                           setIsEditable(false);
                           $user.refetch();
                           refetch();
                         })}
                         InputProps={{
                           sx: {
-                            color: "white",
+                            color: 'white',
                             padding: 0,
                             paddingRight: 1.5,
-                            "& fieldset": {
-                              border: "none",
+                            '& fieldset': {
+                              border: 'none',
                             },
                           },
                         }}
@@ -156,12 +160,10 @@ const UserDetailsPage = () => {
                       </Typography>
                     )}
 
-                    <Typography fontSize={14} color={"white"}>
+                    <Typography fontSize={14} color={'white'}>
                       {user.email}
                     </Typography>
-                    <Stack direction={"row"}>
-                      {user.linkedAccounts.map((acc) => acc.type)}
-                    </Stack>
+                    <Stack direction={'row'}>{user.linkedAccounts.map((acc) => acc.type)}</Stack>
                   </Stack>
                 </Stack>
                 {!isCurrent && (
@@ -200,7 +202,7 @@ const UserDetailsPage = () => {
                 <Stack
                   alignItems="center"
                   justifyContent="center"
-                  width={isCurrent ? "50%" : "100%"}
+                  width={isCurrent ? '50%' : '100%'}
                   border={3}
                   borderColor="#0058A9"
                   bgcolor="#0058A9"
@@ -227,39 +229,21 @@ const UserDetailsPage = () => {
                 </Stack>
               )}
 
-              {user.topHashtags.length === 0 &&
-              user.topHashtags.length === 0 ? (
-                <Typography
-                  fontSize={20}
-                  color="#8B8B8B"
-                  mt={5}
-                  textAlign="center"
-                >
+              {user.topHashtags.length === 0 && user.topHashtags.length === 0 ? (
+                <Typography fontSize={20} color="#8B8B8B" mt={5} textAlign="center">
                   No area and hashtag found to be displayed.
                 </Typography>
               ) : (
                 <>
                   {user.topShades.length > 0 && (
                     <>
-                      <Typography
-                        fontSize={14}
-                        color="#9C9C9C"
-                        fontWeight={500}
-                        mt={1}
-                      >
+                      <Typography fontSize={14} color="#9C9C9C" fontWeight={500} mt={1}>
                         Areas
                       </Typography>
                       <Stack flexWrap="wrap" gap={1} direction="row">
                         {user.topShades.map((shade) => (
-                          <ChipComponent
-                            key={shade._id}
-                            color={shade.shadeInfo.color}
-                          >
-                            <Typography
-                              fontSize={16}
-                              fontWeight={500}
-                              color={shade.shadeInfo.color}
-                            >
+                          <ChipComponent key={shade._id} color={shade.shadeInfo.color}>
+                            <Typography fontSize={16} fontWeight={500} color={shade.shadeInfo.color}>
                               {`${shade.shade} ${shade.points}`}
                             </Typography>
                           </ChipComponent>
@@ -270,30 +254,19 @@ const UserDetailsPage = () => {
 
                   {user.topHashtags.length > 0 && (
                     <>
-                      <Typography
-                        fontSize={14}
-                        color="#9C9C9C"
-                        fontWeight={500}
-                        mt={1}
-                      >
+                      <Typography fontSize={14} color="#9C9C9C" fontWeight={500} mt={1}>
                         Hashtags
                       </Typography>
                       <Stack flexWrap="wrap" gap={1} direction="row">
                         {user.topHashtags.map(
                           (hashtag, i) =>
                             hashtag.hashtag && (
-                              <ChipComponent
-                                key={hashtag.hashtag + i + hashtag.count}
-                              >
-                                <Typography
-                                  fontSize={16}
-                                  fontWeight={500}
-                                  color="info.main"
-                                >
+                              <ChipComponent key={hashtag.hashtag + i + hashtag.count}>
+                                <Typography fontSize={16} fontWeight={500} color="info.main">
                                   #{hashtag.hashtag}
                                 </Typography>
                               </ChipComponent>
-                            )
+                            ),
                         )}
                       </Stack>
                     </>

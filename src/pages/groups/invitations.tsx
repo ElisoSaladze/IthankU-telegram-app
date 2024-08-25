@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import InvitationItem from "src/components/invitation-component";
 import { getInvitations } from "src/api/group";
 import { useAuthContext } from "src/providers/auth";
+import { qk } from "src/api/query-keys";
 
 const Invitation = () => {
   const { userData } = useAuthContext();
@@ -14,8 +15,8 @@ const Invitation = () => {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["get-invitations"],
-    queryFn: async () => getInvitations(userId),
+    queryKey: qk.groups.getInvitations.toKeyWithArgs({ userId }),
+    queryFn: () => getInvitations({ userId }),
   });
 
   if (isLoading) {

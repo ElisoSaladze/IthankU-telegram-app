@@ -1,27 +1,21 @@
-import {
-  Avatar,
-  Button,
-  ListItemButton,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getUsers } from "src/api/listing";
-import Loader from "src/components/loader";
-import ShadeComponent from "src/components/shade-component";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { generatePath, useNavigate } from "react-router-dom";
-import { paths } from "src/app/routes";
-import { match, P } from "ts-pattern";
-import { useEffect } from "react";
-import { useInView } from "react-intersection-observer";
+import { Avatar, Button, ListItemButton, Stack, Typography } from '@mui/material';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { getUsers } from 'src/api/listing';
+import Loader from 'src/components/loader';
+import ShadeComponent from 'src/components/shade-component';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { generatePath, useNavigate } from 'react-router-dom';
+import { paths } from 'src/app/routes';
+import { match, P } from 'ts-pattern';
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 const UsersList = () => {
   const [ref, inView] = useInView();
   const navigate = useNavigate();
 
   const $users = useInfiniteQuery({
-    queryKey: ["listing-users"],
+    queryKey: ['listing-users'],
     queryFn: async ({ pageParam = 1 }) => getUsers(pageParam),
     getNextPageParam: (result) => {
       const nextPage = result.page + 1;
@@ -37,9 +31,7 @@ const UsersList = () => {
 
   return match($users)
     .with({ isLoading: true }, () => <Loader />)
-    .with({ isError: true }, () => (
-      <Typography color="error">Failed to load users.</Typography>
-    ))
+    .with({ isError: true }, () => <Typography color="error">Failed to load users.</Typography>)
     .with({ isSuccess: true, data: P.select() }, ({ pages }) => (
       <Stack paddingBottom={10} marginY={1} gap={1}>
         {pages
@@ -52,9 +44,9 @@ const UsersList = () => {
               }}
               key={user._id}
               sx={{
-                width: "100%",
+                width: '100%',
                 borderRadius: 5,
-                boxShadow: "0px 0px 8.2px -1px #00000026",
+                boxShadow: '0px 0px 8.2px -1px #00000026',
               }}
             >
               <Stack
@@ -83,7 +75,7 @@ const UsersList = () => {
                   <Typography>{Math.round(user.generalRating)}</Typography>
                   <ArrowForwardIosIcon
                     sx={{
-                      color: "secondary.main",
+                      color: 'secondary.main',
                     }}
                   />
                 </Stack>
@@ -96,11 +88,7 @@ const UsersList = () => {
             ref={ref}
             onClick={() => $users.fetchNextPage()}
           >
-            {$users.isFetchingNextPage
-              ? "Loading more data"
-              : $users.hasNextPage
-              ? "Show more"
-              : "No more data"}
+            {$users.isFetchingNextPage ? 'Loading more data' : $users.hasNextPage ? 'Show more' : 'No more data'}
           </Button>
         )}
       </Stack>

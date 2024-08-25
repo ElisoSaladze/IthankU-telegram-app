@@ -15,21 +15,24 @@ import { getInvitationCode } from "src/api/group";
 import Loader from "src/components/loader";
 import { useState } from "react";
 import { handleShare } from "src/helpers";
+import { qk } from "src/api/query-keys";
 
 const InviteWithQr = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const { groupId } = useParams<Params>();
   const location = useLocation();
   const { groupName, image, background } = location.state || {};
+
   const {
     data: invitationResponse,
     isLoading,
     isFetching,
   } = useQuery({
+    queryKey: qk.groups.getInvitationCode.toKeyWithArgs({ groupId: groupId! }),
+    queryFn: () => getInvitationCode({ groupId: groupId! }),
     enabled: !!groupId,
-    queryKey: ["invitation-qr"],
-    queryFn: () => getInvitationCode(groupId!),
   });
+
   const appreciationUrl = invitationResponse
     ? `https://web.itu-net.com/appreciate/${invitationResponse.data.inviteCode}`
     : "";
@@ -41,7 +44,6 @@ const InviteWithQr = () => {
     });
   };
 
-  
   return (
     <Stack height={"100vh"} overflow={"auto"}>
       <BackButtonAppBar pageName={"QR Code"} showNotif={false} />

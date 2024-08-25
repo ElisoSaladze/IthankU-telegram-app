@@ -1,5 +1,9 @@
-import { buildModuleCacheKey } from "src/lib/react-query-utils";
-import { GroupId } from "./group";
+import { buildModuleCacheKey } from 'src/lib/react-query-utils';
+import { GetInvitationsInput, GroupId } from './group';
+import { GetPostDetailsInput } from './posts';
+import { GetUserInput } from './users';
+import { GetAppreciateUser, GetAppreciateUserInput } from './appreciate';
+import { GetTransactionDetailsInput, GetUserTransactionsInput } from './transactions';
 
 /**
  * Same list can be displayed with the standard page pagination in one place (useQuery)
@@ -16,14 +20,35 @@ export type InfiniteQueryKey = {
  */
 export const qk = buildModuleCacheKey({
   auth: {
-    token: {
-      refresh: null,
-    },
+    refresh: null,
   },
   shades: null,
   groups: {
     list: null,
     details: (input: GroupId) => [input],
     posts: (input: GroupId) => [input],
+    userGroups: null,
+    getInvitations: (input: GetInvitationsInput) => [input],
+    getInvitationCode: (input: GroupId) => [input],
+    getUserToInvite: (input: GroupId) => [input],
+  },
+  posts: {
+    list: null,
+    details: (input: GetPostDetailsInput) => [input],
+  },
+  users: {
+    list: null,
+    details: (input: GetUserInput) => [input],
+    check: null,
+  },
+  appreciate: {
+    getUser: (input: GetAppreciateUserInput) => [input],
+    getQRCode: (input: GetAppreciateUser) => [input],
+  },
+  hashtags: null,
+  transactions: {
+    userTransactions: (input: GetUserTransactionsInput) => [input],
+    details: (input: GetTransactionDetailsInput) => [input],
+    pendingTransactions: null,
   },
 });

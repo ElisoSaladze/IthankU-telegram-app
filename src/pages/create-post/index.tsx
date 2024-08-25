@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import AttachmentOutlinedIcon from "@mui/icons-material/AttachmentOutlined";
-import CloseIcon from "@mui/icons-material/Close";
-import DoneIcon from "@mui/icons-material/Done";
+import AttachmentOutlinedIcon from '@mui/icons-material/AttachmentOutlined';
+import CloseIcon from '@mui/icons-material/Close';
+import DoneIcon from '@mui/icons-material/Done';
 import {
   AppBar,
   Avatar,
@@ -14,23 +14,23 @@ import {
   Stack,
   Toolbar,
   Typography,
-} from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
+} from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 
-import paid from "src/assets/images/paid.png";
+import paid from 'src/assets/images/paid.png';
 
-import { useRef, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { Params, useNavigate, useParams } from "react-router-dom";
-import { Visibility } from "src/api/posts/types";
-import { useAuthContext } from "src/providers/auth";
-import { createPost } from "src/api/posts";
-import VisibilityStatus from "src/components/visibility-status";
-import { ControlledTextField } from "src/components/form/controlled/controlled-text-field";
-import { ControlledTextArea } from "src/components/form/controlled/controlled-text-area";
-import PreviewImg from "src/components/preview-img";
-import TagItem from "src/components/tag";
-import ConfirmationDialog from "src/components/confirmation-diallog";
+import { useRef, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { Params, useNavigate, useParams } from 'react-router-dom';
+import { useAuthContext } from 'src/providers/auth';
+import { createPost } from 'src/api/posts';
+import VisibilityStatus from 'src/components/visibility-status';
+import { ControlledTextField } from 'src/components/form/controlled/controlled-text-field';
+import { ControlledTextArea } from 'src/components/form/controlled/controlled-text-area';
+import PreviewImg from 'src/components/preview-img';
+import TagItem from 'src/components/tag';
+import ConfirmationDialog from 'src/components/confirmation-diallog';
+import { Visibility } from '~/constants/enums';
 type Tag = {
   value: string;
 };
@@ -50,40 +50,45 @@ type CreatePostFormData = {
   files: Files[];
 };
 const defaultPostValue: CreatePostFormData = {
-  content: "",
+  content: '',
   group: null,
   images: [],
-  summary: "",
+  summary: '',
   tags: [] as Tag[],
   visibility: Visibility.Public,
-  currentTag: "#",
-  preview: "",
+  currentTag: '#',
+  preview: '',
   files: [],
 };
 const CreatePostPage = () => {
+  const navigate = useNavigate();
+
   const [error, setError] = useState<string | null>(null);
   const { groupId } = useParams<Params>();
   const maxFileSize = 25 * 1024 * 1024;
   const maxLength = 300;
-  const navigate = useNavigate();
+
   const { userData } = useAuthContext();
+
   const { control, watch, setValue, handleSubmit } = useForm({
     defaultValues: {
       ...defaultPostValue,
       group: groupId!,
     },
   });
+
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "tags",
+    name: 'tags',
   });
+
   const {
     fields: imgFields,
     append: imgAppend,
     remove: imgRemove,
   } = useFieldArray({
     control,
-    name: "images",
+    name: 'images',
   });
 
   const {
@@ -92,22 +97,22 @@ const CreatePostPage = () => {
     remove: fileRemove,
   } = useFieldArray({
     control,
-    name: "files",
+    name: 'files',
   });
 
   const mutation = useMutation({
-    mutationKey: ["new-post"],
+    mutationKey: ['new-post'],
     mutationFn: (data: CreatePostFormData) => {
       const formData = new FormData();
-      formData.append("content", data.content);
-      if (groupId) formData.append("group", groupId);
-      formData.append("summary", data.summary);
-      formData.append("visibility", data.visibility);
-      for (const tag of data.tags) formData.append("tags", tag.value);
-      for (const img of data.images) formData.append("images", img.value);
-      for (const file of data.files) formData.append("files", file.value);
+      formData.append('content', data.content);
+      if (groupId) formData.append('group', groupId);
+      formData.append('summary', data.summary);
+      formData.append('visibility', data.visibility);
+      for (const tag of data.tags) formData.append('tags', tag.value);
+      for (const img of data.images) formData.append('images', img.value);
+      for (const file of data.files) formData.append('files', file.value);
       if (data.preview!.trim().length > 0) {
-        formData.append("preview", data.preview!);
+        formData.append('preview', data.preview!);
       }
       return createPost(formData);
     },
@@ -120,15 +125,12 @@ const CreatePostPage = () => {
   });
 
   const onSubmit = handleSubmit((data) => mutation.mutate(data));
-  const handleFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    isImage: boolean
-  ) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, isImage: boolean) => {
     const files = event.target.files;
     if (files && files[0]) {
       const file = files[0];
       if (file.size > maxFileSize) {
-        setError("File size should not exceed 25MB.");
+        setError('File size should not exceed 25MB.');
       } else {
         if (isImage) {
           fileRemove(0); // Remove any existing file
@@ -144,15 +146,11 @@ const CreatePostPage = () => {
     }
   };
 
-  const handlePhotoVideoChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handlePhotoVideoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleFileChange(event, true);
   };
 
-  const handleAttachmentChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleAttachmentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleFileChange(event, false);
   };
   const photoVideoInputRef = useRef<HTMLInputElement | null>(null);
@@ -170,7 +168,7 @@ const CreatePostPage = () => {
       <AppBar>
         <Toolbar
           sx={{
-            justifyContent: "space-between",
+            justifyContent: 'space-between',
           }}
         >
           <IconButton onClick={() => navigate(-1)}>
@@ -180,7 +178,7 @@ const CreatePostPage = () => {
             fontWeight={500}
             variant="h6"
             component="div"
-            sx={{ textAlign: "center", color: "black", fontSize: 20 }}
+            sx={{ textAlign: 'center', color: 'black', fontSize: 20 }}
           >
             Create Post
           </Typography>
@@ -188,38 +186,28 @@ const CreatePostPage = () => {
         </Toolbar>
       </AppBar>
       {userData.isFetched && (
-        <Stack p={2} gap={1} alignItems={"center"} direction={"row"}>
-          <Avatar
-            src={userData.data?.user.picture}
-            sx={{ width: 65, height: 65 }}
-          />
+        <Stack p={2} gap={1} alignItems={'center'} direction={'row'}>
+          <Avatar src={userData.data?.user.picture} sx={{ width: 65, height: 65 }} />
           <Typography fontSize={20} fontWeight={600}>
             {userData.data?.user.name}
           </Typography>
         </Stack>
       )}
 
-      <Stack width={"100%"} p={2} gap={2}>
+      <Stack width={'100%'} p={2} gap={2}>
         <VisibilityStatus
           name="visibility"
           control={control}
-          labels={[
-            "Fully visible to everyone.",
-            "Preview only. 1 coin to unlock",
-          ]}
+          labels={['Fully visible to everyone.', 'Preview only. 1 coin to unlock']}
         />
         <Stack
           sx={{
-            border: "1px solid #ccc",
+            border: '1px solid #ccc',
             borderRadius: 4,
             paddingTop: 1,
           }}
         >
-          <Typography
-            marginLeft={1.5}
-            color={"primary.light"}
-            fontSize={"small"}
-          >
+          <Typography marginLeft={1.5} color={'primary.light'} fontSize={'small'}>
             Summary
           </Typography>
           <ControlledTextField
@@ -230,8 +218,8 @@ const CreatePostPage = () => {
             InputProps={{
               sx: {
                 padding: 0,
-                "& fieldset": {
-                  border: "none", // Remove the border
+                '& fieldset': {
+                  border: 'none', // Remove the border
                 },
               },
             }}
@@ -239,17 +227,17 @@ const CreatePostPage = () => {
         </Stack>
         <Stack
           sx={{
-            border: "1px solid #ccc",
+            border: '1px solid #ccc',
             borderRadius: 7,
             padding: 2,
           }}
         >
-          <Stack direction={"row"} justifyContent={"space-between"}>
-            <Typography color={"primary.light"} fontSize={"small"}>
+          <Stack direction={'row'} justifyContent={'space-between'}>
+            <Typography color={'primary.light'} fontSize={'small'}>
               Text
             </Typography>
-            <Typography color={"red"} fontSize={"small"}>
-              {maxLength - watch("content").length}
+            <Typography color={'red'} fontSize={'small'}>
+              {maxLength - watch('content').length}
             </Typography>
           </Stack>
           <ControlledTextArea
@@ -261,8 +249,8 @@ const CreatePostPage = () => {
             InputProps={{
               sx: {
                 padding: 0,
-                "& fieldset": {
-                  border: "none", // Remove the border
+                '& fieldset': {
+                  border: 'none', // Remove the border
                 },
               },
             }}
@@ -273,7 +261,7 @@ const CreatePostPage = () => {
               accept="image/*,video/*"
               type="file"
               id="photo-video-upload"
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
               onChange={handlePhotoVideoChange}
               ref={photoVideoInputRef}
             />
@@ -282,7 +270,7 @@ const CreatePostPage = () => {
               accept="*/*"
               type="file"
               id="file-upload"
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
               onChange={handleAttachmentChange}
               ref={attachmentInputRef}
             />
@@ -299,17 +287,17 @@ const CreatePostPage = () => {
             {error}
           </Typography>
         )}
-        <Stack spacing={0.5} direction={"row"}>
+        <Stack spacing={0.5} direction={'row'}>
           {fileFields.length > 0 && (
             <ListItemButton
               onClick={() => {
-                const fileURL = URL.createObjectURL(fileFields[0].value);
-                window.open(fileURL, "_blank");
+                const fileURL = URL.createObjectURL(fileFields[0]!.value);
+                window.open(fileURL, '_blank');
               }}
             >
               <Stack direction="row" alignItems="center" spacing={1}>
                 <AttachmentOutlinedIcon />
-                <Typography>{fileFields[0].value.name}</Typography>
+                <Typography>{fileFields[0]!.value.name}</Typography>
                 <IconButton onClick={() => fileRemove(0)}>
                   <CloseIcon />
                 </IconButton>
@@ -317,24 +305,19 @@ const CreatePostPage = () => {
             </ListItemButton>
           )}
         </Stack>
-        <Stack spacing={0.5} direction={"row"}>
-          {imgFields.length > 0 && (
-            <PreviewImg
-              remove={() => imgRemove(0)}
-              image={imgFields[0].value}
-            />
-          )}
+        <Stack spacing={0.5} direction={'row'}>
+          {imgFields.length > 0 && <PreviewImg remove={() => imgRemove(0)} image={imgFields[0]!.value} />}
         </Stack>
 
-        {watch("visibility") === "Private" && (
+        {watch('visibility') === 'Private' && (
           <Stack
             sx={{
-              border: "1px solid #ccc",
+              border: '1px solid #ccc',
               borderRadius: 5,
               padding: 2,
             }}
           >
-            <Typography color={"primary.light"} fontSize={"small"}>
+            <Typography color={'primary.light'} fontSize={'small'}>
               Preview Text
             </Typography>
             <ControlledTextArea
@@ -345,8 +328,8 @@ const CreatePostPage = () => {
               InputProps={{
                 sx: {
                   padding: 0,
-                  "& fieldset": {
-                    border: "none", // Remove the border
+                  '& fieldset': {
+                    border: 'none', // Remove the border
                   },
                 },
               }}
@@ -355,16 +338,12 @@ const CreatePostPage = () => {
         )}
         <Stack
           sx={{
-            border: "1px solid #ccc",
+            border: '1px solid #ccc',
             borderRadius: 4,
             paddingTop: 1,
           }}
         >
-          <Typography
-            marginLeft={1.5}
-            color={"primary.light"}
-            fontSize={"small"}
-          >
+          <Typography marginLeft={1.5} color={'primary.light'} fontSize={'small'}>
             Tags
           </Typography>
           <ControlledTextField
@@ -374,16 +353,16 @@ const CreatePostPage = () => {
               sx: {
                 padding: 0,
                 paddingRight: 1.5,
-                "& fieldset": {
-                  border: "none", // Remove the border
+                '& fieldset': {
+                  border: 'none', // Remove the border
                 },
               },
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     onClick={() => {
-                      append({ value: watch("currentTag") });
-                      setValue("currentTag", "#");
+                      append({ value: watch('currentTag') });
+                      setValue('currentTag', '#');
                     }}
                     edge="end"
                   >
@@ -394,24 +373,14 @@ const CreatePostPage = () => {
             }}
           />
         </Stack>
-        <Stack spacing={0.5} direction={"row"} flexWrap={"wrap"}>
+        <Stack spacing={0.5} direction={'row'} flexWrap={'wrap'}>
           {fields.map((tag, index) => (
-            <TagItem
-              key={tag.id}
-              clickable
-              onClick={() => remove(index)}
-              tag={tag.value}
-            />
+            <TagItem key={tag.id} clickable onClick={() => remove(index)} tag={tag.value} />
           ))}
         </Stack>
-        {watch("visibility") === "Public" ? (
-          <Button
-            disabled={mutation.isLoading}
-            onClick={onSubmit}
-            size="large"
-            variant="contained"
-          >
-            {mutation.isLoading ? <CircularProgress /> : "Post"}
+        {watch('visibility') === 'Public' ? (
+          <Button disabled={mutation.isLoading} onClick={onSubmit} size="large" variant="contained">
+            {mutation.isLoading ? <CircularProgress /> : 'Post'}
           </Button>
         ) : (
           <ConfirmationDialog
@@ -419,16 +388,16 @@ const CreatePostPage = () => {
             title=""
             confirmButtonText="Publish"
             description={
-              <Stack gap={1} alignItems={"center"} textAlign={"center"}>
+              <Stack gap={1} alignItems={'center'} textAlign={'center'}>
                 <img width={120} src={paid} alt="paid" />
                 <Typography fontSize={30} fontWeight={600}>
                   Ready to publish your paid post?
                 </Typography>
-                <Typography fontSize={"small"}>
-                  Publishing a paid post requires{" "}
-                  <Typography component={"span"} color={"primary"}>
+                <Typography fontSize={'small'}>
+                  Publishing a paid post requires{' '}
+                  <Typography component={'span'} color={'primary'}>
                     one coin.
-                  </Typography>{" "}
+                  </Typography>{' '}
                   Please confirm your payment of one coin to proceed.
                 </Typography>
               </Stack>

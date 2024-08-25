@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ParamParseKey, generatePath } from "react-router-dom";
-import { z } from "zod";
-import { requestError } from ".";
-import { createRequestBody } from "./create-request-body";
-import { globalAccessToken } from "src/providers/auth";
+import { ParamParseKey, generatePath } from 'react-router-dom';
+import { z } from 'zod';
+import { requestError } from '.';
+import { createRequestBody } from './create-request-body';
+import { globalAccessToken } from 'src/providers/auth';
 
-type RequestMethods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-export type RequestType = "json" | "file";
+export type RequestType = 'json' | 'file';
 
 type RequestInput<Path extends string> = {
   headers?: Headers;
@@ -19,24 +19,18 @@ type RequestInput<Path extends string> = {
   type?: RequestType;
 };
 
-export const createRequest = <Path extends string>(
-  method: RequestMethods,
-  url: Path
-) => {
-  return async <T extends z.ZodSchema<any, any>>(
-    input: RequestInput<Path>,
-    schema?: T
-  ): Promise<T["_output"]> => {
+export const createRequest = <Path extends string>(method: RequestMethods, url: Path) => {
+  return async <T extends z.ZodSchema<any, any>>(input: RequestInput<Path>, schema?: T): Promise<T['_output']> => {
     const headers = new Headers(input.headers);
 
-    const inputType = input.type ?? "json";
+    const inputType = input.type ?? 'json';
 
-    if (inputType === "json") {
-      headers.set("Content-Type", "application/json");
+    if (inputType === 'json') {
+      headers.set('Content-Type', 'application/json');
     }
 
     if (globalAccessToken && !input.withoutAuth) {
-      headers.set("Authorization", `Bearer ${globalAccessToken}`);
+      headers.set('Authorization', `Bearer ${globalAccessToken}`);
     }
 
     const requestInit = {
@@ -49,16 +43,13 @@ export const createRequest = <Path extends string>(
     const apiUrl = input.params ? generatePath(url, input.params) : url;
 
     try {
-      const res = await fetch(
-        input.query ? `${apiUrl}?${input.query}` : apiUrl,
-        requestInit
-      );
+      const res = await fetch(input.query ? `${apiUrl}?${input.query}` : apiUrl, requestInit);
 
       if (res.status >= 500) {
         const error = await res.json();
 
         throw requestError({
-          type: "server",
+          type: 'server',
           message: error.message,
           name: error.name,
           errors: error.errors,
@@ -69,7 +60,7 @@ export const createRequest = <Path extends string>(
         const error = await res.json();
 
         throw requestError({
-          type: "client",
+          type: 'client',
           message: error.message,
           name: error.name,
           errors: error.errors,
@@ -81,18 +72,15 @@ export const createRequest = <Path extends string>(
 
         const parsed = schema.safeParse(json);
 
-        console.log({ json, parsed });
-
         if (!parsed.success) {
           const { error } = parsed;
-          const errorMessages = error.issues
-            .map((issue) => issue.message)
-            .join(", ");
+          const errorMessages = error.issues.map((issue) => issue.message).join(', ');
 
           throw requestError({
-            type: "decode_error",
+            type: 'decode_error',
             message: errorMessages,
             name: error.name,
+            url,
           });
         }
 
@@ -103,7 +91,7 @@ export const createRequest = <Path extends string>(
     } catch (error) {
       if (error instanceof TypeError) {
         throw requestError({
-          type: "network",
+          type: 'network',
           ...error,
         });
       }

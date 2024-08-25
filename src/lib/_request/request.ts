@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { globalAccessToken } from "../../providers/auth";
+import { globalAccessToken } from '../../providers/auth';
 
 /**
  * The HTTP request function.
@@ -7,9 +7,9 @@ import { globalAccessToken } from "../../providers/auth";
  * @param method The HTTP method (e.g., 'GET', 'POST', etc.).
  * @returns A function that makes an HTTP request with the specified method.
  */
-type Method = "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
+type Method = 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
 
-const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL;
+const VITE_APP_API_URL = import.meta.env['VITE_APP_API_URL'];
 
 export const request =
   (method: Method) =>
@@ -17,7 +17,7 @@ export const request =
     const result = await fetch(`${VITE_APP_API_URL}${path}`, {
       method,
       headers: {
-        "Content-type": "application/json",
+        'Content-type': 'application/json',
         Authorization: `Bearer ${globalAccessToken}`,
       },
       body: JSON.stringify(body),
@@ -40,8 +40,8 @@ export const request =
   };
 
 // Functions for making specific HTTP requests
-export const get = request("GET");
-export const post = request("POST");
-export const put = request("PUT");
-export const patch = request("PATCH");
-export const del = request("DELETE");
+export const get = request('GET');
+export const post = request('POST');
+export const put = request('PUT');
+export const patch = request('PATCH');
+export const del = request('DELETE');

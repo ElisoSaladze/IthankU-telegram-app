@@ -1,11 +1,13 @@
-import { z } from "zod";
-import { TShade } from "../shades";
+import { z } from 'zod';
+import { TShade } from '../shades';
 
 export const TAuthor = z.object({
-  _id: z.string(),
+  _id: z.string().optional(),
   name: z.string().optional(),
   picture: z.string().optional(),
 });
+
+export type Author = z.infer<typeof TAuthor>;
 
 export const TGroup = z.object({
   _id: z.string(),
@@ -17,11 +19,13 @@ export const TGroup = z.object({
   shadeInfo: TShade,
 });
 
+export type Group = z.infer<typeof TGroup>;
+
 export const TGroupsResponse = z.object({
   data: z.array(TGroup),
 });
 
-export const TVisibility = z.union([z.literal("Public"), z.literal("Private")]);
+export const TVisibility = z.union([z.literal('Public'), z.literal('Private')]);
 
 export const TGroupDetails = z.object({
   _id: z.string(),
@@ -39,4 +43,31 @@ export const TGroupDetails = z.object({
 
 export const TGroupDetailsResponse = z.object({
   data: TGroupDetails,
+});
+
+export const TInvitation = z.object({
+  _id: z.string(),
+  group: TGroup,
+  status: z.string(),
+  createdAt: z.string(),
+});
+
+export const TInvitationResponse = z.object({
+  data: z.array(TInvitation),
+});
+
+export const TInvitationCodeResponse = z.object({
+  data: z.object({
+    inviteCode: z.string(),
+  }),
+});
+
+const TUserToInvite = z.object({
+  _id: z.string(),
+  name: z.string(),
+  picture: z.string(),
+});
+
+export const TUserToInviteResponse = z.object({
+  data: z.array(TUserToInvite),
 });
