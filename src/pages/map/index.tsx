@@ -2,11 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import MapSvg from 'src/assets/icons/map.svg';
 import { AppBar, Box, Stack, Toolbar, Typography } from '@mui/material';
-
 import FilterDrawer from 'src/components/filter-drawer';
-import { getUsersByLocation, LocationQueryParams, User } from '~/api/users';
-
-// const GOOGLE_MAP_API_KEY = import.meta.env.VITE_APP_GOOGLE_MAP_API_KEY;
+import { getUsersByLocation, MapUser } from '~/api/users';
+import { useQuery } from '@tanstack/react-query';
 
 const MapPage = () => {
   const { isLoaded } = useJsApiLoader({
@@ -14,13 +12,16 @@ const MapPage = () => {
     googleMapsApiKey: 'AIzaSyDsf_MC31bfKI8JwasA5WebPrCl2TDqoHc',
   });
 
+  const searchParams = new URLSearchParams(location.search);
+  const initialRadius = Number(searchParams.get('radius')) * 1000 || 1000;
+  const shade = searchParams.get('shade') || undefined;
+  const hashtag = searchParams.get('hashtag') || undefined;
+
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
   const [locationLoaded, setLocationLoaded] = useState(false);
   const [circle, setCircle] = useState<google.maps.Circle | null>(null);
-  const [nearbyUsers, setNearbyUsers] = useState<User[]>([]);
-
-  const [radius, setRadius] = useState(1000); // Default to 1 km = 1000 meters
+  const [radius] = useState(initialRadius);
 
   const onLoad = useCallback(
     (map: google.maps.Map) => {
@@ -48,31 +49,26 @@ const MapPage = () => {
     [userLocation, radius],
   );
 
-  // TODO!
-  const fetchNearbyUsers = useCallback(
-    async (lat: number, lng: number) => {
-      const locationParams: LocationQueryParams = {
-        latitude: lat,
-        longitude: lng,
+  const $nearbyUsers = useQuery({
+    queryKey: ['nearbyUsers', userLocation, radius, shade, hashtag],
+    queryFn: () =>
+      getUsersByLocation({
+        latitude: userLocation.lat,
+        longitude: userLocation.lng,
         radius: radius / 1000,
-      };
-
-      try {
-        const users = await getUsersByLocation(locationParams);
-        setNearbyUsers(users.users);
-      } catch (error) {
-        console.error('Error fetching nearby users:', error);
-      }
-    },
-    [radius],
-  );
+        area: shade,
+        hashtag: hashtag,
+      }),
+    enabled: locationLoaded,
+  });
 
   const onUnmount = useCallback(() => {
     if (circle) {
       circle.setMap(null);
+      circle.setRadius(radius);
     }
     setMap(null);
-  }, [circle]);
+  }, [circle, radius]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -95,21 +91,20 @@ const MapPage = () => {
     }
   }, []);
 
-  const handleRadiusChange = (_event: Event, newValue: number | number[]) => {
-    const radiusInKm = newValue as number;
-    const radiusInMeters = radiusInKm * 1000;
-    setRadius(radiusInMeters);
-    if (circle) {
-      circle.setRadius(radiusInMeters);
+  const handleMapDragEnd = useCallback(() => {
+    const newCenter = map?.getCenter();
+    if (newCenter) {
+      setUserLocation({ lat: newCenter.lat(), lng: newCenter.lng() });
+      $nearbyUsers.refetch();
     }
-  };
+  }, [$nearbyUsers, map]);
 
   if (!isLoaded || !locationLoaded) {
     return <div>Loading...</div>;
   }
 
   return (
-    <Stack height={1} overflow="hidden">
+    <Stack height="100vh" overflow="hidden">
       <AppBar>
         <Toolbar>
           <Box sx={{ flexGrow: 1 }}>
@@ -122,7 +117,7 @@ const MapPage = () => {
               People nearby
             </Typography>
           </Box>
-          <FilterDrawer radius={radius} onRadiusChange={handleRadiusChange} />
+          <FilterDrawer />
         </Toolbar>
       </AppBar>
       <GoogleMap
@@ -130,10 +125,7 @@ const MapPage = () => {
         center={userLocation}
         zoom={17}
         onLoad={onLoad}
-        onDragEnd={async () => {
-          const newCenter = map?.getCenter();
-          fetchNearbyUsers(newCenter?.lat() || 0, newCenter?.lng() || 0);
-        }}
+        onDragEnd={handleMapDragEnd}
         onUnmount={onUnmount}
       >
         <img
@@ -145,15 +137,13 @@ const MapPage = () => {
             transform: 'translate(-50%, -50%)',
           }}
         />
-        {nearbyUsers.map((user) => (
-          <UserMarker key={user._id} user={user} />
-        ))}
+        {$nearbyUsers.data?.users.map((user) => <UserMarker key={user._id} user={user} />)}
       </GoogleMap>
     </Stack>
   );
 };
 
-const UserMarker: React.FC<{ user: User }> = ({ user }) => {
+const UserMarker: React.FC<{ user: MapUser }> = ({ user }) => {
   return (
     <Marker
       position={{

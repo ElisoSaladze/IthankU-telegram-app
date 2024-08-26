@@ -1,4 +1,4 @@
-import { Author } from "../post/types";
+import { Author } from '../groups';
 
 export type ListingApiResponse = {
   totalPages: number;

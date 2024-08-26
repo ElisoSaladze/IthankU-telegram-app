@@ -32,6 +32,23 @@ export const TUser = z.intersection(
   }),
 );
 
+export const TMapUser = z.object({
+  _id: z.string(),
+  name: z.string(),
+  picture: z.string().url(),
+  givingRating: z.number(),
+  receivingRating: z.number(),
+  linkedAccounts: z.array(TLinkedAccount),
+  location: TLocation,
+});
+
+export const TMapingApiResponse = z.object({
+  status: z.literal('success'),
+  users: z.array(TMapUser),
+});
+
+export type MapUser = z.infer<typeof TMapUser>;
+
 export type User = z.infer<typeof TUser>;
 
 export const TListingApiResponse = z.object({

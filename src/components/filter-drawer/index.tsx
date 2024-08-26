@@ -6,18 +6,16 @@ import ShadeComponent from '../shade-component';
 import CustomAccordion from './accordion';
 import { ControlledTextField } from '../form/controlled/controlled-text-field';
 import { useForm } from 'react-hook-form';
-import NearMeIcon from '@mui/icons-material/NearMe';
-import { Shade } from '~/api/shades';
-type Props = {
-  radius: number;
-  onRadiusChange: (event: Event, newValue: number | number[]) => void;
-};
+import { useNavigate } from 'react-router-dom';
+import { NearMe } from '@mui/icons-material';
+import { Shade } from '~/api/shades/shades.schema';
 
-const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
+const FilterDrawer = () => {
+  const navigate = useNavigate();
   const [selectedShade, setSelectedShade] = useState<Shade | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<string | false>(false);
-  const { control } = useForm({
+  const { control, getValues, watch, setValue } = useForm({
     defaultValues: {
       area: '',
       hashtag: '',
@@ -43,6 +41,43 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
   };
 
   const { shades, shadesLoading } = useFetchItemsContext();
+
+  const generateQueryString = (radius: number, area: string, hashtag: string, selectedShade: Shade | null) => {
+    const radiusKm = radius / 1000;
+    const queryParams = new URLSearchParams();
+
+    if (radiusKm > 0) {
+      queryParams.append('radius', radiusKm.toString());
+    }
+    if (selectedShade?.en || area) {
+      queryParams.append('shade', selectedShade?.en ?? area);
+    }
+    if (hashtag) {
+      queryParams.append('hashtag', hashtag);
+    }
+
+    return queryParams.toString();
+  };
+
+  const handleShowInListing = () => {
+    const { area, hashtag, distance } = getValues();
+    const queryString = generateQueryString(distance, area, hashtag, selectedShade);
+    setIsOpen(false);
+    navigate(`/more/listing/users-list${queryString ? `?${queryString}` : ''}`);
+  };
+
+  const handleShowInMap = () => {
+    const { area, hashtag, distance } = getValues();
+    const queryString = generateQueryString(distance, area, hashtag, selectedShade);
+    setIsOpen(false);
+    navigate(`/map${queryString ? `?${queryString}` : ''}`);
+  };
+
+  const handleRadiusChange = (_event: Event, newValue: number | number[]) => {
+    const radiusInKm = newValue as number;
+    const radiusInMeters = radiusInKm * 1000;
+    setValue('distance', radiusInMeters);
+  };
 
   return (
     <Stack>
@@ -114,17 +149,18 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
             expanded={expandedAccordion === 'location'}
             onChange={handleAccordionChange('location')}
           >
+            {/* TODO: implement location autocomplete */}
             <ControlledTextField
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <NearMeIcon />
+                    <NearMe />
                   </InputAdornment>
                 ),
                 sx: {
                   backgroundColor: 'rgba(240, 240, 240, 1)',
                   '& fieldset': {
-                    border: 'none', // Remove the border
+                    border: 'none',
                   },
                 },
               }}
@@ -139,8 +175,8 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
             onChange={handleAccordionChange('distance')}
           >
             <Slider
-              value={radius / 1000}
-              onChange={onRadiusChange}
+              value={watch('distance') / 1000}
+              onChange={handleRadiusChange}
               min={1}
               max={25}
               step={1}
@@ -149,10 +185,10 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
             />
           </CustomAccordion>
           <Stack gap={1} direction={'row'}>
-            <Button size="medium" fullWidth color="primary" variant="contained">
+            <Button size="medium" fullWidth color="primary" variant="contained" onClick={handleShowInListing}>
               Show in listing
             </Button>
-            <Button size="medium" fullWidth color="info" variant="contained">
+            <Button size="medium" fullWidth color="info" variant="contained" onClick={handleShowInMap}>
               Show on the map
             </Button>
           </Stack>

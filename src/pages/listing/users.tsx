@@ -15,9 +15,15 @@ const UsersList = () => {
   const [ref, inView] = useInView();
   const navigate = useNavigate();
 
+  const searchParams = new URLSearchParams(location.search);
+
+  const radius = searchParams.get('radius') || undefined;
+  const shade = searchParams.get('shade') || undefined;
+  const hashtag = searchParams.get('hashtag') || undefined;
+
   const $users = useInfiniteQuery({
     queryKey: qk.users.list.toKey(), // TODO
-    queryFn: async ({ pageParam = 1 }) => getUsers({ page: pageParam }),
+    queryFn: async ({ pageParam = 1 }) => getUsers({ page: pageParam, radius: radius, shade: shade, hashtag: hashtag }),
     getNextPageParam: (result) => {
       const nextPage = result.page + 1;
       return nextPage <= result.totalPages ? nextPage : undefined;
@@ -37,13 +43,13 @@ const UsersList = () => {
       <Stack paddingBottom={10} marginY={1} gap={1}>
         {pages
           .flatMap((page) => page.users)
-          .map((user) => (
+          .map((user, index) => (
             <ListItemButton
               onClick={() => {
                 const userId = user._id;
                 navigate(generatePath(paths.userDetails, { userId }));
               }}
-              key={user._id}
+              key={user._id! + index}
               sx={{
                 width: '100%',
                 borderRadius: 5,
