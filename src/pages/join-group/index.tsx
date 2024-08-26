@@ -3,7 +3,7 @@ import { Button, Divider, Stack, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
 import { useNavigate } from 'react-router-dom';
-import { getGroups } from 'src/api/group';
+import { getGroups } from '~/api/groups';
 import Loader from 'src/components/loader';
 
 import GroupItem from 'src/components/join-group-item';

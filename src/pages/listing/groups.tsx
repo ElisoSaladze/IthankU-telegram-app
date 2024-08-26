@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
-import { getGroups, Group } from 'src/api/group';
+import { getGroups, Group } from '~/api/groups';
 import Loader from 'src/components/loader';
 import GroupItem from 'src/components/group-item';
 import { qk } from 'src/api/query-keys';

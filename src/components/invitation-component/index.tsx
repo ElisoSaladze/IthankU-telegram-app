@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography, Avatar, Button, Stack } from '@mui/material';
 import ShadeComponent from '../shade-component';
 import { useMutation } from '@tanstack/react-query';
-import { acceptInvitation, declineInvitation, Group } from '~/api/group';
+import { acceptInvitation, declineInvitation, Group } from '~/api/groups';
 
 type InvitationItemProps = {
   group: Group;

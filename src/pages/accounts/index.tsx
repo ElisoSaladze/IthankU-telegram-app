@@ -9,7 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { userGroups } from 'src/api/group';
+import { userGroups } from '~/api/groups';
 import LikesItem from 'src/components/likes';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';

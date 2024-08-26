@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { userGroups } from 'src/api/group';
+import { userGroups } from '~/api/groups';
 import GroupItem from 'src/components/group-item';
 import settingsIcon from 'src/assets/icons/settings.svg';
 import { paths } from 'src/app/routes';

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TAuthor } from '../group';
+import { TAuthor } from '../groups';
 import { TShade } from '../shades';
 
 export const TTransactionType = z.union([z.literal('incoming'), z.literal('outgoing')]);

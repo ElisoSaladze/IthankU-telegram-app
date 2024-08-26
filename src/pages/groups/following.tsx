@@ -2,22 +2,21 @@ import { Typography, Stack, ListItemButton, Avatar, IconButton, Box, Skeleton } 
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { match, P } from 'ts-pattern';
 
-import { leaveGroup, userGroups } from 'src/api/group';
 import ShadeComponent from 'src/components/shade-component';
 import TagItem from 'src/components/tag';
 import defaultImageUrl from 'src/assets/images/itu-circle.png';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { leaveGroup, userGroups } from '~/api/groups';
+import { qk } from '~/api/query-keys';
 
 const Following = () => {
   const $groups = useQuery({
-    queryKey: ['groups'],
+    queryKey: qk.groups.userGroups.toKey(),
     queryFn: userGroups,
   });
 
-  const { mutate: leave } = useMutation({
-    mutationKey: ['join-group'],
-    mutationFn: (groupId: string) => leaveGroup(groupId),
-    onSuccess: () => $groups.refetch(),
+  const $leaveGroup = useMutation({
+    mutationFn: leaveGroup,
   });
 
   return (
@@ -77,7 +76,18 @@ const Following = () => {
                     <Stack direction="row">{group.tags?.map((tag, i) => <TagItem key={i} tag={tag} />)}</Stack>
                   </Stack>
                 </Stack>
-                <IconButton onClick={() => leave(group._id)}>
+                <IconButton
+                  onClick={() => {
+                    $leaveGroup.mutate(
+                      { groupId: group._id },
+                      {
+                        onSuccess: () => {
+                          $groups.refetch();
+                        },
+                      },
+                    );
+                  }}
+                >
                   <LogoutIcon fontSize="large" />
                 </IconButton>
               </Stack>

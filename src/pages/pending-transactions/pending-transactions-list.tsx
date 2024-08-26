@@ -1,11 +1,11 @@
 import { Skeleton, Stack, Typography } from '@mui/material';
-import { getPendingTransactions } from 'src/api/transaction';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { Transaction } from 'src/api/transaction/types';
 import PendingTransactionItem from 'src/components/pending-transaction-component';
 import { match, P } from 'ts-pattern';
 import { useCallback, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { getPendingTransactions, TransactionType } from '~/api/transactions';
+import { qk } from '~/api/query-keys';
 
 type TransactionsListProps = {
   type: TransactionType;
@@ -15,8 +15,8 @@ const TransactionsList = ({ type }: TransactionsListProps) => {
   const [ref, inView] = useInView();
 
   const $pendingTransactions = useInfiniteQuery({
-    queryKey: ['transactions', type],
-    queryFn: async ({ pageParam = 1 }) => getPendingTransactions(type, pageParam),
+    queryKey: qk.transactions.pendingTransactions.toKeyWithArgs({ type }),
+    queryFn: async ({ pageParam = 1 }) => getPendingTransactions({ type, page: pageParam }),
     getNextPageParam: (result) => {
       const nextPage = result.page + 1;
       return nextPage <= result.totalPages ? nextPage : undefined;
@@ -55,7 +55,7 @@ const TransactionsList = ({ type }: TransactionsListProps) => {
 
           return (
             <Stack gap={2}>
-              {transactions.map((transaction: Transaction) => (
+              {transactions.map((transaction) => (
                 <PendingTransactionItem
                   key={transaction._id}
                   transaction={{

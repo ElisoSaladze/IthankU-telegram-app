@@ -1,6 +1,5 @@
 import { Avatar, Button, ListItemButton, Stack, Typography } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getUsers } from 'src/api/listing';
 import Loader from 'src/components/loader';
 import ShadeComponent from 'src/components/shade-component';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -9,14 +8,16 @@ import { paths } from 'src/app/routes';
 import { match, P } from 'ts-pattern';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { getUsers } from '~/api/users';
+import { qk } from '~/api/query-keys';
 
 const UsersList = () => {
   const [ref, inView] = useInView();
   const navigate = useNavigate();
 
   const $users = useInfiniteQuery({
-    queryKey: ['listing-users'],
-    queryFn: async ({ pageParam = 1 }) => getUsers(pageParam),
+    queryKey: qk.users.list.toKey(), // TODO
+    queryFn: async ({ pageParam = 1 }) => getUsers({ page: pageParam }),
     getNextPageParam: (result) => {
       const nextPage = result.page + 1;
       return nextPage <= result.totalPages ? nextPage : undefined;
@@ -27,7 +28,7 @@ const UsersList = () => {
     if (inView && $users.hasNextPage) {
       $users.fetchNextPage();
     }
-  }, [inView]);
+  }, [$users, inView]);
 
   return match($users)
     .with({ isLoading: true }, () => <Loader />)
@@ -65,8 +66,8 @@ const UsersList = () => {
                     </Typography>
                     {user.topShades && user.topShades.length > 0 && (
                       <ShadeComponent
-                        color={user.topShades[0].shadeInfo?.color}
-                        name={user.topShades[0].shadeInfo?.en}
+                        color={user.topShades[0]!.shadeInfo?.color}
+                        name={user.topShades[0]!.shadeInfo?.en}
                       />
                     )}
                   </Stack>

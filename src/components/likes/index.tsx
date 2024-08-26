@@ -1,5 +1,5 @@
 import { Avatar, Stack } from '@mui/material';
-import { Author } from '~/api/group';
+import { Author } from '~/api/groups';
 
 type Props = {
   likes: Author[];

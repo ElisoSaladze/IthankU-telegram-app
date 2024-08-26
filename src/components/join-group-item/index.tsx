@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { useState } from 'react';
 import ShadeComponent from '../shade-component';
-import { Group, joinGroup } from '~/api/group';
+import { Group, joinGroup } from '~/api/groups';
 
 type Props = {
   group: Group;

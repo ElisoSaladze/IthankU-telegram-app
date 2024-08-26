@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TAuthor } from '../group';
+import { TAuthor } from '../groups';
 import { TShade } from '../shades';
 
 const TLocation = z.object({

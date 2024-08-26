@@ -1,7 +1,15 @@
 import { request } from '~/lib/request';
 import { GetCurrentUserResponse, LocationQueryParams, TListingApiResponse } from './users.schema';
 
-export const getUsers = async () => {
+export type GetUsersInput = {
+  page: number;
+};
+
+export const getUsers = async ({ page }: GetUsersInput) => {
+  const query = new URLSearchParams();
+
+  query.set('page', String(page));
+
   return await request('/users/listing').get({}, TListingApiResponse);
 };
 

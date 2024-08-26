@@ -7,7 +7,8 @@ import {
   TInvitationResponse,
   TUserToInviteResponse,
 } from './groups.schema';
-import { TPostsResponse } from '../posts';
+import { withPagination } from '../common';
+import { TPost } from '../posts';
 
 const VITE_APP_API_URL = import.meta.env['VITE_APP_API_URL'];
 
@@ -37,7 +38,7 @@ export const getGroupPosts = async ({ groupId }: GroupId) => {
         groupId,
       },
     },
-    TPostsResponse,
+    withPagination(TPost),
   );
 };
 

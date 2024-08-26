@@ -1,21 +1,14 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Snackbar,
-  Stack,
-  Typography,
-} from "@mui/material";
-import BackButtonAppBar from "src/components/appbar";
-import IosShareIcon from "@mui/icons-material/IosShare";
-import InsertLinkIcon from "@mui/icons-material/InsertLink";
-import { Params, useLocation, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getInvitationCode } from "src/api/group";
-import Loader from "src/components/loader";
-import { useState } from "react";
-import { handleShare } from "src/helpers";
-import { qk } from "src/api/query-keys";
+import { Avatar, Box, Button, Snackbar, Stack, Typography } from '@mui/material';
+import BackButtonAppBar from 'src/components/appbar';
+import IosShareIcon from '@mui/icons-material/IosShare';
+import InsertLinkIcon from '@mui/icons-material/InsertLink';
+import { Params, useLocation, useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { getInvitationCode } from '~/api/groups';
+import Loader from 'src/components/loader';
+import { useState } from 'react';
+import { handleShare } from 'src/helpers';
+import { qk } from 'src/api/query-keys';
 
 const InviteWithQr = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -35,7 +28,7 @@ const InviteWithQr = () => {
 
   const appreciationUrl = invitationResponse
     ? `https://web.itu-net.com/appreciate/${invitationResponse.data.inviteCode}`
-    : "";
+    : '';
 
   const handleCopyLink = () => {
     const textToCopy = `Join our group "${groupName}" using this link: ${appreciationUrl}`;
@@ -45,21 +38,21 @@ const InviteWithQr = () => {
   };
 
   return (
-    <Stack height={"100vh"} overflow={"auto"}>
-      <BackButtonAppBar pageName={"QR Code"} showNotif={false} />
+    <Stack height={'100vh'} overflow={'auto'}>
+      <BackButtonAppBar pageName={'QR Code'} showNotif={false} />
       <Stack gap={2} marginTop={8} marginX={2}>
         <Stack
-          maxHeight={"90%"}
+          maxHeight={'90%'}
           maxWidth={380}
-          width={"100%"}
+          width={'100%'}
           paddingY={2}
           paddingX={1}
           borderRadius={10}
-          alignItems={"center"}
-          justifyContent={"center"}
+          alignItems={'center'}
+          justifyContent={'center'}
           gap={1}
-          boxShadow={"0px 0px 0px 1px #0000000F, 0px 10px 36px 0px #00000029"}
-          position={"relative"}
+          boxShadow={'0px 0px 0px 1px #0000000F, 0px 10px 36px 0px #00000029'}
+          position={'relative'}
         >
           <Box
             position="absolute"
@@ -71,15 +64,15 @@ const InviteWithQr = () => {
             height={100}
             sx={{
               backgroundImage: `url(${background})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              overflow: "hidden",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              overflow: 'hidden',
               borderTopLeftRadius: 20,
               borderTopRightRadius: 20,
             }}
           />
-          <Box bgcolor={"white"} p={1} borderRadius={"50%"} zIndex={2} mt={3}>
+          <Box bgcolor={'white'} p={1} borderRadius={'50%'} zIndex={2} mt={3}>
             <Avatar sx={{ height: 100, width: 100 }} src={image} />
           </Box>
 
@@ -96,30 +89,18 @@ const InviteWithQr = () => {
             />
           )}
         </Stack>
-        <Stack gap={1} maxWidth={380} width={"100%"} direction={"row"}>
+        <Stack gap={1} maxWidth={380} width={'100%'} direction={'row'}>
           <Button
             startIcon={<IosShareIcon />}
             size="large"
             fullWidth
             variant="contained"
             color="info"
-            onClick={() =>
-              handleShare(
-                appreciationUrl,
-                "Join our Group",
-                "Check out this link to join our group!"
-              )
-            }
+            onClick={() => handleShare(appreciationUrl, 'Join our Group', 'Check out this link to join our group!')}
           >
             Share
           </Button>
-          <Button
-            startIcon={<InsertLinkIcon />}
-            fullWidth
-            size="large"
-            variant="contained"
-            onClick={handleCopyLink}
-          >
+          <Button startIcon={<InsertLinkIcon />} fullWidth size="large" variant="contained" onClick={handleCopyLink}>
             Copy
           </Button>
         </Stack>
@@ -129,7 +110,7 @@ const InviteWithQr = () => {
         autoHideDuration={2000}
         onClose={() => setSnackbarOpen(false)}
         message="Link copied to clipboard!"
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       />
     </Stack>
   );

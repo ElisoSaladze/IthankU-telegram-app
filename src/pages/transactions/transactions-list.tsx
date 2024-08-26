@@ -2,20 +2,20 @@ import { Stack, Skeleton, Typography, Button } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useCallback } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { getUserTransactions } from 'src/api/transaction';
 import TransactionItem from 'src/components/transaction-item';
 import { useAuthContext } from 'src/providers/auth';
 import { match, P } from 'ts-pattern';
 import { qk } from '~/api/query-keys';
-import { getUserTransactions, TransactionType } from '~/api/transactions';
+import { getUserTransactions } from '~/api/transactions';
 
 const TransactionsList = ({ type }: { type: 'incoming' | 'outgoing' }) => {
   const [ref, inView] = useInView();
   const { userData } = useAuthContext();
 
   const $transactions = useInfiniteQuery({
-    queryKey: ['transactions', type],
-    queryFn: async ({ pageParam = 1 }) => getUserTransactions(userData.data!.user._id, type, pageParam),
+    queryKey: qk.transactions.userTransactions.toKeyWithArgs({ userId: userData.data!.user._id, type }), // TODO!
+    queryFn: async ({ pageParam = 1 }) =>
+      getUserTransactions({ userId: userData.data!.user._id, type, page: pageParam }),
     getNextPageParam: (result) => {
       const nextPage = result.page + 1;
       return nextPage <= result.totalPages ? nextPage : undefined;

@@ -1,6 +1,7 @@
 import { globalAccessToken } from 'src/providers/auth';
 import { request } from '~/lib/request';
-import { TPostDetailsResponse, TPostsResponse } from './posts.schema';
+import { TPostDetailsResponse, TPost } from './posts.schema';
+import { withPagination } from '../common';
 
 const VITE_APP_API_URL = import.meta.env['VITE_APP_API_URL'];
 
@@ -13,7 +14,7 @@ export const getPosts = async ({ page }: GetPostsInput) => {
 
   query.set('page', String(page));
 
-  return await request('/api/posts').get({}, TPostsResponse);
+  return await request('/api/posts').get({}, withPagination(TPost));
 };
 
 export type GetPostDetailsInput = {

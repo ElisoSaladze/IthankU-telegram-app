@@ -6,7 +6,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import ShadeComponent from '../shade-component';
 import TagItem from '../tag';
 import { paths } from 'src/app/routes';
-import { Group } from '~/api/group';
+import { Group } from '~/api/groups';
 
 type Props = {
   group: Group;

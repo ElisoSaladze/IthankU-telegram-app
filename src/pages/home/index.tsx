@@ -1,24 +1,24 @@
 import { Avatar, Box, Skeleton, Stack, Typography, Button } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getPosts } from 'src/api/post';
 import Loader from 'src/components/loader';
 import PostItem from 'src/components/post-item';
 import { useAuthContext } from 'src/providers/auth';
-import { Post } from 'src/api/post/types';
 import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { match, P } from 'ts-pattern';
+import { getPosts } from '~/api/posts';
+import { qk } from '~/api/query-keys';
 
 const HomePage = () => {
   const [ref, inView] = useInView();
   const { userData } = useAuthContext();
 
   const $posts = useInfiniteQuery({
-    queryKey: ['posts'],
-    queryFn: async ({ pageParam = 1 }) => getPosts(pageParam),
+    queryKey: qk.posts.list.toKey(),
+    queryFn: async ({ pageParam = 1 }) => getPosts({ page: pageParam }),
     getNextPageParam: (lastPage) => {
-      const nextPage = lastPage.meta!.currentPage + 1;
-      return nextPage <= lastPage.meta!.totalPages ? nextPage : undefined;
+      const nextPage = lastPage.meta.currentPage + 1;
+      return nextPage <= lastPage.meta.totalPages ? nextPage : undefined;
     },
   });
 
@@ -63,7 +63,7 @@ const HomePage = () => {
           <Stack gap={2} width={1} marginBottom={10}>
             {pages.map((page, pageIndex) => (
               <React.Fragment key={pageIndex}>
-                {page.data.map((post: Post, index: number) => (
+                {page.data.map((post, index: number) => (
                   <PostItem isDetails={false} key={index} post={post} />
                 ))}
               </React.Fragment>
