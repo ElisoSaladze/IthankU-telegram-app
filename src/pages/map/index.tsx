@@ -1,17 +1,17 @@
-import { useState, useEffect, useCallback } from "react";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import MapSvg from "src/assets/icons/map.svg";
-import { getUsersByLocation } from "src/api/listing";
-import { LocationQueryParams, User } from "src/api/listing/types";
-import { AppBar, Box, Stack, Toolbar, Typography } from "@mui/material";
+import { useState, useEffect, useCallback } from 'react';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import MapSvg from 'src/assets/icons/map.svg';
+import { AppBar, Box, Stack, Toolbar, Typography } from '@mui/material';
 
-import FilterDrawer from "src/components/filter-drawer";
+import FilterDrawer from 'src/components/filter-drawer';
+import { getUsersByLocation, LocationQueryParams, User } from '~/api/users';
+
 // const GOOGLE_MAP_API_KEY = import.meta.env.VITE_APP_GOOGLE_MAP_API_KEY;
 
 const MapPage = () => {
   const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: "AIzaSyDsf_MC31bfKI8JwasA5WebPrCl2TDqoHc",
+    id: 'google-map-script',
+    googleMapsApiKey: 'AIzaSyDsf_MC31bfKI8JwasA5WebPrCl2TDqoHc',
   });
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -27,10 +27,10 @@ const MapPage = () => {
       setMap(map);
 
       const newCircle = new google.maps.Circle({
-        strokeColor: "#21A54D",
+        strokeColor: '#21A54D',
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: "#21A54D",
+        fillColor: '#21A54D',
         fillOpacity: 0.35,
         map,
         center: userLocation,
@@ -38,16 +38,17 @@ const MapPage = () => {
       });
       setCircle(newCircle);
 
-      map.addListener("center_changed", () => {
+      map.addListener('center_changed', () => {
         const newCenter = map.getCenter();
         if (newCenter && newCircle) {
           newCircle.setCenter(newCenter);
         }
       });
     },
-    [userLocation, radius]
+    [userLocation, radius],
   );
 
+  // TODO!
   const fetchNearbyUsers = useCallback(
     async (lat: number, lng: number) => {
       const locationParams: LocationQueryParams = {
@@ -55,14 +56,15 @@ const MapPage = () => {
         longitude: lng,
         radius: radius / 1000,
       };
+
       try {
         const users = await getUsersByLocation(locationParams);
         setNearbyUsers(users.users);
       } catch (error) {
-        console.error("Error fetching nearby users:", error);
+        console.error('Error fetching nearby users:', error);
       }
     },
-    [radius]
+    [radius],
   );
 
   const onUnmount = useCallback(() => {
@@ -83,17 +85,17 @@ const MapPage = () => {
           setLocationLoaded(true);
         },
         (error) => {
-          console.error("Error getting user location:", error);
+          console.error('Error getting user location:', error);
           setLocationLoaded(true);
-        }
+        },
       );
     } else {
-      console.error("Geolocation is not supported by this browser.");
+      console.error('Geolocation is not supported by this browser.');
       setLocationLoaded(true);
     }
   }, []);
 
-  const handleRadiusChange = (event: Event, newValue: number | number[]) => {
+  const handleRadiusChange = (_event: Event, newValue: number | number[]) => {
     const radiusInKm = newValue as number;
     const radiusInMeters = radiusInKm * 1000;
     setRadius(radiusInMeters);
@@ -115,7 +117,7 @@ const MapPage = () => {
               fontWeight={500}
               variant="h6"
               component="div"
-              sx={{ textAlign: "center", color: "black", fontSize: 20 }}
+              sx={{ textAlign: 'center', color: 'black', fontSize: 20 }}
             >
               People nearby
             </Typography>
@@ -124,7 +126,7 @@ const MapPage = () => {
         </Toolbar>
       </AppBar>
       <GoogleMap
-        mapContainerStyle={{ width: "100%", height: "100%" }}
+        mapContainerStyle={{ width: '100%', height: '100%' }}
         center={userLocation}
         zoom={17}
         onLoad={onLoad}
@@ -137,10 +139,10 @@ const MapPage = () => {
         <img
           src={MapSvg}
           style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
           }}
         />
         {nearbyUsers.map((user) => (
@@ -159,7 +161,7 @@ const UserMarker: React.FC<{ user: User }> = ({ user }) => {
         lng: user.location?.coordinates?.[0] || 0,
       }}
       icon={{
-        url: user.picture ?? "",
+        url: user.picture ?? '',
         scaledSize: new google.maps.Size(40, 40),
       }}
     />

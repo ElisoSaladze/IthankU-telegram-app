@@ -1,12 +1,12 @@
-import { Avatar, ListItemButton, Stack, Typography } from "@mui/material";
+import { Avatar, ListItemButton, Stack, Typography } from '@mui/material';
 
-import defaultImageUrl from "../../assets/images/itu-circle.png";
+import defaultImageUrl from '../../assets/images/itu-circle.png';
 
-import { generatePath, useNavigate } from "react-router-dom";
-import { Group } from "../../api/group/types";
-import ShadeComponent from "../shade-component";
-import TagItem from "../tag";
-import { paths } from "src/app/routes";
+import { generatePath, useNavigate } from 'react-router-dom';
+import ShadeComponent from '../shade-component';
+import TagItem from '../tag';
+import { paths } from 'src/app/routes';
+import { Group } from '~/api/groups';
 
 type Props = {
   group: Group;
@@ -18,24 +18,21 @@ const GroupItem = ({ group }: Props) => {
   return (
     <ListItemButton
       sx={{
-        width: "100%",
+        width: '100%',
         borderRadius: 5,
         padding: 1,
-        boxShadow: "0px 0px 8.2px -1px #00000026",
+        boxShadow: '0px 0px 8.2px -1px #00000026',
       }}
       onClick={() =>
-        navigate(generatePath(paths.groupDetails, {
+        navigate(
+          generatePath(paths.groupDetails, {
             groupId,
-        }))
+          }),
+        )
       }
     >
-      <Stack
-        sx={{ width: "100%" }}
-        alignItems={"center"}
-        justifyContent={"space-between"}
-        direction={"row"}
-      >
-        <Stack gap={1} alignItems={"center"} direction={"row"}>
+      <Stack sx={{ width: '100%' }} alignItems={'center'} justifyContent={'space-between'} direction={'row'}>
+        <Stack gap={1} alignItems={'center'} direction={'row'}>
           <Avatar
             sx={{ width: 70, height: 70, borderRadius: 4 }}
             variant="rounded"
@@ -45,18 +42,11 @@ const GroupItem = ({ group }: Props) => {
             <Typography fontSize={15} fontWeight={600}>
               {group.name}
             </Typography>
-            <ShadeComponent
-              color={group.shadeInfo?.color}
-              name={group.shadeInfo?.en}
-            />
-            <Stack direction={"row"}>
-              {group.tags?.map((tag, i) => (
-                <TagItem key={i} tag={tag} />
-              ))}
-            </Stack>
+            <ShadeComponent color={group.shadeInfo?.color} name={group.shadeInfo?.en} />
+            <Stack direction={'row'}>{group.tags?.map((tag, i) => <TagItem key={i} tag={tag} />)}</Stack>
           </Stack>
         </Stack>
-        <Avatar sx={{ bgcolor: "black" }}>
+        <Avatar sx={{ bgcolor: 'black' }}>
           <Typography color="white">{group.membersCount}</Typography>
         </Avatar>
       </Stack>

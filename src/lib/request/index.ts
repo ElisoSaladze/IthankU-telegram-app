@@ -1,1 +1,2 @@
-export * from "src/lib/request/request";
+export { request } from './request'
+export * from './error-types'

@@ -1,17 +1,17 @@
-import { Avatar, Stack } from "@mui/material";
-import { Author } from "../../api/post/types";
+import { Avatar, Stack } from '@mui/material';
+import { Author } from '~/api/groups';
 
 type Props = {
   likes: Author[];
-  size?: "small" | "medium" | "large";
+  size?: 'small' | 'medium' | 'large';
 };
 
-const LikesItem = ({ likes, size = "small" }: Props) => {
+const LikesItem = ({ likes, size = 'small' }: Props) => {
   const getSize = () => {
     switch (size) {
-      case "medium":
+      case 'medium':
         return { width: 36, height: 36 };
-      case "large":
+      case 'large':
         return { width: 50, height: 50 };
       default:
         return { width: 22, height: 22 };
@@ -19,7 +19,7 @@ const LikesItem = ({ likes, size = "small" }: Props) => {
   };
 
   return (
-    <Stack spacing={-2} direction={"row"}>
+    <Stack spacing={-2} direction={'row'}>
       {likes.map((like) => (
         <Avatar sx={getSize()} key={like._id} src={like.picture} />
       ))}

@@ -1,23 +1,20 @@
-import { Box, Stack, Typography } from "@mui/material";
-import { Scanner } from "@yudiel/react-qr-scanner";
-import { useNavigate } from "react-router-dom";
-import BackButtonAppBar from "src/components/appbar";
-import background from "src/assets/images/scanner-back.png";
+import { Box, Stack, Typography } from '@mui/material';
+import { Scanner } from '@yudiel/react-qr-scanner';
+import { useNavigate } from 'react-router-dom';
+import BackButtonAppBar from 'src/components/appbar';
+import background from 'src/assets/images/scanner-back.png';
 
 const ScanQrCodePage = () => {
   const navigate = useNavigate();
   const handleScan = (result: string | null) => {
     if (result) {
       const url = new URL(result);
-      if (
-        url.hostname === "web.itu-net.com" &&
-        url.pathname.startsWith("/appreciate/")
-      ) {
-        const appreciateId = url.pathname.split("/").pop();
+      if (url.hostname === 'web.itu-net.com' && url.pathname.startsWith('/appreciate/')) {
+        const appreciateId = url.pathname.split('/').pop();
         if (appreciateId) {
           navigate(`/appreciate/${appreciateId}`);
         } else {
-          console.error("Invalid QR code");
+          console.error('Invalid QR code');
         }
       }
     }
@@ -26,27 +23,22 @@ const ScanQrCodePage = () => {
   return (
     <Stack>
       <BackButtonAppBar pageName="" />
-      <Stack
-        alignItems={"center"}
-        justifyContent={"center"}
-        gap={4}
-        marginX={2}
-      >
+      <Stack alignItems={'center'} justifyContent={'center'} gap={4} marginX={2}>
         <Stack
-          width={"100%"}
+          width={'100%'}
           borderRadius={4}
-          alignItems={"center"}
+          alignItems={'center'}
           padding={1}
           sx={{
             backgroundImage: `url(${background})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
           }}
         >
           <Typography fontSize={32}>
-            Scan{" "}
-            <Typography fontSize={32} component={"span"} color={"primary"}>
+            Scan{' '}
+            <Typography fontSize={32} component={'span'} color={'primary'}>
               QR Code
             </Typography>
           </Typography>
@@ -54,7 +46,7 @@ const ScanQrCodePage = () => {
         </Stack>
         <Box position="relative" width={300} height={300}>
           <Scanner
-            onScan={(result) => handleScan(result[0].rawValue)}
+            onScan={(result) => handleScan(result[0]!.rawValue)} // TODO
             components={{
               audio: false,
               finder: false,
@@ -62,8 +54,8 @@ const ScanQrCodePage = () => {
             }}
             styles={{
               container: {
-                width: "100%",
-                height: "100%",
+                width: '100%',
+                height: '100%',
               },
             }}
           />

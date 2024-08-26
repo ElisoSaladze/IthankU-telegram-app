@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import LockIcon from "@mui/icons-material/Lock";
-import PublicIcon from "@mui/icons-material/Public";
-import { Box, Stack, Typography } from "@mui/material";
+import LockIcon from '@mui/icons-material/Lock';
+import PublicIcon from '@mui/icons-material/Public';
+import { Box, Stack, Typography } from '@mui/material';
 
-import { Control } from "react-hook-form";
-import { ControlledRadioGroup } from "src/components/form/controlled/controlled-radio-group";
-import { Visibility } from "src/api/post/types";
+import { Control } from 'react-hook-form';
+import { ControlledRadioGroup } from 'src/components/form/controlled/controlled-radio-group';
+import { Visibility } from '~/constants/enums';
 
 type Props = {
   control: Control<any, any>;
@@ -14,7 +14,7 @@ type Props = {
 };
 const VisibilityStatus = ({ control, name, labels }: Props) => {
   return (
-    <Box width={"100%"}>
+    <Box width={'100%'}>
       <ControlledRadioGroup
         fullWidth
         name={name}
@@ -22,13 +22,13 @@ const VisibilityStatus = ({ control, name, labels }: Props) => {
         options={[
           {
             label: (
-              <Stack gap={1} alignItems={"center"} direction={"row"}>
-                <Box borderRadius={1.5} p={1} bgcolor={"secondary.main"}>
+              <Stack gap={1} alignItems={'center'} direction={'row'}>
+                <Box borderRadius={1.5} p={1} bgcolor={'secondary.main'}>
                   <PublicIcon />
                 </Box>
                 <Stack>
                   <Typography fontWeight={600}>Public</Typography>
-                  <Typography fontSize={"small"}>{labels[0]}</Typography>
+                  <Typography fontSize={'small'}>{labels[0]}</Typography>
                 </Stack>
               </Stack>
             ),
@@ -36,13 +36,13 @@ const VisibilityStatus = ({ control, name, labels }: Props) => {
           },
           {
             label: (
-              <Stack gap={1} alignItems={"center"} direction={"row"}>
-                <Box borderRadius={1.5} p={1} bgcolor={"secondary.main"}>
+              <Stack gap={1} alignItems={'center'} direction={'row'}>
+                <Box borderRadius={1.5} p={1} bgcolor={'secondary.main'}>
                   <LockIcon />
                 </Box>
                 <Stack>
                   <Typography fontWeight={600}>Private</Typography>
-                  <Typography fontSize={"small"}>{labels[1]}</Typography>
+                  <Typography fontSize={'small'}>{labels[1]}</Typography>
                 </Stack>
               </Stack>
             ),
