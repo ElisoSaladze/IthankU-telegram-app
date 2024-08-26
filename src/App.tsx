@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Routes } from "./app/routes/route";
-import {} from "@telegram-apps/sdk";
+import "./app.css";
 
 const App = () => {
   useEffect(() => {

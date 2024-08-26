@@ -1,18 +1,10 @@
-import CloseIcon from "@mui/icons-material/Close";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  IconButton,
-  Skeleton,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { Shade } from "src/api/shade";
-import ShadeComponent from "src/components/shade-component";
-import { useEffect, useState } from "react";
-import { useFetchItemsContext } from "src/providers/hashtag-shade";
+import CloseIcon from '@mui/icons-material/Close';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Accordion, AccordionDetails, AccordionSummary, IconButton, Skeleton, Stack, Typography } from '@mui/material';
+import ShadeComponent from 'src/components/shade-component';
+import { useEffect, useState } from 'react';
+import { useFetchItemsContext } from 'src/providers/hashtag-shade';
+import { Shade } from '~/api/shades';
 type Props = {
   onSelect?: (shade: Shade | null) => void;
   defaultSelected?: string;
@@ -36,27 +28,20 @@ const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
 
   useEffect(() => {
     if (defaultSelected && shades?.data) {
-      const initialShade = shades.data.find(
-        (shade) => shade.en === defaultSelected
-      );
+      const initialShade = shades.data.find((shade) => shade.en === defaultSelected);
       if (initialShade) setSelectedShade(initialShade);
     }
   }, [defaultSelected, shades?.data]);
 
-  if (shadesLoading) return <Skeleton width={"100%"} height={60} />;
+  if (shadesLoading) return <Skeleton width={'100%'} height={60} />;
   if (shadesError) return <Typography>Failed to load shades</Typography>;
 
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Stack
-          alignItems={"center"}
-          justifyContent={"space-between"}
-          width={"100%"}
-          direction={"row"}
-        >
+        <Stack alignItems={'center'} justifyContent={'space-between'} width={'100%'} direction={'row'}>
           <Stack>
-            <Typography fontSize={10} color={"secondary"}>
+            <Typography fontSize={10} color={'secondary'}>
               optional
             </Typography>
             <Typography>Area</Typography>
@@ -64,21 +49,18 @@ const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
 
           <Stack
             minWidth={200}
-            border={"1px solid #D1D1D175"}
+            border={'1px solid #D1D1D175'}
             borderRadius={3}
-            bgcolor={selectedShade ? "white" : "#EEEEEE8A"}
-            boxShadow={"0px 1px 5px -1px #00000014"}
-            alignItems={"center"}
-            direction={"row"}
+            bgcolor={selectedShade ? 'white' : '#EEEEEE8A'}
+            boxShadow={'0px 1px 5px -1px #00000014'}
+            alignItems={'center'}
+            direction={'row'}
             p={0.5}
-            justifyContent={"space-between"}
+            justifyContent={'space-between'}
           >
             {selectedShade ? (
               <>
-                <ShadeComponent
-                  name={selectedShade.en}
-                  color={selectedShade.color}
-                />
+                <ShadeComponent name={selectedShade.en} color={selectedShade.color} />
                 <IconButton
                   onClick={() => {
                     setSelectedShade(null);
@@ -95,7 +77,7 @@ const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        <Stack width={"100%"} gap={0.5} direction={"row"} flexWrap={"wrap"}>
+        <Stack width={'100%'} gap={0.5} direction={'row'} flexWrap={'wrap'}>
           {shades?.data.map((shade) => (
             <ShadeComponent
               key={shade._id}

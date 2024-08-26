@@ -1,28 +1,20 @@
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import {
-  Button,
-  Stack,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Button, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { paths } from 'src/app/routes';
 
 const TransactionsPage = () => {
   const location = useLocation();
-  const [list, setList] = useState("incoming");
+  const [list, setList] = useState('incoming');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const pathSegment = location.pathname.split("/")[3];
+    const pathSegment = location.pathname.split('/')[3]!; // TODO
     setList(pathSegment);
   }, [location.pathname]);
 
-  const handleListChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newList: string
-  ) => {
+  const handleListChange = (_event: React.MouseEvent<HTMLElement>, newList: string) => {
     if (newList !== null) {
       setList(newList);
       navigate(newList);
@@ -30,42 +22,22 @@ const TransactionsPage = () => {
   };
 
   return (
-    <Stack margin={2} justifyContent={"center"}>
-      <Typography marginBottom={2} textAlign={"center"}>
+    <Stack pb={10} m={2} justifyContent="center">
+      <Typography mb={2} textAlign="center">
         Transactions
       </Typography>
       <Stack>
-        <ToggleButtonGroup
-          color="primary"
-          fullWidth
-          value={list}
-          exclusive
-          onChange={handleListChange}
-        >
+        <ToggleButtonGroup color="primary" fullWidth value={list} exclusive onChange={handleListChange}>
           <ToggleButton value="incoming">Incoming</ToggleButton>
           <ToggleButton value="outgoing">Outgoing</ToggleButton>
         </ToggleButtonGroup>
       </Stack>
-      <Stack></Stack>
-      <Stack
-        marginBottom={1}
-        direction={"row"}
-        alignItems={"center"}
-        justifyContent={"flex-end"}
-      >
-        <Button
-          onClick={() => navigate("/more/pending-transactions")}
-          sx={{ padding: 0 }}
-        >
-          <Typography
-            sx={{ textDecoration: "underline" }}
-            textAlign={"end"}
-            fontSize={"small"}
-            color="primary"
-          >
+      <Stack mb={1} direction="row" alignItems="center" justifyContent="flex-end">
+        <Button onClick={() => navigate(paths.incomingPendingTransactions)} sx={{ padding: 0 }}>
+          <Typography sx={{ textDecoration: 'underline' }} textAlign="end" fontSize="small" color="primary">
             See Pending Transactions
           </Typography>
-          <ArrowForwardIosIcon color="primary" sx={{ height: "10px" }} />
+          <ArrowForwardIosIcon color="primary" sx={{ height: '10px' }} />
         </Button>
       </Stack>
       <Outlet />

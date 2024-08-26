@@ -1,39 +1,27 @@
-import {
-  Button,
-  Drawer,
-  IconButton,
-  InputAdornment,
-  Slider,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import { useFetchItemsContext } from "src/providers/hashtag-shade";
-import ShadeComponent from "../shade-component";
-import { Shade } from "src/api/shade";
-import CustomAccordion from "./accordion";
-import { ControlledTextField } from "../form/controlled/controlled-text-field";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { NearMe } from "@mui/icons-material";
+import { Button, Drawer, IconButton, InputAdornment, Slider, Stack, Typography } from '@mui/material';
+import { useState } from 'react';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import { useFetchItemsContext } from 'src/providers/hashtag-shade';
+import ShadeComponent from '../shade-component';
+import CustomAccordion from './accordion';
+import { ControlledTextField } from '../form/controlled/controlled-text-field';
+import { useForm } from 'react-hook-form';
+import NearMeIcon from '@mui/icons-material/NearMe';
+import { Shade } from '~/api/shades';
 type Props = {
   radius: number;
   onRadiusChange: (event: Event, newValue: number | number[]) => void;
 };
 
 const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
-  const navigate = useNavigate();
   const [selectedShade, setSelectedShade] = useState<Shade | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [expandedAccordion, setExpandedAccordion] = useState<string | false>(
-    false
-  );
-  const { control, getValues } = useForm({
+  const [expandedAccordion, setExpandedAccordion] = useState<string | false>(false);
+  const { control } = useForm({
     defaultValues: {
-      area: "",
-      hashtag: "",
-      location: "",
+      area: '',
+      hashtag: '',
+      location: '',
       distance: 1,
     },
   });
@@ -56,62 +44,16 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
 
   const { shades, shadesLoading } = useFetchItemsContext();
 
-  const generateQueryString = (
-    radius: number,
-    area: string,
-    hashtag: string,
-    selectedShade: Shade | null
-  ) => {
-    const radiusKm = radius / 1000; // Convert meters to kilometers
-    const queryParams = new URLSearchParams();
-
-    if (radiusKm > 0) {
-      queryParams.append("radius", radiusKm.toString());
-    }
-    if (selectedShade?.en || area) {
-      queryParams.append("shade", selectedShade?.en ?? area);
-    }
-    if (hashtag) {
-      queryParams.append("hashtag", hashtag);
-    }
-
-    return queryParams.toString();
-  };
-
-  const handleShowInListing = () => {
-    const { area, hashtag } = getValues();
-    const queryString = generateQueryString(
-      radius,
-      area,
-      hashtag,
-      selectedShade
-    );
-    setIsOpen(false);
-    navigate(`/more/listing/users-list${queryString ? `?${queryString}` : ""}`);
-  };
-
-  const handleShowInMap = () => {
-    const { area, hashtag } = getValues();
-    const queryString = generateQueryString(
-      radius,
-      area,
-      hashtag,
-      selectedShade
-    );
-    setIsOpen(false);
-    navigate(`/map${queryString ? `?${queryString}` : ""}`);
-  };
-
   return (
     <Stack>
       <IconButton
         onClick={toggleDrawer(true)}
         sx={{
-          backgroundColor: "info.main",
-          color: "white",
-          borderRadius: "12px",
-          "&:hover": {
-            backgroundColor: "info.main",
+          backgroundColor: 'info.main',
+          color: 'white',
+          borderRadius: '12px',
+          '&:hover': {
+            backgroundColor: 'info.main',
           },
         }}
         size="small"
@@ -120,20 +62,20 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
       </IconButton>
       <Drawer anchor="bottom" open={isOpen} onClose={toggleDrawer(false)}>
         <Stack>
-          <Stack direction={"row"} justifyContent={"space-between"}>
-            <Typography fontSize={"large"} fontWeight={600}>
+          <Stack direction={'row'} justifyContent={'space-between'}>
+            <Typography fontSize={'large'} fontWeight={600}>
               Filter
             </Typography>
             <Button color="secondary">Clear all</Button>
           </Stack>
           <CustomAccordion
             title="Area"
-            expanded={expandedAccordion === "area"}
-            onChange={handleAccordionChange("area")}
+            expanded={expandedAccordion === 'area'}
+            onChange={handleAccordionChange('area')}
           >
-            <Stack gap={0.5} direction={"row"} flexWrap={"wrap"}>
+            <Stack gap={0.5} direction={'row'} flexWrap={'wrap'}>
               {shadesLoading
-                ? "loading"
+                ? 'loading'
                 : shades?.data.map((shade) => (
                     <ShadeComponent
                       key={shade._id}
@@ -146,24 +88,19 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
                   ))}
             </Stack>
           </CustomAccordion>
-          {selectedShade && (
-            <ShadeComponent
-              color={selectedShade?.color}
-              name={selectedShade.en}
-            />
-          )}
+          {selectedShade && <ShadeComponent color={selectedShade?.color} name={selectedShade.en} />}
           <CustomAccordion
             title="Hashtags"
-            expanded={expandedAccordion === "hashtags"}
-            onChange={handleAccordionChange("hashtags")}
+            expanded={expandedAccordion === 'hashtags'}
+            onChange={handleAccordionChange('hashtags')}
           >
             <ControlledTextField
               placeholder="Enter the hashtag"
               InputProps={{
                 sx: {
-                  backgroundColor: "rgba(240, 240, 240, 1)",
-                  "& fieldset": {
-                    border: "none", // Remove the border
+                  backgroundColor: 'rgba(240, 240, 240, 1)',
+                  '& fieldset': {
+                    border: 'none', // Remove the border
                   },
                 },
               }}
@@ -174,21 +111,20 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
           </CustomAccordion>
           <CustomAccordion
             title="Location"
-            expanded={expandedAccordion === "location"}
-            onChange={handleAccordionChange("location")}
+            expanded={expandedAccordion === 'location'}
+            onChange={handleAccordionChange('location')}
           >
-            {/* TODO: implement location autocomplete */}
             <ControlledTextField
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <NearMe />
+                    <NearMeIcon />
                   </InputAdornment>
                 ),
                 sx: {
-                  backgroundColor: "rgba(240, 240, 240, 1)",
-                  "& fieldset": {
-                    border: "none",
+                  backgroundColor: 'rgba(240, 240, 240, 1)',
+                  '& fieldset': {
+                    border: 'none', // Remove the border
                   },
                 },
               }}
@@ -199,8 +135,8 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
           </CustomAccordion>
           <CustomAccordion
             title="Distance"
-            expanded={expandedAccordion === "distance"}
-            onChange={handleAccordionChange("distance")}
+            expanded={expandedAccordion === 'distance'}
+            onChange={handleAccordionChange('distance')}
           >
             <Slider
               value={radius / 1000}
@@ -212,23 +148,11 @@ const FilterDrawer = ({ radius, onRadiusChange }: Props) => {
               aria-labelledby="radius-slider-title"
             />
           </CustomAccordion>
-          <Stack gap={1} direction={"row"}>
-            <Button
-              size="medium"
-              fullWidth
-              color="primary"
-              variant="contained"
-              onClick={handleShowInListing}
-            >
+          <Stack gap={1} direction={'row'}>
+            <Button size="medium" fullWidth color="primary" variant="contained">
               Show in listing
             </Button>
-            <Button
-              size="medium"
-              fullWidth
-              color="info"
-              variant="contained"
-              onClick={handleShowInMap}
-            >
+            <Button size="medium" fullWidth color="info" variant="contained">
               Show on the map
             </Button>
           </Stack>

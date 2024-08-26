@@ -1,39 +1,40 @@
-import {
-  Divider,
-  IconButton,
-  InputAdornment,
-  Menu,
-  MenuItem,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { useFieldArray } from "react-hook-form";
+import { Box, Divider, IconButton, InputAdornment, Menu, MenuItem, Stack, Typography } from '@mui/material';
+import { useFieldArray } from 'react-hook-form';
 
-import { ControlledTextArea } from "src/components/form/controlled/controlled-text-area";
-import { ControlledTextField } from "src/components/form/controlled/controlled-text-field";
-import Loader from "src/components/loader";
-import { useGetUserDetailsContext } from "src/providers/user-data";
-import AddIcon from "@mui/icons-material/Add";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useState } from "react";
-import { updateUserBio } from "src/api/auth/api";
-import { useMutation } from "@tanstack/react-query";
+import { ControlledTextArea } from 'src/components/form/controlled/controlled-text-area';
+import { ControlledTextField } from 'src/components/form/controlled/controlled-text-field';
+import Loader from 'src/components/loader';
+import { useGetUserDetailsContext } from 'src/providers/user-data';
+import AddIcon from '@mui/icons-material/Add';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { userGroups } from '~/api/groups';
+import LikesItem from 'src/components/likes';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useNavigate } from 'react-router-dom';
+import { qk } from 'src/api/query-keys';
+import { updateUserBio } from '~/api/auth';
 
 const Accounts = () => {
-  const { control, isLoading, isFetching, handleSubmit } =
-    useGetUserDetailsContext();
+  const navigate = useNavigate();
+  const { control, isLoading, isFetching, handleSubmit } = useGetUserDetailsContext();
+
   const { fields: socials } = useFieldArray({
     control,
-    name: "linkedAccounts",
+    name: 'linkedAccounts',
   });
+
+  const { data, isLoading: groupsLoading } = useQuery({
+    queryKey: qk.groups.userGroups.toKey(),
+    queryFn: userGroups,
+  });
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentField, setCurrentField] = useState<string | null>(null);
   const [editableField, setEditableField] = useState<string | null>(null);
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLElement>,
-    fieldName: string
-  ) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>, fieldName: string) => {
     setAnchorEl(event.currentTarget);
     setCurrentField(fieldName);
   };
@@ -53,16 +54,18 @@ const Accounts = () => {
     // Handle delete logic here
     setAnchorEl(null);
   };
-  const { mutate: changeBio } = useMutation({
-    mutationFn: (bio: string) => updateUserBio({ bio }),
+  const $updateUserBio = useMutation({
+    mutationFn: updateUserBio,
   });
 
   const handleBlur = handleSubmit((data) => {
     // This will trigger when the user unfocuses from the input field
     if (editableField) {
       // Handle saving data based on the current editable field
-      if (editableField === "bio") {
-        changeBio(data.bio);
+      if (editableField === 'bio') {
+        $updateUserBio.mutate({
+          bio: data.bio,
+        });
       }
       // Add other cases here for phoneNumber, email, etc.
 
@@ -74,28 +77,24 @@ const Accounts = () => {
   if (isLoading || isFetching) return <Loader />;
 
   return (
-    <Stack gap={1} paddingX={2} alignItems={"center"}>
+    <Stack mb={10} height={'100%'} gap={1} px={2} alignItems={'center'}>
       <Typography fontSize={24}>Accounts</Typography>
 
-      <Typography fontSize={12} alignSelf={"flex-start"}>
+      <Typography fontSize={12} alignSelf={'flex-start'}>
         About me
       </Typography>
       <ControlledTextArea
         onBlur={handleBlur}
-        disabled={editableField !== "bio"}
+        disabled={editableField !== 'bio'}
         fullWidth
         control={control}
         name="bio"
         multiline
-        rows={3}
+        rows={2}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton
-                size="small"
-                edge="end"
-                onClick={(event) => handleClick(event, "bio")}
-              >
+              <IconButton size="small" edge="end" onClick={(event) => handleClick(event, 'bio')}>
                 <MoreVertIcon fontSize="small" color="primary" />
               </IconButton>
             </InputAdornment>
@@ -103,22 +102,18 @@ const Accounts = () => {
         }}
       />
 
-      <Typography fontSize={12} alignSelf={"flex-start"}>
+      <Typography fontSize={12} alignSelf={'flex-start'}>
         Phone Numbers
       </Typography>
       <ControlledTextField
-        disabled={editableField !== "phoneNumber"}
+        disabled={editableField !== 'phoneNumber'}
         fullWidth
         control={control}
         name="phoneNumber"
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton
-                size="small"
-                edge="end"
-                onClick={(event) => handleClick(event, "phoneNumber")}
-              >
+              <IconButton size="small" edge="end" onClick={(event) => handleClick(event, 'phoneNumber')}>
                 <MoreVertIcon fontSize="small" color="primary" />
               </IconButton>
             </InputAdornment>
@@ -126,22 +121,18 @@ const Accounts = () => {
         }}
       />
 
-      <Typography fontSize={12} alignSelf={"flex-start"}>
+      <Typography fontSize={12} alignSelf={'flex-start'}>
         Emails
       </Typography>
       <ControlledTextField
-        disabled={editableField !== "email"}
+        disabled={editableField !== 'email'}
         fullWidth
         control={control}
         name="email"
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton
-                size="small"
-                edge="end"
-                onClick={(event) => handleClick(event, "email")}
-              >
+              <IconButton size="small" edge="end" onClick={(event) => handleClick(event, 'email')}>
                 <MoreVertIcon fontSize="small" color="primary" />
               </IconButton>
             </InputAdornment>
@@ -149,32 +140,55 @@ const Accounts = () => {
         }}
       />
 
-      <Typography fontSize={12} alignSelf={"flex-start"}>
+      <Typography fontSize={12} alignSelf={'flex-start'}>
         Socials
       </Typography>
-      <Stack width={"100%"} flexWrap={"wrap"} direction={"row"}>
+      <Stack width={'100%'} flexWrap={'wrap'} direction={'row'}>
         {socials.map((social) => (
           <Typography key={social.id}>{social.type}</Typography>
         ))}
         <IconButton
           sx={{
-            boxShadow: "0px 0px 9.1px 1px #0000001F",
+            boxShadow: '0px 0px 9.1px 1px #0000001F',
           }}
         >
           <AddIcon color="primary" />
         </IconButton>
       </Stack>
 
-      {/* <Typography fontSize={12} alignSelf={"flex-start"}>
+      <Typography fontSize={12} alignSelf={'flex-start'}>
         Groups
       </Typography>
-      <Stack></Stack> */}
+      <Box
+        sx={{
+          width: '100%',
+        }}
+        onClick={() => navigate('/groups')}
+      >
+        <Stack alignItems={'center'} width={'100%'} justifyContent={'space-between'} direction={'row'}>
+          {groupsLoading ? (
+            <Typography>...</Typography>
+          ) : (
+            <LikesItem
+              size="medium"
+              likes={data!.data
+                .map((data) => ({
+                  _id: data._id,
+                  picture: data.groupImage,
+                  name: data.name,
+                }))
+                .slice(0, 5)}
+            />
+          )}
+          <ArrowForwardIosIcon />
+        </Stack>
+      </Box>
 
       <Menu
         sx={{
-          "& .MuiPaper-root": {
-            border: "none", // Removes the border
-            boxShadow: "0px 2px 8.8px -2px #00000030",
+          '& .MuiPaper-root': {
+            border: 'none', // Removes the border
+            boxShadow: '0px 2px 8.8px -2px #00000030',
             borderRadius: 2,
           },
         }}
@@ -184,8 +198,8 @@ const Accounts = () => {
       >
         <MenuItem
           sx={{
-            minHeight: "30px",
-            padding: "5px 16px",
+            minHeight: '30px',
+            padding: '5px 16px',
           }}
           onClick={handleEdit}
         >
@@ -193,15 +207,15 @@ const Accounts = () => {
         </MenuItem>
         <Divider
           sx={{
-            "&.MuiDivider-root": {
-              margin: "0 !important",
+            '&.MuiDivider-root': {
+              margin: '0 !important',
             },
           }}
         />
         <MenuItem
           sx={{
-            minHeight: "30px",
-            padding: "5px 16px",
+            minHeight: '30px',
+            padding: '5px 16px',
           }}
           onClick={handleDelete}
         >

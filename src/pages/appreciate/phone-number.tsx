@@ -1,48 +1,48 @@
-import { Button, Stack, Typography } from "@mui/material";
-import BackButtonAppBar from "src/components/appbar";
-import appreciate from "src/assets/images/like.png";
-import { ControlledPhoneInput } from "src/components/form/controlled/controlled-phone-input";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { PhoneNumberUtil } from "google-libphonenumber";
+import { Button, Stack, Typography } from '@mui/material';
+import BackButtonAppBar from 'src/components/appbar';
+import appreciate from 'src/assets/images/like.png';
+import { ControlledPhoneInput } from 'src/components/form/controlled/controlled-phone-input';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { PhoneNumberUtil } from 'google-libphonenumber';
 
 const phoneUtil = PhoneNumberUtil.getInstance();
+
 const PhoneNumberAppreciate = () => {
   const navigate = useNavigate();
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
-      phoneNumber: "",
+      phoneNumber: '',
     },
   });
+
   const validatePhoneNumber = (value: string) => {
     try {
       const number = phoneUtil.parseAndKeepRawInput(value);
-      return (
-        phoneUtil.isValidNumber(number) || "Please enter a valid phone number"
-      );
+      return phoneUtil.isValidNumber(number) || 'Please enter a valid phone number';
     } catch {
-      return "Invalid phone number format";
+      return 'Invalid phone number format';
     }
   };
-  console.log(watch("phoneNumber"));
+
   return (
     <Stack
-      height={"100vh"}
+      height={'100vh'}
       gap={2}
       paddingY={5}
       paddingTop={8}
-      justifyContent={"space-between"}
-      alignItems={"center"}
+      justifyContent={'space-between'}
+      alignItems={'center'}
       marginX={2}
     >
       <BackButtonAppBar pageName="" />
-      <Stack gap={2} alignItems={"center"} width={"100%"}>
+      <Stack gap={2} alignItems={'center'} width={'100%'}>
         <img width={85} src={appreciate} />
         <Typography fontSize={30}>Appreciate</Typography>
         <Typography>Please enter phone number to appreciate</Typography>
         <ControlledPhoneInput
           rules={{
-            required: "Phone number is required",
+            required: 'Phone number is required',
             validate: validatePhoneNumber,
           }}
           defaultCountry="ge"
@@ -57,7 +57,7 @@ const PhoneNumberAppreciate = () => {
             state: {
               phoneNumber: true,
             },
-          })
+          }),
         )}
         size="large"
         fullWidth

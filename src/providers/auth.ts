@@ -1,20 +1,21 @@
-import { useQuery } from "@tanstack/react-query";
-import { retrieveLaunchParams } from "@telegram-apps/sdk";
+import { useQuery } from '@tanstack/react-query';
+import { retrieveLaunchParams } from '@telegram-apps/sdk';
 
-import { useCallback, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
+import { useCallback, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 
-import { useLogoutAcrossTabs } from "./logout-across-tabs";
-import { jwtDecode } from "jwt-decode";
-import constate from "constate";
-import { checkUser, reissueToken } from "../api/auth/api";
-import { keys } from "src/api/keys";
+import { useLogoutAcrossTabs } from './logout-across-tabs';
+import { jwtDecode } from 'jwt-decode';
+import constate from 'constate';
+import { checkUser, reissueToken } from '../api/auth/auth.api';
+import { qk } from '~/api/query-keys';
 
 type NotAuthUser = {
-  state: "unauthenticated";
+  state: 'unauthenticated';
 };
+
 type UserType = {
   email: string;
   isLocationPublic: boolean;
@@ -25,6 +26,7 @@ type UserType = {
   role: string;
   _id: string;
 };
+
 export type AuthUserResponse = {
   accessToken: string;
   refreshToken: string;
@@ -33,7 +35,7 @@ export type AuthUserResponse = {
 };
 
 export type AuthUser = {
-  state: "authenticated";
+  state: 'authenticated';
 } & AuthUserResponse;
 
 type User = NotAuthUser | AuthUser;
@@ -58,23 +60,25 @@ const cookies = new Cookies();
  */
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState<User>({
-    state: cookies.get("refreshToken") ? "authenticated" : "unauthenticated",
+    state: cookies.get('refreshToken') ? 'authenticated' : 'unauthenticated',
   } as User);
 
   const { handleSubmit, setValue, control, watch } = useForm({
     defaultValues: {
-      telegramId: "",
-      name: "",
-      bio: "",
+      telegramId: '',
+      name: '',
+      bio: '',
       interest: [] as { value: string }[],
-      picture: "",
+      picture: '',
     },
   });
 
   const refreshTimeoutRef = useRef<number | null>(null);
 
-  useQuery(keys.reissueToken.token(), reissueToken, {
-    enabled: Boolean(cookies.get("refreshToken")),
+  useQuery({
+    queryKey: qk.auth.refresh.toKey(),
+    queryFn: reissueToken,
+    enabled: Boolean(cookies.get('refreshToken')),
     staleTime: Number.POSITIVE_INFINITY,
     onSuccess: (user) => {
       authorize(user);
@@ -99,13 +103,13 @@ const useAuth = () => {
 
       setGlobalAccessToken(user.accessToken);
 
-      cookies.set("refreshToken", user.refreshToken, {
-        path: "/",
+      cookies.set('refreshToken', user.refreshToken, {
+        path: '/',
         expires: new Date(2_147_483_647 * 1000),
       });
 
       const newUser: AuthUser = {
-        state: "authenticated",
+        state: 'authenticated',
         ...user,
       };
 
@@ -116,7 +120,7 @@ const useAuth = () => {
       //   refetchRefreshToken()
       // }, expiresIn)
     } else {
-      setCurrentUser({ state: "unauthenticated" });
+      setCurrentUser({ state: 'unauthenticated' });
     }
   }, []);
 
@@ -128,12 +132,12 @@ const useAuth = () => {
   const initialize = useCallback((user: boolean) => {
     if (user) {
       const newUser: NotAuthUser = {
-        state: "unauthenticated",
+        state: 'unauthenticated',
       };
 
       setCurrentUser(newUser);
     } else {
-      setCurrentUser({ state: "unauthenticated" });
+      setCurrentUser({ state: 'unauthenticated' });
     }
   }, []);
 
@@ -144,34 +148,33 @@ const useAuth = () => {
   const unauthorize = useLogoutAcrossTabs(
     useCallback(() => {
       setGlobalAccessToken(null);
-      cookies.remove("refreshToken");
-      setCurrentUser({ state: "unauthenticated" });
+      cookies.remove('refreshToken');
+      setCurrentUser({ state: 'unauthenticated' });
       if (refreshTimeoutRef.current !== null) {
         window.clearTimeout(refreshTimeoutRef.current);
       }
-      navigate("/onBoarding");
-    }, [navigate])
+      navigate('/onBoarding');
+    }, [navigate]),
   );
 
   const initializeNewUser = useCallback(() => {
     const { initData } = retrieveLaunchParams();
     const newUser: NotAuthUser = {
-      state: "unauthenticated",
+      state: 'unauthenticated',
     };
 
     setCurrentUser(newUser);
     // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-    setValue("telegramId", initData?.user?.id.toString()!);
-    setValue(
-      "name",
-      initData?.user?.firstName + " " + initData?.user?.lastName
-    );
+    setValue('telegramId', initData?.user?.id.toString()!);
+    setValue('name', initData?.user?.firstName + ' ' + initData?.user?.lastName);
   }, [setValue]);
 
   const userData = useQuery({
-    queryKey: ["checkUser"],
-    queryFn: async () => checkUser(),
-    onSuccess: (data) => authorize(data),
+    queryKey: qk.users.check.toKey(),
+    queryFn: checkUser,
+    onSuccess: (data) => {
+      authorize(data);
+    },
     onError: () => {
       initializeNewUser();
       unauthorize();
@@ -189,7 +192,7 @@ const useAuth = () => {
     authorize,
     initialize,
     unauthorize,
-    isAuthenticated: currentUser.state === "authenticated",
+    isAuthenticated: currentUser.state === 'authenticated',
     state: currentUser.state,
   } as const;
 };

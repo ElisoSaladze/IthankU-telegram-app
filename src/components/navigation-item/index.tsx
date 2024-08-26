@@ -9,7 +9,7 @@ type Props = {
 
 const NavigationItem = ({ icon, name, onClick }: Props) => {
   return (
-    <ListItemButton onClick={onClick}>
+    <ListItemButton sx={{ width: "100%" }} onClick={onClick}>
       <Stack
         justifyContent={"space-between"}
         alignItems={"center"}

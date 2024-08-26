@@ -4,6 +4,7 @@ import itu from "src/assets/images/itu2.png";
 import { useNavigate } from "react-router-dom";
 import Loader from "src/components/loader";
 import { useAuthContext } from "src/providers/auth";
+import { paths } from "src/app/routes";
 const Onboarding = () => {
   const navigate = useNavigate();
   const { userData } = useAuthContext();
@@ -39,7 +40,7 @@ const Onboarding = () => {
         </Typography>
       </Stack>
       <Button
-        onClick={() => navigate("/introduce-yourself")}
+        onClick={() => navigate(paths.introduceYourself)}
         fullWidth
         size="large"
         variant="contained"
