@@ -30,7 +30,7 @@ const PendingTransactionsPage = () => {
     }
   };
   return (
-    <Stack px={2} justifyContent="center">
+    <Stack px={3} justifyContent="center">
       <Typography mb={2} textAlign="center">
         Pending Transactions
       </Typography>
