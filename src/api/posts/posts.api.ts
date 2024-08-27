@@ -14,7 +14,7 @@ export const getPosts = async ({ page }: GetPostsInput) => {
 
   query.set('page', String(page));
 
-  return await request('/api/posts').get({}, withPagination(TPost));
+  return await request('/api/posts').get({ query }, withPagination(TPost));
 };
 
 export type GetPostDetailsInput = {
