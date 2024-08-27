@@ -1,14 +1,16 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import Loader from 'src/components/loader';
 import PostItem from 'src/components/post-item';
-import { getPost } from 'src/api/posts';
+import { getPost, viewPrivatePost } from 'src/api/posts';
 import BackButtonAppBar from 'src/components/appbar';
 import { match, P } from 'ts-pattern';
 import { qk } from '~/api/query-keys';
+import { paths } from '~/app/routes';
 
 const PrivatePostPage = () => {
+  const navigate = useNavigate();
   const { postId } = useParams<{ postId: string }>();
 
   const $post = useQuery({
@@ -16,13 +18,30 @@ const PrivatePostPage = () => {
     queryFn: () => getPost({ postId: postId! }),
   });
 
+  const { mutate: unlockPost } = useMutation({
+    mutationKey: ['unlock-post'],
+    mutationFn: () => viewPrivatePost({ postId: postId! }),
+    onSuccess: () =>
+      navigate({
+        pathname: generatePath(paths.post, {
+          postId,
+        }),
+      }),
+  });
+
   return (
-    <Stack marginTop={6}>
+    <Stack gap={2} p={2}>
       <BackButtonAppBar pageName="Post" />
-      <Typography>Continue Reading?</Typography>
-      <Typography>
+      <Typography textAlign={'center'} fontSize={25} fontWeight={600}>
+        Continue Reading?
+      </Typography>
+      <Typography textAlign={'center'}>
         You&apos;ve reached the end of the preview. To unlock the full content and enjoy the rest of this post, please
-        pay one coin.
+        pay{' '}
+        <Typography fontWeight={600} color="primary" component="span">
+          one coin
+        </Typography>
+        .
       </Typography>
 
       {match($post)
@@ -33,7 +52,7 @@ const PrivatePostPage = () => {
           <Box>Could not load</Box>
         ))}
 
-      <Button fullWidth variant="contained" size="large">
+      <Button onClick={() => unlockPost()} fullWidth variant="contained" size="large">
         Unlock Full Post
       </Button>
     </Stack>
