@@ -1,5 +1,6 @@
 import { request } from '~/lib/request';
-import { TransactionType, TTransactionData, TUserTransactionsResponse } from './transactions.schema';
+import { TransactionType, TTransaction, TTransactionData, TUserTransactionsResponse } from './transactions.schema';
+import { withPagination } from '../common';
 
 export type GetUserTransactionsInput = {
   userId: string;
@@ -42,7 +43,7 @@ export const getPendingTransactions = async ({ type, page }: GetPendingTransacti
   query.set('type', type);
   query.set('page', String(page));
 
-  return await request('/transactions/pending').get({ query }, TUserTransactionsResponse);
+  return await request('/transactions/pending').get({ query }, withPagination(TTransaction));
 };
 
 type AcceptTransactionInput = {

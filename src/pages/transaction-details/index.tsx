@@ -126,7 +126,9 @@ const TransactionDetailsPage = () => {
                 </ListItemButton>
                 <Divider />
 
-                <CopyableItem contentColor="primary" title="ITU" content={transaction.itu.toString()} />
+                {transaction.itu && (
+                  <CopyableItem contentColor="primary" title="ITU" content={transaction.itu.toString()} />
+                )}
                 <Divider />
 
                 <CopyableItem contentColor="primary" title="USD" content={transaction.amount!.toString()} />
