@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Drawer, IconButton, Slider, Stack, Typography } from '@mui/material';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, ReactNode } from 'react';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { useFetchItemsContext } from 'src/providers/hashtag-shade';
 import ShadeComponent from '../shade-component';
@@ -13,7 +13,12 @@ import CustomSearch from './autocomplete';
 import { useFilterUsersContext } from '~/providers/filter-provider';
 import { paths } from '~/app/routes';
 
-const FilterDrawer = () => {
+type Props = {
+  Icon?: ReactNode;
+  buttonColor?: string;
+};
+
+const FilterDrawer = ({ Icon = <FilterAltOutlinedIcon />, buttonColor = 'primary.main' }: Props) => {
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -63,7 +68,7 @@ const FilterDrawer = () => {
       <IconButton
         onClick={toggleDrawer(true)}
         sx={{
-          backgroundColor: 'info.main',
+          backgroundColor: buttonColor,
           color: 'white',
           borderRadius: '12px',
           '&:hover': {
@@ -72,7 +77,7 @@ const FilterDrawer = () => {
         }}
         size="small"
       >
-        <FilterAltOutlinedIcon />
+        {Icon}
       </IconButton>
       <Drawer anchor="bottom" open={isOpen} onClose={toggleDrawer(false)}>
         <Stack px={1} spacing={0.5}>

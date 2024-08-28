@@ -29,7 +29,7 @@ const useFilterUsers = () => {
   }, [reset]);
 
   useEffect(() => {
-    if (location.pathname !== paths.usersList || location.pathname !== paths.map) {
+    if (location.pathname !== paths.usersList && location.pathname !== paths.map) {
       clear();
     }
   }, [clear, location.pathname]);

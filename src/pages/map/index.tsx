@@ -9,6 +9,7 @@ import { useFilterUsersContext } from '~/providers/filter-provider';
 import { qk } from '~/api/query-keys';
 import Loader from '~/components/loader';
 import CircleIcon from '@mui/icons-material/Circle';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 const MapPage = () => {
   const { watch, setValue, selectedShade } = useFilterUsersContext();
@@ -136,7 +137,7 @@ const MapPage = () => {
               People nearby
             </Typography>
           </Box>
-          <FilterDrawer />
+          <FilterDrawer buttonColor="info.main" Icon={<FilterAltIcon />} />
         </Toolbar>
       </AppBar>
       <GoogleMap
@@ -169,9 +170,18 @@ const MapPage = () => {
         >
           {selectedShade && (
             <Chip
-              sx={{ backgroundColor: 'white' }}
-              avatar={<CircleIcon sx={{ color: selectedShade?.color }} />}
-              label={selectedShade?.en}
+              sx={{
+                backgroundColor: 'white',
+                '& .MuiChip-label': {
+                  px: 0.5,
+                },
+              }}
+              label={
+                <Box display="flex">
+                  <CircleIcon sx={{ color: selectedShade.color }} />
+                  <Typography>{selectedShade.en}</Typography>
+                </Box>
+              }
             />
           )}
           {watch('hashtag') && <Chip sx={{ backgroundColor: selectedShade?.color }} label={watch('hashtag')} />}
