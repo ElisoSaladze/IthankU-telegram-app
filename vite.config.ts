@@ -9,7 +9,16 @@ const PROXY_BASE_URL = 'https://itu-dev-02f448e47ca5.herokuapp.com/';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
+    react({
+      /**
+       * Use the `@emotion/react` and `@emotion/babel-plugin` options if you use emotion as your style engine. For example, emotion is the default engine in MUI.
+       */
+      jsxImportSource: '@emotion/react',
+      jsxRuntime: 'automatic',
+      babel: {
+        plugins: ['@emotion/babel-plugin'],
+      },
+    }),
     checker({
       // e.g. use TypeScript check
       typescript: true,

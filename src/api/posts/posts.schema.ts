@@ -10,7 +10,7 @@ const TMedia = z.object({
 export const TPost = z.object({
   _id: z.string(),
   content: z.string(),
-  summary: z.string(),
+  summary: z.string().optional(),
   preview: z.string(),
   group: z.string().nullable(),
   tags: z.array(z.string()),

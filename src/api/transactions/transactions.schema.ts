@@ -11,7 +11,7 @@ export const TTransaction = z.object({
   amount: z.number(),
   shade: z.string(),
   hashtag: z.string(),
-  itu: z.number(),
+  itu: z.number().optional(),
   createdAt: z.string(),
   comment: z.string(),
   sender: TAuthor.optional(),
