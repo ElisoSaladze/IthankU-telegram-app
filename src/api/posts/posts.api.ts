@@ -32,6 +32,14 @@ export const getPost = async ({ postId }: GetPostDetailsInput) => {
   );
 };
 
+export const viewPrivatePost = async ({ postId }: GetPostDetailsInput) => {
+  return await request("/api/posts/:postId/unlock").post({
+    params: {
+      postId,
+    },
+  });
+};
+
 // TODO!
 export const createPost = async (body: FormData) => {
   try {

@@ -67,13 +67,13 @@ const CreatePostPage = () => {
   const { groupId } = useParams<Params>();
   const maxFileSize = 25 * 1024 * 1024;
   const maxLength = 300;
-
+  const actualGroupId = groupId === ':groupId' ? undefined : groupId;
   const { userData } = useAuthContext();
-
+  console.log(groupId);
   const { control, watch, setValue, handleSubmit } = useForm({
     defaultValues: {
       ...defaultPostValue,
-      group: groupId!,
+      group: actualGroupId ?? null,
     },
   });
 
@@ -105,7 +105,7 @@ const CreatePostPage = () => {
     mutationFn: (data: CreatePostFormData) => {
       const formData = new FormData();
       formData.append('content', data.content);
-      if (groupId) formData.append('group', groupId);
+      if (actualGroupId) formData.append('group', actualGroupId);
       formData.append('summary', data.summary);
       formData.append('visibility', data.visibility);
       for (const tag of data.tags) formData.append('tags', tag.value);
