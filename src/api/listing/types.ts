@@ -47,10 +47,7 @@ export type CurrentUser = Author & {
   placemark: string;
   isLocationPublic: boolean;
   bio: string;
-  topHashtags: {
-    hashtag: string;
-    count: number;
-  }[];
+  topHashtags: TopHashtag[];
   phoneNumber: string | null;
 };
 

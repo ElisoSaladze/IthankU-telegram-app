@@ -1,7 +1,7 @@
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-import { Box, IconButton, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Box, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import FilterDrawer from '~/components/filter-drawer';
 
 const Listing = () => {
   const location = useLocation();
@@ -26,7 +26,8 @@ const Listing = () => {
       <Stack alignItems={'center'} direction={'row'} justifyContent={'space-between'}>
         <Box width={40}></Box>
         <Typography>Listing</Typography>
-        <IconButton
+        <FilterDrawer />
+        {/* <IconButton
           sx={{
             backgroundColor: 'primary.main',
             color: 'white',
@@ -38,7 +39,7 @@ const Listing = () => {
           size="small"
         >
           <FilterAltOutlinedIcon />
-        </IconButton>
+        </IconButton> */}
       </Stack>
       <Stack spacing={1}>
         <ToggleButtonGroup color="primary" fullWidth value={list} exclusive onChange={handleListChange}>

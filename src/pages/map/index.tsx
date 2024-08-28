@@ -1,24 +1,23 @@
 import { useState, useEffect, useCallback } from 'react';
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, Marker } from '@react-google-maps/api';
 import MapSvg from 'src/assets/icons/map.svg';
-import { AppBar, Box, Stack, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Chip, Stack, Toolbar, Typography } from '@mui/material';
 import FilterDrawer from 'src/components/filter-drawer';
 import { getUsersByLocation, MapUser } from '~/api/users';
 import { useQuery } from '@tanstack/react-query';
+import { useFilterUsersContext } from '~/providers/filter-provider';
+import { qk } from '~/api/query-keys';
+import Loader from '~/components/loader';
+import CircleIcon from '@mui/icons-material/Circle';
 
 const MapPage = () => {
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: 'AIzaSyDsf_MC31bfKI8JwasA5WebPrCl2TDqoHc',
-  });
+  const { watch, setValue, selectedShade } = useFilterUsersContext();
 
-  const searchParams = new URLSearchParams(location.search);
-  const initialRadius = Number(searchParams.get('radius')) * 1000 || 1000;
-  const shade = searchParams.get('shade') || undefined;
-  const hashtag = searchParams.get('hashtag') || undefined;
+  const initialRadius = watch('distance') || 1000;
+  const shade = watch('area') || undefined;
+  const hashtag = watch('hashtag') || undefined;
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
   const [locationLoaded, setLocationLoaded] = useState(false);
   const [circle, setCircle] = useState<google.maps.Circle | null>(null);
   const [radius] = useState(initialRadius);
@@ -34,7 +33,7 @@ const MapPage = () => {
         fillColor: '#21A54D',
         fillOpacity: 0.35,
         map,
-        center: userLocation,
+        center: watch('userLocation'),
         radius,
       });
       setCircle(newCircle);
@@ -46,15 +45,20 @@ const MapPage = () => {
         }
       });
     },
-    [userLocation, radius],
+    [watch, radius],
   );
 
   const $nearbyUsers = useQuery({
-    queryKey: ['nearbyUsers', userLocation, radius, shade, hashtag],
+    queryKey: qk.map.list.toKeyWithArgs({
+      shade: shade,
+      radius: initialRadius.toString(),
+      hashtag: hashtag,
+      userLocation: watch('userLocation'),
+    }),
     queryFn: () =>
       getUsersByLocation({
-        latitude: userLocation.lat,
-        longitude: userLocation.lng,
+        latitude: watch('userLocation').lat,
+        longitude: watch('userLocation').lng,
         radius: radius / 1000,
         area: shade,
         hashtag: hashtag,
@@ -70,14 +74,42 @@ const MapPage = () => {
     setMap(null);
   }, [circle, radius]);
 
+  const handleMapDragEnd = useCallback(() => {
+    const newCenter = map?.getCenter();
+    if (newCenter) {
+      setValue('userLocation', { lat: newCenter.lat(), lng: newCenter.lng() });
+
+      $nearbyUsers.refetch();
+    }
+  }, [$nearbyUsers, map, setValue]);
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLocation({
+          const userLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
-          });
+          };
+          setValue('userLocation', userLocation);
+
+          if (map) {
+            const service = new google.maps.places.PlacesService(map);
+            const request = {
+              location: new google.maps.LatLng(userLocation.lat, userLocation.lng),
+              radius: 1,
+            };
+
+            service.nearbySearch(request, (results, status) => {
+              if (status === google.maps.places.PlacesServiceStatus.OK && results![0]) {
+                const place = results![0];
+                setValue('location', place.vicinity! || place.name!);
+              } else {
+                console.error('No nearby place found or error occurred.');
+              }
+            });
+          }
+
           setLocationLoaded(true);
         },
         (error) => {
@@ -89,18 +121,10 @@ const MapPage = () => {
       console.error('Geolocation is not supported by this browser.');
       setLocationLoaded(true);
     }
-  }, []);
+  }, [map, setValue]);
 
-  const handleMapDragEnd = useCallback(() => {
-    const newCenter = map?.getCenter();
-    if (newCenter) {
-      setUserLocation({ lat: newCenter.lat(), lng: newCenter.lng() });
-      $nearbyUsers.refetch();
-    }
-  }, [$nearbyUsers, map]);
-
-  if (!isLoaded || !locationLoaded) {
-    return <div>Loading...</div>;
+  if (!locationLoaded) {
+    return <Loader />;
   }
 
   return (
@@ -108,12 +132,7 @@ const MapPage = () => {
       <AppBar>
         <Toolbar>
           <Box sx={{ flexGrow: 1 }}>
-            <Typography
-              fontWeight={500}
-              variant="h6"
-              component="div"
-              sx={{ textAlign: 'center', color: 'black', fontSize: 20 }}
-            >
+            <Typography color={'black'} fontWeight={500} variant="h6" component="div" fontSize={20}>
               People nearby
             </Typography>
           </Box>
@@ -122,8 +141,8 @@ const MapPage = () => {
       </AppBar>
       <GoogleMap
         mapContainerStyle={{ width: '100%', height: '100%' }}
-        center={userLocation}
-        zoom={17}
+        center={watch('userLocation')}
+        zoom={14}
         onLoad={onLoad}
         onDragEnd={handleMapDragEnd}
         onUnmount={onUnmount}
@@ -137,6 +156,27 @@ const MapPage = () => {
             transform: 'translate(-50%, -50%)',
           }}
         />
+
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 1,
+            position: 'absolute',
+            left: '50%',
+            top: '80%',
+            transform: 'translate(-50%, 0)',
+          }}
+        >
+          {selectedShade && (
+            <Chip
+              sx={{ backgroundColor: 'white' }}
+              avatar={<CircleIcon sx={{ color: selectedShade?.color }} />}
+              label={selectedShade?.en}
+            />
+          )}
+          {watch('hashtag') && <Chip sx={{ backgroundColor: selectedShade?.color }} label={watch('hashtag')} />}
+        </Box>
+
         {$nearbyUsers.data?.users.map((user) => <UserMarker key={user._id} user={user} />)}
       </GoogleMap>
     </Stack>

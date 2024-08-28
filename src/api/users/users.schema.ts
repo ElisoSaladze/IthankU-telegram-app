@@ -20,6 +20,11 @@ const TLinkedAccount = z.object({
   value: z.string(),
 });
 
+const TTopHashtag = z.object({
+  hashtag: z.string(),
+  count: z.number(),
+});
+
 export const TUser = z.intersection(
   TAuthor,
   z.object({
@@ -29,6 +34,7 @@ export const TUser = z.intersection(
     location: TLocation.nullable(),
     generalRating: z.number(),
     topShades: z.array(TTopShade),
+    topHashtags: z.array(TTopHashtag).optional(),
   }),
 );
 
