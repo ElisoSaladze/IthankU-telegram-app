@@ -11,6 +11,7 @@ import { jwtDecode } from 'jwt-decode';
 import constate from 'constate';
 import { checkUser, reissueToken } from '../api/auth/auth.api';
 import { qk } from '~/api/query-keys';
+import { socket } from 'src/socket';
 
 type NotAuthUser = {
   state: 'unauthenticated';
@@ -112,6 +113,11 @@ const useAuth = () => {
         state: 'authenticated',
         ...user,
       };
+
+      console.log({ user });
+
+      socket.connect();
+      socket.emit('joinUserRoom', user.user._id);
 
       setCurrentUser(newUser);
 

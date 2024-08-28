@@ -24,6 +24,7 @@ import TagItem from '../tag';
 import LikesItem from '../likes';
 import { paths } from 'src/app/routes';
 import { Post } from '~/api/posts';
+import { IconPrivatePost } from '~/assets/icons';
 
 type Props = {
   post: Post;
@@ -37,15 +38,15 @@ const PostItem = ({ post, isDetails = false }: Props) => {
     const postId = post._id;
 
     if (!isDetails) {
-      if (post.visibility === 'Public') {
+      if (post.visibility === 'Private') {
         navigate({
-          pathname: generatePath(paths.post, {
+          pathname: generatePath(paths.privatePost, {
             postId,
           }),
         });
       } else {
         navigate({
-          pathname: generatePath(paths.privatePost, {
+          pathname: generatePath(paths.post, {
             postId,
           }),
         });
@@ -78,7 +79,10 @@ const PostItem = ({ post, isDetails = false }: Props) => {
         }
       />
       <CardContent>
-        <Typography fontWeight={600}>{post.summary}</Typography>
+        <Box gap={1} display="flex">
+          <Typography fontWeight={600}>{post.summary}</Typography>
+          {post.visibility === 'Private' && <IconPrivatePost />}
+        </Box>
         <Typography paragraph>{post.preview}</Typography>
         <Stack spacing={0.5} direction="row">
           {post.tags!.map((tag, index) => (

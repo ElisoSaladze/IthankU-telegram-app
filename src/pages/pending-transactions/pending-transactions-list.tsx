@@ -18,8 +18,8 @@ const TransactionsList = ({ type }: TransactionsListProps) => {
     queryKey: qk.transactions.pendingTransactions.toKeyWithArgs({ type }),
     queryFn: async ({ pageParam = 1 }) => getPendingTransactions({ type, page: pageParam }),
     getNextPageParam: (result) => {
-      const nextPage = result.page + 1;
-      return nextPage <= result.totalPages ? nextPage : undefined;
+      const nextPage = result.meta.currentPage + 1;
+      return nextPage <= result.meta.totalPages ? nextPage : undefined;
     },
   });
 

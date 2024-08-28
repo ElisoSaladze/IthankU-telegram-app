@@ -1,6 +1,7 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import {
   AppBar,
+  Badge,
   BottomNavigation,
   BottomNavigationAction,
   Box,
@@ -31,6 +32,7 @@ import Loader from 'src/components/loader';
 import AppreciateComponent from 'src/components/appreciate-components/appreciate-buttons';
 import { IconNotification } from 'src/assets/icons';
 import { paths } from 'src/app/routes';
+import { useNotifications } from '~/lib/hooks';
 
 const useActiveIndex = () => {
   const location = useLocation();
@@ -43,6 +45,7 @@ const useActiveIndex = () => {
 
   return activeIndex !== -1 ? activeIndex : false;
 };
+
 const StyledBottomNavigation = styled(BottomNavigation)(({ theme }) => ({
   '& .Mui-selected': {
     color: theme.palette.primary.main,
@@ -53,15 +56,22 @@ const StyledBottomNavigation = styled(BottomNavigation)(({ theme }) => ({
 }));
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const activeIndex = useActiveIndex();
+
+  const notifications = useNotifications();
+  console.log({ notifications });
+
   const [showAppreciate, setShowAppreciate] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const open = Boolean(anchorEl);
-  const navigate = useNavigate();
-  const activeIndex = useActiveIndex();
-  const theme = useTheme();
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -136,7 +146,16 @@ const HomePage = () => {
               <MenuItem onClick={() => navigate(paths.createGroupDetails)}>Create Group</MenuItem>
             </Menu>
             <IconButton onClick={() => navigate(paths.incomingPendingTransactions)}>
-              <IconNotification sx={{ color: 'info.main' }} />
+              <Badge
+                color="error"
+                badgeContent={notifications?.pendingTransactions}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+              >
+                <IconNotification sx={{ color: 'info.main' }} />
+              </Badge>
             </IconButton>
           </Toolbar>
         </AppBar>
