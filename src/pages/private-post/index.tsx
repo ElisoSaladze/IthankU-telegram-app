@@ -19,7 +19,6 @@ const PrivatePostPage = () => {
   });
 
   const { mutate: unlockPost } = useMutation({
-    mutationKey: ['unlock-post'],
     mutationFn: () => viewPrivatePost({ postId: postId! }),
     onSuccess: () =>
       navigate({
