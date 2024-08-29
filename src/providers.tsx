@@ -12,7 +12,9 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { FetchItemsProvider } from './providers/hashtag-shade';
 import { GlobalQueryClientProvider } from './lib/query-utils';
 import { ToastContainer } from './components/toast';
-import { UserDetailsProvider } from './lib/hooks';
+import { NotificationsProvider, UserDetailsProvider } from './lib/hooks';
+import { LoadScript } from '@react-google-maps/api';
+import { FilterUsersProvider } from './providers/filter-provider';
 
 export const RoutesWrapper = () => {
   return (
@@ -45,7 +47,15 @@ export const Providers = ({ children }: Props) => {
             <GlobalQueryClientProvider>
               <FetchItemsProvider>
                 <AuthProvider>
-                  <UserDetailsProvider>{children}</UserDetailsProvider>
+                  <UserDetailsProvider>
+                    <NotificationsProvider>
+                      <FilterUsersProvider>
+                        <LoadScript libraries={['places']} googleMapsApiKey="AIzaSyDsf_MC31bfKI8JwasA5WebPrCl2TDqoHc">
+                          {children}
+                        </LoadScript>
+                      </FilterUsersProvider>
+                    </NotificationsProvider>
+                  </UserDetailsProvider>
                 </AuthProvider>
               </FetchItemsProvider>
             </GlobalQueryClientProvider>

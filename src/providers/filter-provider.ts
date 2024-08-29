@@ -1,7 +1,8 @@
 import constate from 'constate';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-use';
+
 import { Shade } from '~/api/shades';
 import { paths } from '~/app/routes';
 
@@ -22,17 +23,19 @@ const useFilterUsers = () => {
   const { control, getValues, watch, setValue, reset } = useForm({
     defaultValues: defaultValues,
   });
-  const location = useLocation();
+
   const clear = useCallback(() => {
     reset(defaultValues);
     setSelectedShade(null);
   }, [reset]);
 
+  const location = useLocation();
+
   useEffect(() => {
     if (location.pathname !== paths.usersList && location.pathname !== paths.map) {
       clear();
     }
-  }, [clear, location.pathname]);
+  }, [location.pathname, clear]);
 
   return { setValue, control, watch, getValues, selectedShade, setSelectedShade, clear } as const;
 };
