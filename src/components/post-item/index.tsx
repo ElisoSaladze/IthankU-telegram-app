@@ -22,9 +22,9 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { timeAgo } from '../../helpers';
 import TagItem from '../tag';
 import LikesItem from '../likes';
-import { paths } from 'src/app/routes';
 import { Post } from '~/api/posts';
 import { IconPrivatePost } from '~/assets/icons';
+import { paths } from '~/app/routes';
 
 type Props = {
   post: Post;
@@ -63,7 +63,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
   };
 
   return (
-    <Card onClick={navigateToDetails} sx={{ width: 1, maxWidth: 400 }}>
+    <Card onClick={navigateToDetails} sx={{ width: 1 }}>
       <CardHeader
         avatar={post.author !== undefined && <Avatar src={post.author ? post.author.picture : ''} />}
         title={post.author !== undefined && post.author ? post.author.name : ''}

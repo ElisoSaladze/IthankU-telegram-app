@@ -5,8 +5,8 @@ import defaultImageUrl from '../../assets/images/itu-circle.png';
 import { generatePath, useNavigate } from 'react-router-dom';
 import ShadeComponent from '../shade-component';
 import TagItem from '../tag';
-import { paths } from 'src/app/routes';
 import { Group } from '~/api/groups';
+import { paths } from '~/app/routes';
 
 type Props = {
   group: Group;

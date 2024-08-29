@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 
 import { createSearchParams, generatePath, Params, useNavigate, useParams } from 'react-router-dom';
 import { changeName, changePfp } from '~/api/auth/auth.api';
-import { paths } from 'src/app/routes';
 import { IconLocation } from 'src/assets/icons';
 import BackButtonAppBar from 'src/components/appbar';
 import { ChipComponent } from 'src/components/chip-component';
@@ -14,19 +13,23 @@ import Loader from 'src/components/loader';
 
 import PfpComponent from 'src/components/pfp-component';
 import { fileToBase64, formatNumber } from 'src/helpers';
-import { useAuthContext } from 'src/providers/auth';
-import { useGetUserDetailsContext } from 'src/providers/user-data';
 import { match, P } from 'ts-pattern';
 import { qk } from '~/api/query-keys';
 import { getUser } from '~/api/users';
+import { useAuthUser } from '~/app/auth';
+import { useUserDetails } from '~/lib/hooks';
+import { paths } from '~/app/routes';
 
 const UserDetailsPage = () => {
-  const [isEditable, setIsEditable] = useState(false);
   const navigate = useNavigate();
-  const { refetch } = useGetUserDetailsContext();
-  const { userData } = useAuthContext();
+  const authUser = useAuthUser();
+
+  const { refetch } = useUserDetails();
   const { userId } = useParams<Params>();
-  const isCurrent = userData.data?.user._id === userId;
+
+  const [isEditable, setIsEditable] = useState(false);
+
+  const isCurrent = authUser?.user._id === userId;
 
   const $user = useQuery({
     queryKey: qk.users.details.toKeyWithArgs({ userId: userId! }),
@@ -35,7 +38,7 @@ const UserDetailsPage = () => {
 
   const { control, setValue, handleSubmit } = useForm({
     defaultValues: {
-      name: "",
+      name: '',
     },
   });
 
@@ -90,15 +93,17 @@ const UserDetailsPage = () => {
                       // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
                       const coordinates = user.location?.coordinates!;
 
-                      navigate({
-                        pathname: generatePath(paths.userLocation, {
-                          userId,
-                        }),
-                        search: createSearchParams({
-                          lat: coordinates[0].toString(),
-                          lng: coordinates[1].toString(),
-                        }).toString(),
-                      });
+                      if (userId) {
+                        navigate({
+                          pathname: generatePath(paths.userLocation, {
+                            userId,
+                          }),
+                          search: createSearchParams({
+                            lat: coordinates[0].toString(),
+                            lng: coordinates[1].toString(),
+                          }).toString(),
+                        });
+                      }
                     }}
                   >
                     <IconLocation sx={{ fontSize: 40 }} />
@@ -149,7 +154,7 @@ const UserDetailsPage = () => {
                         onClick={() => {
                           if (isCurrent) {
                             setIsEditable(true);
-                            setValue("name", user.name || "");
+                            setValue('name', user.name || '');
                           }
                         }}
                         fontSize={20}

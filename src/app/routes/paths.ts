@@ -22,7 +22,6 @@ export const paths = {
   transactions: '/list/transactions/:transactionId',
   userDetails: '/more/:userId',
   userLocation: '/more/:userId/location',
-  mainLayout: '/',
   home: '/home',
   groups: '/groups',
   groupSettings: '/groups/group-settings',
@@ -41,4 +40,7 @@ export const paths = {
   pendingTransactions: '/more/pending-transactions',
   incomingPendingTransactions: '/more/pending-transactions/incoming',
   outgoingPendingTransactions: '/more/pending-transactions/outgoing',
-};
+} as const;
+
+export type PathKey = keyof typeof paths;
+export type PathValue = (typeof paths)[PathKey];

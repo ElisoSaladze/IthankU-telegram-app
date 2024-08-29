@@ -24,6 +24,7 @@ const TTopHashtag = z.object({
   hashtag: z.string(),
   count: z.number(),
 });
+export type LinkedAccount = z.infer<typeof TLinkedAccount>;
 
 export const TUser = z.intersection(
   TAuthor,

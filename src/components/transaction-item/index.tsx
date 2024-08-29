@@ -2,8 +2,8 @@ import { Avatar, Chip, IconButton, ListItemButton, Stack, Typography } from '@mu
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { generatePath, useNavigate } from 'react-router-dom';
 import CircleIcon from '@mui/icons-material/Circle';
-import { paths } from 'src/app/routes';
 import { Transaction } from '~/api/transactions';
+import { paths } from '~/app/routes';
 
 type Props = {
   transaction: Transaction;
@@ -29,8 +29,8 @@ const TransactionItem = ({ transaction }: Props) => {
         boxShadow: '0px 0px 8.2px -1px #00000026',
       }}
     >
-      <Stack sx={{ width: '100%' }} alignItems={'center'} justifyContent={'space-between'} direction={'row'}>
-        <Stack gap={1} alignItems={'center'} direction={'row'}>
+      <Stack sx={{ width: 1 }} alignItems="center" justifyContent="space-between" direction="row">
+        <Stack gap={1} alignItems="center" direction="row">
           <Avatar sx={{ height: 66, width: 66 }} src={transaction.sender?.picture} />
           <Stack>
             <Typography>{transaction.sender?.name}</Typography>
@@ -39,7 +39,7 @@ const TransactionItem = ({ transaction }: Props) => {
               <Chip
                 sx={{ padding: 0, height: 'auto' }}
                 label={
-                  <Stack gap={0.5} alignItems={'center'} direction={'row'}>
+                  <Stack gap={0.5} alignItems="center" direction="row">
                     <CircleIcon sx={{ color: transaction.shadeInfo.color, fontSize: 16 }} /> {transaction.shadeInfo.en}
                   </Stack>
                 }

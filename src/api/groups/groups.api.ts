@@ -1,4 +1,3 @@
-import { globalAccessToken } from 'src/providers/auth';
 import { request } from 'src/lib/request';
 import {
   TGroupDetailsResponse,
@@ -7,8 +6,8 @@ import {
   TInvitationResponse,
   TUserToInviteResponse,
 } from './groups.schema';
-import { withPagination } from '../common';
-import { TPost } from '../posts';
+import { TPostsResponse } from '../posts';
+import { globalAccessToken } from '~/app/auth/access-token';
 
 const VITE_APP_API_URL = import.meta.env['VITE_APP_API_URL'];
 
@@ -38,7 +37,7 @@ export const getGroupPosts = async ({ groupId }: GroupId) => {
         groupId,
       },
     },
-    withPagination(TPost),
+    TPostsResponse,
   );
 };
 

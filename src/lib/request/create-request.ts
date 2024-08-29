@@ -3,7 +3,7 @@ import { ParamParseKey, generatePath } from 'react-router-dom';
 import { z } from 'zod';
 import { requestError } from '.';
 import { createRequestBody } from './create-request-body';
-import { globalAccessToken } from 'src/providers/auth';
+import { globalAccessToken } from '~/app/auth/access-token';
 
 type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
@@ -71,8 +71,6 @@ export const createRequest = <Path extends string>(method: RequestMethods, url: 
         const json = await res.json();
 
         const parsed = schema.safeParse(json);
-
-        console.log({ parsed });
 
         if (!parsed.success) {
           const { error } = parsed;

@@ -4,6 +4,7 @@ import { GetPostDetailsInput } from './posts';
 import { GetUserInput, GetUsersInput } from './users';
 import { GetAppreciateUser, GetAppreciateUserInput } from './appreciate';
 import { GetPendingTransactionsInput, GetTransactionDetailsInput, GetUserTransactionsInput } from './transactions';
+import { RefreshTokenInput } from './auth';
 
 /**
  * Same list can be displayed with the standard page pagination in one place (useQuery)
@@ -20,7 +21,7 @@ export type InfiniteQueryKey = {
  */
 export const qk = buildModuleCacheKey({
   auth: {
-    refresh: null,
+    refresh: (input: RefreshTokenInput) => [input],
   },
   shades: null,
   groups: {

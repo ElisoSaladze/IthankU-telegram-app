@@ -1,8 +1,8 @@
-import { Typography, Stack } from "@mui/material";
+import { Typography, Stack } from '@mui/material';
 
-import { useNavigate } from "react-router-dom";
-import { paths } from "src/app/routes";
-import NavigationItem from "src/components/navigation-item";
+import { useNavigate } from 'react-router-dom';
+import NavigationItem from 'src/components/navigation-item';
+import { paths } from '~/app/routes';
 
 const GroupSettings = () => {
   const navigate = useNavigate();
@@ -11,14 +11,8 @@ const GroupSettings = () => {
       <Typography variant="h6" gutterBottom>
         Group Settings
       </Typography>
-      <NavigationItem
-        onClick={() => navigate(paths.groupSettingsFollowings)}
-        name="Following"
-      />
-      <NavigationItem
-        name="Invitation"
-        onClick={() => navigate(paths.groupSettingsInvitations)}
-      />
+      <NavigationItem onClick={() => navigate(paths.groupSettingsFollowings)} name="Following" />
+      <NavigationItem name="Invitation" onClick={() => navigate(paths.groupSettingsInvitations)} />
     </Stack>
   );
 };

@@ -2,16 +2,16 @@ import { Avatar, Box, Skeleton, Stack, Typography, Button } from '@mui/material'
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Loader from 'src/components/loader';
 import PostItem from 'src/components/post-item';
-import { useAuthContext } from 'src/providers/auth';
 import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { match, P } from 'ts-pattern';
 import { getPosts } from '~/api/posts';
 import { qk } from '~/api/query-keys';
+import { useAuthUser } from '~/app/auth';
 
 const HomePage = () => {
   const [ref, inView] = useInView();
-  const { userData } = useAuthContext();
+  const authUser = useAuthUser();
 
   const $posts = useInfiniteQuery({
     queryKey: qk.posts.list.toKey(),
@@ -36,7 +36,7 @@ const HomePage = () => {
         <Stack justifyContent="space-between" direction="row" alignItems="center">
           <Stack>
             <Typography fontSize={30} fontWeight={600}>
-              Hello, {userData.data?.user.name}!
+              Hello, {authUser?.user.name}!
             </Typography>
             <Typography fontSize={14} color="secondary.dark">
               Transforming kindness into rewards? Discover how with{' '}
@@ -45,7 +45,7 @@ const HomePage = () => {
               </Typography>
             </Typography>
           </Stack>
-          <Avatar src={userData.data?.user.picture} sx={{ width: 65, height: 65 }} />
+          <Avatar src={authUser?.user.picture} sx={{ width: 65, height: 65 }} />
         </Stack>
 
         {$posts.isLoading && !$posts.isFetchingNextPage ? (

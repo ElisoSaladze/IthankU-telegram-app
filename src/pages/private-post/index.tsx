@@ -20,12 +20,15 @@ const PrivatePostPage = () => {
 
   const { mutate: unlockPost } = useMutation({
     mutationFn: () => viewPrivatePost({ postId: postId! }),
-    onSuccess: () =>
-      navigate({
-        pathname: generatePath(paths.post, {
-          postId,
-        }),
-      }),
+    onSuccess: () => {
+      if (postId) {
+        navigate({
+          pathname: generatePath(paths.post, {
+            postId,
+          }),
+        });
+      }
+    },
   });
 
   return (

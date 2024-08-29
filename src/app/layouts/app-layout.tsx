@@ -26,13 +26,14 @@ import homeIconSelected from 'src/assets/icons/selectedHome.svg';
 import mapIconSelected from 'src/assets/icons/selectedMap.svg';
 import moreIconSelected from 'src/assets/icons/selectedMore.svg';
 import ituIcon from 'src/assets/images/itu.svg';
-import React, { Suspense, useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import React, { ReactNode, Suspense, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from 'src/components/loader';
 import AppreciateComponent from 'src/components/appreciate-components/appreciate-buttons';
 import { IconNotification } from 'src/assets/icons';
-import { paths } from 'src/app/routes';
 import { useNotifications } from '~/lib/hooks';
+import { paths } from '~/app/routes';
+import { GlobalLoadingIndicator } from '~/components/global-loading-indicator';
 
 const useActiveIndex = () => {
   const location = useLocation();
@@ -55,13 +56,16 @@ const StyledBottomNavigation = styled(BottomNavigation)(({ theme }) => ({
   },
 }));
 
-const HomePage = () => {
+type Props = {
+  children: ReactNode;
+};
+
+export const AppLayout = ({ children }: Props) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const activeIndex = useActiveIndex();
 
   const notifications = useNotifications();
-  console.log({ notifications });
 
   const [showAppreciate, setShowAppreciate] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -93,6 +97,7 @@ const HomePage = () => {
 
   return (
     <Box overflow="auto" height="100%" display="flex" flexDirection="column">
+      <GlobalLoadingIndicator />
       {activeIndex !== 3 && (
         <AppBar
           sx={{
@@ -162,9 +167,7 @@ const HomePage = () => {
       )}
       <Box height={1}>
         <Box height={1}>
-          <Suspense fallback={<Loader />}>
-            <Outlet />
-          </Suspense>
+          <Suspense fallback={<Loader />}>{children}</Suspense>
         </Box>
         <AppreciateComponent show={showAppreciate} setShow={setShowAppreciate} />
       </Box>
@@ -225,5 +228,3 @@ const HomePage = () => {
     </Box>
   );
 };
-
-export default HomePage;

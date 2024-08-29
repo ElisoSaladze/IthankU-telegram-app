@@ -1,29 +1,37 @@
 import { Button, Stack, Typography } from '@mui/material';
-import { useMutation, useQuery } from '@tanstack/react-query';
-
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { telegramSignUp } from '~/api/auth/auth.api';
-import { paths } from 'src/app/routes';
 import Loader from 'src/components/loader';
 import ShadeComponent from 'src/components/shade-component';
-import { useAuthContext } from 'src/providers/auth';
 import { getShades } from '~/api/shades';
+import { qk } from '~/api/query-keys';
+import { paths } from '~/app/routes';
+
+type InterestsFormValues = {
+  interests: Array<{ value: string }>;
+};
 
 const InterestsPage = () => {
   const navigate = useNavigate();
-  const { control, handleSubmit, authorize } = useAuthContext();
+
+  const { control } = useForm<InterestsFormValues>({
+    defaultValues: {
+      interests: [],
+    },
+  });
+
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'interest',
+    name: 'interests',
   });
 
   const [selectedShades, setSelectedShades] = useState<string[]>([]);
 
   const shades = useQuery({
-    queryKey: ['shades'],
-    queryFn: async () => getShades(),
+    queryKey: qk.shades.toKey(),
+    queryFn: getShades,
   });
 
   const handleSelectShade = (shadeName: string) => {
@@ -37,32 +45,16 @@ const InterestsPage = () => {
     }
   };
 
-  const $telegramSignUp = useMutation({
-    mutationFn: telegramSignUp,
-  });
-
-  const onSubmit = handleSubmit((data) => {
-    $telegramSignUp.mutate(
-      {
-        ...data,
-        interest: data.interest.map((tag) => tag.value),
-      },
-      {
-        onSuccess: (data) => {
-          authorize(data);
-          navigate(paths.joinGroup);
-        },
-        onError: (error) => {
-          console.error(error);
-        },
-      },
-    );
-  });
-
   return (
-    <Stack spacing={2} height={'100vh'} alignItems={'center'} justifyContent={'space-between'} padding={2}>
+    <Stack spacing={2} height="100vh" alignItems="center" justifyContent="space-between" padding={2}>
       <Stack alignItems={'center'}>
-        <Button onClick={onSubmit} sx={{ alignSelf: 'end' }} color="secondary">
+        <Button
+          onClick={() => {
+            navigate(paths.joinGroup);
+          }}
+          sx={{ alignSelf: 'end' }}
+          color="secondary"
+        >
           Skip
         </Button>
         <Typography fontSize={24} fontWeight={600}>
@@ -87,7 +79,16 @@ const InterestsPage = () => {
         )}
       </Stack>
 
-      <Button size="large" onClick={onSubmit} variant="contained" color="primary" fullWidth>
+      <Button
+        size="large"
+        onClick={() => {
+          // TODO add update interests logic
+          navigate(paths.joinGroup);
+        }}
+        variant="contained"
+        color="primary"
+        fullWidth
+      >
         Continue
       </Button>
     </Stack>
