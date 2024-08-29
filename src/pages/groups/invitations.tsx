@@ -1,13 +1,15 @@
-import { Box, Typography, CircularProgress, Stack } from '@mui/material';
+import { Box, Typography, Stack } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import InvitationItem from 'src/components/invitation-component';
 import { getInvitations } from '~/api/groups';
-import { useAuthContext } from 'src/providers/auth';
 import { qk } from 'src/api/query-keys';
+import { useAuthUser } from '~/app/auth';
+import { Progress } from '~/components/progress';
 
 const Invitation = () => {
-  const { userData } = useAuthContext();
-  const userId = userData.data?.user._id || '';
+  const authUser = useAuthUser();
+
+  const userId = authUser?.user._id || '';
 
   const {
     data: invitations,
@@ -22,7 +24,7 @@ const Invitation = () => {
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-        <CircularProgress />
+        <Progress />
       </Box>
     );
   }

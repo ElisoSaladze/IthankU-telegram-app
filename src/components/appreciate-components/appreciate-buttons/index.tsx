@@ -2,7 +2,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { Box, Button, Fab, Stack } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { paths } from 'src/app/routes';
+import { paths } from '~/app/routes';
 
 type Props = {
   show: boolean;

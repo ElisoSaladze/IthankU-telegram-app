@@ -18,10 +18,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { match, P } from 'ts-pattern';
 import CopyableItem from 'src/components/copyable-item';
 import Loader from 'src/components/loader';
-import { paths } from 'src/app/routes';
 import { TransactionBackground } from 'src/assets/images/transaction-backround';
 import { getTransactionDetails } from '~/api/transactions';
 import { qk } from '~/api/query-keys';
+import { paths } from '~/app/routes';
 
 const TransactionDetailsPage = () => {
   const { transactionId } = useParams<{ transactionId: string }>();

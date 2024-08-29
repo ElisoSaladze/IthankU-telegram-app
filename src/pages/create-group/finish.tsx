@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
 import { generatePath, useNavigate } from 'react-router-dom';
@@ -6,7 +6,8 @@ import ShadeComponent from 'src/components/shade-component';
 import TagItem from 'src/components/tag';
 import { useCreateGroupContext, CreateGroupRequest } from 'src/providers/create-group-provider';
 import { createGroup } from '~/api/groups';
-import { paths } from 'src/app/routes';
+import { paths } from '~/app/routes';
+import { Progress } from '~/components/progress';
 
 const FinishNewGroup = () => {
   const { watch, handleSubmit } = useCreateGroupContext();
@@ -96,7 +97,7 @@ const FinishNewGroup = () => {
           Cancel
         </Button>
         <Button disabled={mutation.isLoading} fullWidth onClick={onSubmit} size="large" variant="contained">
-          {mutation.isLoading ? <CircularProgress /> : 'Create'}
+          {mutation.isLoading ? <Progress /> : 'Create'}
         </Button>
       </Stack>
     </Stack>

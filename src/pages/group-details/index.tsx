@@ -29,13 +29,13 @@ import LikesItem from 'src/components/likes';
 import Loader from 'src/components/loader';
 import PostItem from 'src/components/post-item';
 import TagItem from 'src/components/tag';
-import { useAuthContext } from 'src/providers/auth';
 import qrIcon from 'src/assets/icons/qr.png';
 import { qk } from 'src/api/query-keys';
 import { Post } from 'src/api/posts';
+import { useAuthUser } from '~/app/auth';
 
 const GroupDetailsPage = () => {
-  const { userData } = useAuthContext();
+  const authUser = useAuthUser();
   const { groupId } = useParams<Params>();
 
   const args = { groupId: groupId! };
@@ -227,7 +227,7 @@ const GroupDetailsPage = () => {
             >
               <Stack width={'100%'} justifyContent={'space-between'} alignItems={'center'} direction={'row'}>
                 <Stack gap={2} alignItems={'center'} direction={'row'}>
-                  <Avatar src={userData.data?.user.picture} />
+                  <Avatar src={authUser?.user.picture} />
                   <Typography>Write something...</Typography>
                 </Stack>
                 <Button onClick={() => navigate(`/create-post/${groupId}`)} variant="outlined">

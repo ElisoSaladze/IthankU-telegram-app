@@ -1,23 +1,16 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material'
-import { ReactNode, useState } from 'react'
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { ReactNode, useState } from 'react';
 
 /**
  * Props type definition for the ConfirmationDialog component.
  */
 type Props = {
-  response: () => void
-  title: string
-  description: string | ReactNode
-  confirmButtonText: string
-  children: (showDialog: () => void) => ReactNode
-}
+  response: () => void;
+  title: string;
+  description: string | ReactNode;
+  confirmButtonText: string;
+  children: (showDialog: () => void) => ReactNode;
+};
 
 /**
  * ConfirmationDialog component - Displays a dialog with a confirmation message.
@@ -29,30 +22,24 @@ type Props = {
  * @param {string | ReactNode} description - Description text or component for the dialog.
  * @param {(showDialog: () => void) => ReactNode} children - Render prop to trigger the dialog.
  */
-const ConfirmationDialog = ({
-  response,
-  children,
-  description,
-  title,
-  confirmButtonText,
-}: Props) => {
-  const [open, setOpen] = useState(false)
+const ConfirmationDialog = ({ response, children, description, title, confirmButtonText }: Props) => {
+  const [open, setOpen] = useState(false);
 
   // Function to show the dialog
   const showDialog = () => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
 
   // Function to hide the dialog
   const hideDialog = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   // Function to handle confirmation and hide the dialog
   const confirmRequest = () => {
-    response()
-    hideDialog()
-  }
+    response();
+    hideDialog();
+  };
 
   return (
     <>
@@ -68,27 +55,18 @@ const ConfirmationDialog = ({
           <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
           {/* Dialog content */}
           <DialogContent sx={{ margin: 1 }}>
-            <DialogContentText id="alert-dialog-description">
-              {description}
-            </DialogContentText>
+            <DialogContentText id="alert-dialog-description">{description}</DialogContentText>
           </DialogContent>
           {/* Dialog actions */}
           <DialogActions>
-            <Button
-              sx={{ marginX: 1 }}
-              fullWidth
-              onClick={confirmRequest}
-              color="primary"
-              variant="contained"
-              size="large"
-            >
+            <Button sx={{ mx: 1 }} fullWidth onClick={confirmRequest} color="primary" variant="contained" size="large">
               {confirmButtonText}
             </Button>
           </DialogActions>
         </Dialog>
       )}
     </>
-  )
-}
+  );
+};
 
-export default ConfirmationDialog
+export default ConfirmationDialog;

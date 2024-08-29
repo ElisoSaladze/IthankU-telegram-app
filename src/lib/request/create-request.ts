@@ -3,7 +3,7 @@ import { ParamParseKey, generatePath } from 'react-router-dom';
 import { z } from 'zod';
 import { requestError } from '.';
 import { createRequestBody } from './create-request-body';
-import { globalAccessToken } from 'src/providers/auth';
+import { globalAccessToken } from '~/app/auth/access-token';
 
 type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 

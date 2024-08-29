@@ -7,8 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { userGroups } from '~/api/groups';
 import GroupItem from 'src/components/group-item';
 import settingsIcon from 'src/assets/icons/settings.svg';
-import { paths } from 'src/app/routes';
 import { qk } from 'src/api/query-keys';
+import { paths } from '~/app/routes';
+
 const GroupsPage = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
