@@ -1,10 +1,11 @@
 import DoneIcon from '@mui/icons-material/Done';
-import { Avatar, Button, CircularProgress, Stack, Typography } from '@mui/material';
+import { Avatar, Button, Stack, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
 import { useState } from 'react';
 import ShadeComponent from '../shade-component';
 import { Group, joinGroup } from '~/api/groups';
+import { Progress } from '../progress';
 
 type Props = {
   group: Group;
@@ -29,9 +30,10 @@ const GroupItem = ({ group }: Props) => {
       },
     );
   };
+
   return (
-    <Stack width={'100%'} justifyContent={'space-between'} alignItems={'center'} direction={'row'}>
-      <Stack gap={1} alignItems={'center'} direction={'row'}>
+    <Stack width={1} justifyContent="space-between" alignItems="center" direction="row">
+      <Stack gap={1} alignItems="center" direction="row">
         <Avatar sx={{ height: 62, width: 62 }} src={group.groupImage} />
         <Stack>
           <Typography fontSize={15} fontWeight={600}>
@@ -44,7 +46,7 @@ const GroupItem = ({ group }: Props) => {
         </Stack>
       </Stack>
       {$joinGroup.isLoading ? (
-        <CircularProgress />
+        <Progress centered />
       ) : !joined ? (
         <Button size="small" variant="outlined" onClick={handleJoinGroup}>
           join

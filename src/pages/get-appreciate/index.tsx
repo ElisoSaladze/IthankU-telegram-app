@@ -4,17 +4,17 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import ShareIcon from '@mui/icons-material/Share';
 import { useQuery } from '@tanstack/react-query';
 import BackButtonAppBar from 'src/components/appbar';
-import { useAuthContext } from 'src/providers/auth';
 import Loader from 'src/components/loader';
 import back from 'src/assets/images/itu.png';
 import { useState } from 'react';
 import { handleShare } from 'src/helpers';
 import { qk } from '~/api/query-keys';
 import { getQRCode } from '~/api/appreciate';
+import { useAuthUser } from '~/app/auth';
 
 function QRCodePage() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const { userData } = useAuthContext();
+  const authUser = useAuthUser();
   const location = useLocation();
 
   const { area, hashtag } = location.state || {};
@@ -71,7 +71,7 @@ function QRCodePage() {
           paddingY={2}
           marginTop={2}
         >
-          <Avatar sx={{ width: 85, height: 85 }} src={userData.data?.user.picture} />
+          <Avatar sx={{ width: 85, height: 85 }} src={authUser?.user.picture} />
           <img
             width={260}
             src={`https://api.qrserver.com/v1/create-qr-code/?data=${appreciationUrl}&size=200x200`}

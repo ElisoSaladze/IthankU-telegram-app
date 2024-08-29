@@ -1,13 +1,9 @@
-import { Box, Divider, IconButton, InputAdornment, Menu, MenuItem, Stack, Typography } from '@mui/material';
-import { useFieldArray } from 'react-hook-form';
+import { Box, Button, Stack, Typography } from '@mui/material';
+import { useForm } from 'react-hook-form';
 
 import { ControlledTextArea } from 'src/components/form/controlled/controlled-text-area';
-import { ControlledTextField } from 'src/components/form/controlled/controlled-text-field';
 import Loader from 'src/components/loader';
-import { useGetUserDetailsContext } from 'src/providers/user-data';
-import AddIcon from '@mui/icons-material/Add';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useState } from 'react';
+
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { userGroups } from '~/api/groups';
 import LikesItem from 'src/components/likes';
@@ -15,14 +11,24 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';
 import { qk } from 'src/api/query-keys';
 import { updateUserBio } from '~/api/auth';
+import { useUserDetails } from '~/lib/hooks';
+
+type AccountsFormValues = {
+  bio: string;
+};
 
 const Accounts = () => {
   const navigate = useNavigate();
-  const { control, isLoading, isFetching, handleSubmit } = useGetUserDetailsContext();
+  const { user: userDetails, isLoading } = useUserDetails();
 
-  const { fields: socials } = useFieldArray({
+  const {
     control,
-    name: 'linkedAccounts',
+    handleSubmit,
+    formState: { isDirty },
+  } = useForm<AccountsFormValues>({
+    defaultValues: {
+      bio: userDetails?.user.bio ?? '',
+    },
   });
 
   const { data, isLoading: groupsLoading } = useQuery({
@@ -30,135 +36,48 @@ const Accounts = () => {
     queryFn: userGroups,
   });
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [currentField, setCurrentField] = useState<string | null>(null);
-  const [editableField, setEditableField] = useState<string | null>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>, fieldName: string) => {
-    setAnchorEl(event.currentTarget);
-    setCurrentField(fieldName);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleEdit = () => {
-    if (currentField) {
-      setEditableField(currentField); // Set the field as editable
-      setAnchorEl(null);
-    }
-  };
-
-  const handleDelete = () => {
-    // Handle delete logic here
-    setAnchorEl(null);
-  };
   const $updateUserBio = useMutation({
     mutationFn: updateUserBio,
   });
 
-  const handleBlur = handleSubmit((data) => {
-    // This will trigger when the user unfocuses from the input field
-    if (editableField) {
-      // Handle saving data based on the current editable field
-      if (editableField === 'bio') {
-        $updateUserBio.mutate({
-          bio: data.bio,
-        });
-      }
-      // Add other cases here for phoneNumber, email, etc.
-
-      // Reset editable field after saving
-      setEditableField(null);
-    }
-  });
-
-  if (isLoading || isFetching) return <Loader />;
+  if (isLoading) return <Loader />;
 
   return (
-    <Stack mb={10} height={'100%'} gap={1} px={2} alignItems={'center'}>
+    <Stack
+      component="form"
+      onSubmit={handleSubmit((values) => {
+        $updateUserBio.mutate({
+          bio: values.bio,
+        });
+      })}
+      mb={10}
+      height={1}
+      gap={1}
+      px={2}
+      alignItems="center"
+    >
       <Typography fontSize={24}>Accounts</Typography>
 
       <Typography fontSize={12} alignSelf={'flex-start'}>
         About me
       </Typography>
-      <ControlledTextArea
-        onBlur={handleBlur}
-        disabled={editableField !== 'bio'}
-        fullWidth
-        control={control}
-        name="bio"
-        multiline
-        rows={2}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton size="small" edge="end" onClick={(event) => handleClick(event, 'bio')}>
-                <MoreVertIcon fontSize="small" color="primary" />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
 
-      <Typography fontSize={12} alignSelf={'flex-start'}>
-        Phone Numbers
-      </Typography>
-      <ControlledTextField
-        disabled={editableField !== 'phoneNumber'}
-        fullWidth
-        control={control}
-        name="phoneNumber"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton size="small" edge="end" onClick={(event) => handleClick(event, 'phoneNumber')}>
-                <MoreVertIcon fontSize="small" color="primary" />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-
-      <Typography fontSize={12} alignSelf={'flex-start'}>
-        Emails
-      </Typography>
-      <ControlledTextField
-        disabled={editableField !== 'email'}
-        fullWidth
-        control={control}
-        name="email"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton size="small" edge="end" onClick={(event) => handleClick(event, 'email')}>
-                <MoreVertIcon fontSize="small" color="primary" />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
+      <ControlledTextArea fullWidth control={control} name="bio" multiline rows={2} />
 
       <Typography fontSize={12} alignSelf={'flex-start'}>
         Socials
       </Typography>
-      <Stack width={'100%'} flexWrap={'wrap'} direction={'row'}>
-        {socials.map((social) => (
-          <Typography key={social.id}>{social.type}</Typography>
-        ))}
-        <IconButton
-          sx={{
-            boxShadow: '0px 0px 9.1px 1px #0000001F',
-          }}
-        >
-          <AddIcon color="primary" />
-        </IconButton>
-      </Stack>
 
-      <Typography fontSize={12} alignSelf={'flex-start'}>
+      <Box width={1} display="flex" flexWrap="wrap" gap={1}>
+        {userDetails?.user.linkedAccounts.map((social, index) => (
+          <Typography key={social.value + index}>{social.type}</Typography>
+        ))}
+      </Box>
+
+      <Typography fontSize={12} alignSelf="flex-start">
         Groups
       </Typography>
+
       <Box
         sx={{
           width: '100%',
@@ -184,44 +103,9 @@ const Accounts = () => {
         </Stack>
       </Box>
 
-      <Menu
-        sx={{
-          '& .MuiPaper-root': {
-            border: 'none', // Removes the border
-            boxShadow: '0px 2px 8.8px -2px #00000030',
-            borderRadius: 2,
-          },
-        }}
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem
-          sx={{
-            minHeight: '30px',
-            padding: '5px 16px',
-          }}
-          onClick={handleEdit}
-        >
-          Edit
-        </MenuItem>
-        <Divider
-          sx={{
-            '&.MuiDivider-root': {
-              margin: '0 !important',
-            },
-          }}
-        />
-        <MenuItem
-          sx={{
-            minHeight: '30px',
-            padding: '5px 16px',
-          }}
-          onClick={handleDelete}
-        >
-          Delete
-        </MenuItem>
-      </Menu>
+      <Button fullWidth disabled={!isDirty} color="primary" size="large">
+        Save Changes
+      </Button>
     </Stack>
   );
 };

@@ -1,0 +1,17 @@
+.Toastify__toast {
+  min-height: unset;
+}
+
+.Toastify__toast-body {
+  padding: 4px;
+  line-height: 24px;
+}
+
+.Toastify__toast--success {
+  background: rgb(46, 125, 50);
+  color: #fff
+}
+.Toastify__toast--error {
+  background: rgb(211, 47, 47);
+  color: #fff
+}

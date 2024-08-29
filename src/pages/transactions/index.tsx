@@ -2,7 +2,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Button, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { paths } from 'src/app/routes';
+import { paths } from '~/app/routes';
 
 const TransactionsPage = () => {
   const location = useLocation();

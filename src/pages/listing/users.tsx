@@ -4,12 +4,12 @@ import Loader from 'src/components/loader';
 import ShadeComponent from 'src/components/shade-component';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { generatePath, useNavigate } from 'react-router-dom';
-import { paths } from 'src/app/routes';
 import { match, P } from 'ts-pattern';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { getUsers } from '~/api/users';
 import { qk } from '~/api/query-keys';
+import { paths } from '~/app/routes';
 
 const UsersList = () => {
   const [ref, inView] = useInView();
@@ -40,8 +40,7 @@ const UsersList = () => {
           .map((user) => (
             <ListItemButton
               onClick={() => {
-                const userId = user._id;
-                navigate(generatePath(paths.userDetails, { userId }));
+                navigate(generatePath(paths.userDetails, { userId: user._id ?? '' }));
               }}
               key={user._id}
               sx={{

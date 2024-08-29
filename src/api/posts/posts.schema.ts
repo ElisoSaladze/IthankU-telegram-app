@@ -28,4 +28,8 @@ export const TPost = z.object({
 
 export type Post = z.infer<typeof TPost>;
 
+export const TPostsResponse = z.object({
+  data: z.array(TPost),
+});
+
 export const TPostDetailsResponse = z.object({ data: TPost });

@@ -3,13 +3,13 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { useForm } from 'react-hook-form';
 import { Params, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { paths } from 'src/app/routes';
 import BackButtonAppBar from 'src/components/appbar';
 import AreaSelect from 'src/components/appreciate-components/select-area';
 import HashtagSelect from 'src/components/appreciate-components/select-hashtag';
 import { ControlledTextArea } from 'src/components/form/controlled/controlled-text-area';
 import { appreciateUser, AppreciateUserInput, appreciateWithMobile, getAppreciateUser } from '~/api/appreciate';
 import { qk } from '~/api/query-keys';
+import { paths } from '~/app/routes';
 
 const AppreciatePage = () => {
   const navigate = useNavigate();

@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export const TUserRole = z.literal('user'); // TODO
+
 export const TUserType = z.object({
   _id: z.string(),
   email: z.string(),
@@ -13,21 +15,20 @@ export const TUserType = z.object({
 
 export type UserType = z.infer<typeof TUserType>;
 
-export const TAuthUserResponse = z.object({
+export const TAuthUser = z.object({
   accessToken: z.string(),
   refreshToken: z.string(),
-  status: z.string(),
   user: TUserType,
 });
 
-export type AuthUserResponse = z.infer<typeof TAuthUserResponse>;
+export type AuthUser = z.infer<typeof TAuthUser>;
 
 export const TTelegramSignUpRequestBody = z.object({
   telegramId: z.string(),
   name: z.string(),
   bio: z.string(),
-  interest: z.array(z.string()),
   picture: z.string(),
+  interest: z.array(z.string()),
 });
 
 export type TelegramSignUpRequestBody = z.infer<typeof TTelegramSignUpRequestBody>;

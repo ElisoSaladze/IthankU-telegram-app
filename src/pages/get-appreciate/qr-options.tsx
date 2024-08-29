@@ -1,10 +1,10 @@
 import { Button, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { paths } from 'src/app/routes';
 import BackButtonAppBar from 'src/components/appbar';
 import AreaSelect from 'src/components/appreciate-components/select-area';
 import HashtagSelect from 'src/components/appreciate-components/select-hashtag';
+import { paths } from '~/app/routes';
 
 function AdvancedSelectionPage() {
   const navigate = useNavigate();

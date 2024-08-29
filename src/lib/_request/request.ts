@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { globalAccessToken } from '../../providers/auth';
+
+import { globalAccessToken } from '~/app/auth/access-token';
 
 /**
  * The HTTP request function.

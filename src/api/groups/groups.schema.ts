@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { TShade } from '../shades';
 
 export const TAuthor = z.object({
-  _id: z.string().optional(),
+  _id: z.string(),
   name: z.string().optional(),
   picture: z.string().optional(),
 });

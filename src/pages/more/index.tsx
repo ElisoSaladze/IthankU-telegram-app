@@ -7,27 +7,25 @@ import privateIcon from 'src/assets/icons/private.svg';
 import transactions from 'src/assets/icons/transactions.svg';
 
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import { ControlledSwitch } from 'src/components/form/controlled/controlled-switch';
 import NavigationItem from 'src/components/navigation-item';
-import { useGetUserDetailsContext } from 'src/providers/user-data';
 import Loader from 'src/components/loader';
 import { useMutation } from '@tanstack/react-query';
-import { useAuthContext } from 'src/providers/auth';
-import { paths } from 'src/app/routes';
 import { updateAccountVisibility, updateLocationVisibility } from '~/api/auth';
+import { useUserDetails } from '~/lib/hooks';
+import { paths } from '~/app/routes';
 
 const MorePage = () => {
   const navigate = useNavigate();
 
-  const { userData } = useAuthContext();
-  const { user, isLoading, isFetching } = useGetUserDetailsContext();
+  const { user: userDetails, isLoading } = useUserDetails();
 
   const { control, watch } = useForm({
     defaultValues: {
-      private: user?.user.isPrivate,
-      showOnMap: user?.user.isLocationPublic,
+      private: userDetails?.user.isPrivate,
+      showOnMap: userDetails?.user.isLocationPublic,
     },
   });
 
@@ -42,26 +40,40 @@ const MorePage = () => {
     mutationFn: updateLocationVisibility,
   });
 
-  if (isLoading && isFetching) return <Loader />;
+  if (isLoading) return <Loader />;
+
+  if (!userDetails) {
+    return;
+  }
 
   return (
     <Stack mx={3} gap={1.5}>
-      <ListItemButton onClick={() => navigate(`${userData.data!.user._id}`)}>
-        <Stack width={1} justifyContent="space-between" direction="row" alignItems="center" gap={1}>
-          <Stack gap={1.5} direction="row" alignItems="center">
-            <Avatar src={user?.user.picture} sx={{ width: 65, height: 65 }} />
-            <Stack>
-              <Typography fontSize={20}>{user?.user.name}</Typography>
-              <Typography fontSize={14} color="secondary.dark">
-                {user?.user.email}
-              </Typography>
+      {userDetails && (
+        <ListItemButton
+          onClick={() => {
+            navigate(
+              generatePath(paths.userDetails, {
+                userId: userDetails.user._id,
+              }),
+            );
+          }}
+        >
+          <Stack width={1} justifyContent="space-between" direction="row" alignItems="center" gap={1}>
+            <Stack gap={1.5} direction="row" alignItems="center">
+              <Avatar src={userDetails.user.picture} sx={{ width: 65, height: 65 }} />
+              <Stack>
+                <Typography fontSize={20}>{userDetails.user.name}</Typography>
+                <Typography fontSize={14} color="secondary.dark">
+                  {userDetails.user.email}
+                </Typography>
+              </Stack>
             </Stack>
+            <Avatar sx={{ bgcolor: 'primary.main' }}>
+              <Typography color="white">{userDetails.user.generalRating}</Typography>
+            </Avatar>
           </Stack>
-          <Avatar sx={{ bgcolor: 'primary.main' }}>
-            <Typography color="white">{user?.user.generalRating}</Typography>
-          </Avatar>
-        </Stack>
-      </ListItemButton>
+        </ListItemButton>
+      )}
       <Stack>
         <NavigationItem onClick={() => navigate(paths.accounts)} icon={accounts} name="Accounts" />
         <Divider />
