@@ -33,7 +33,6 @@ const useAuthContext = () => {
       isRefreshed.setTrue();
     },
     onMutate: () => {
-      console.log('inMutate');
       isRefreshed.setTrue();
     },
   });
@@ -49,9 +48,7 @@ const useAuthContext = () => {
   });
 
   useEffectOnce(() => {
-    console.log('out', isRefreshed.isFalse);
     if (isRefreshed.isFalse) {
-      console.log('in', isRefreshed.isFalse);
       mutateRefresh();
     }
   });
