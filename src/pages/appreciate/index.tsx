@@ -54,19 +54,20 @@ const AppreciatePage = () => {
           onSelect={(shade) => (shade ? setValue('shade', shade.en) : setValue('shade', ''))}
         />
         <HashtagSelect
+          control={control}
           defaultSelected={appreciateData?.data.hashtag}
           onSelect={(hashtag) => (hashtag ? setValue('hashtag', hashtag.hashtag) : setValue('hashtag', ''))}
         />
-        <Box borderRadius={5} boxShadow={'0px 0px 8px -2px #00000040'} p={1.5}>
-          <Stack marginBottom={1} alignItems={'center'} direction={'row'}>
+        <Box borderRadius={5} boxShadow="0px 0px 8px -2px #00000040" p={1.5}>
+          <Stack mt={1} alignItems="center" direction="row">
             <Typography>Add comment</Typography>
-            <Typography fontSize={10} color={'secondary'}>
+            <Typography fontSize={10} color="secondary">
               optional
             </Typography>
           </Stack>
           <ControlledTextArea fullWidth rows={6} multiline control={control} name="comment" />
         </Box>
-        <Stack gap={2} direction={'row'}>
+        <Stack gap={2} direction="row">
           <Button size="large" fullWidth variant="contained" color="secondary">
             Skip
           </Button>

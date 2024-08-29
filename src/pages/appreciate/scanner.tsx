@@ -23,12 +23,12 @@ const ScanQrCodePage = () => {
   return (
     <Stack>
       <BackButtonAppBar pageName="" />
-      <Stack alignItems={'center'} justifyContent={'center'} gap={4} marginX={2}>
+      <Stack alignItems="center" justifyContent="center" gap={4} mx={2}>
         <Stack
-          width={'100%'}
+          width="100%"
           borderRadius={4}
-          alignItems={'center'}
-          padding={1}
+          alignItems="center"
+          p={1}
           sx={{
             backgroundImage: `url(${background})`,
             backgroundSize: 'cover',
@@ -38,7 +38,7 @@ const ScanQrCodePage = () => {
         >
           <Typography fontSize={32}>
             Scan{' '}
-            <Typography fontSize={32} component={'span'} color={'primary'}>
+            <Typography fontSize={32} component="span" color="primary">
               QR Code
             </Typography>
           </Typography>

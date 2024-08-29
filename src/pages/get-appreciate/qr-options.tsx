@@ -1,29 +1,37 @@
 import { Button, Stack } from '@mui/material';
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { paths } from 'src/app/routes';
 import BackButtonAppBar from 'src/components/appbar';
 import AreaSelect from 'src/components/appreciate-components/select-area';
 import HashtagSelect from 'src/components/appreciate-components/select-hashtag';
 
+type AppreciateDetails = {
+  area?: string;
+  hashtag?: string;
+};
+
 function AdvancedSelectionPage() {
   const navigate = useNavigate();
-
-  const [area, setArea] = useState<string | undefined>('');
-  const [hashtag, setHashtag] = useState<string | undefined>();
+  const { control, setValue, watch } = useForm<AppreciateDetails>({});
 
   const handleCreateQRCode = () => {
+    const area = watch('area');
+    const hashtag = watch('hashtag');
     navigate(paths.getAppreciate, {
       state: { area, hashtag, isAdvanced: true },
     });
   };
 
   return (
-    <Stack paddingTop={10} paddingBottom={2} justifyContent={'space-between'} height={'100vh'} marginX={2}>
-      <BackButtonAppBar pageName="" />
+    <Stack pb={2} justifyContent={'space-between'} height={'100vh'} mx={2}>
       <Stack gap={2}>
-        <AreaSelect onSelect={(area) => setArea(area?.en)} />
-        <HashtagSelect onSelect={(hashtag) => setHashtag(hashtag?.hashtag)} />
+        <BackButtonAppBar pageName="" />
+        <AreaSelect onSelect={(area) => setValue('area', area?.en)} />
+        <HashtagSelect
+          control={control}
+          onSelect={(hashtag) => (hashtag ? setValue('hashtag', hashtag.hashtag) : setValue('hashtag', ''))}
+        />
       </Stack>
 
       <Button size="large" variant="contained" color="primary" onClick={handleCreateQRCode}>

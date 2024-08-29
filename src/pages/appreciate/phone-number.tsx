@@ -26,17 +26,9 @@ const PhoneNumberAppreciate = () => {
   };
 
   return (
-    <Stack
-      height={'100vh'}
-      gap={2}
-      paddingY={5}
-      paddingTop={8}
-      justifyContent={'space-between'}
-      alignItems={'center'}
-      marginX={2}
-    >
+    <Stack height="100vh" gap={2} py={5} pt={8} justifyContent="space-between" alignItems="center" mx={2}>
       <BackButtonAppBar pageName="" />
-      <Stack gap={2} alignItems={'center'} width={'100%'}>
+      <Stack gap={2} alignItems="center" width="100%">
         <img width={85} src={appreciate} />
         <Typography fontSize={30}>Appreciate</Typography>
         <Typography>Please enter phone number to appreciate</Typography>

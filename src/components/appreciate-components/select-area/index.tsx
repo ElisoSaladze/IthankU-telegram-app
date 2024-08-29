@@ -51,7 +51,6 @@ const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
             minWidth={200}
             border={'1px solid #D1D1D175'}
             borderRadius={3}
-            bgcolor={selectedShade ? 'white' : '#EEEEEE8A'}
             boxShadow={'0px 1px 5px -1px #00000014'}
             alignItems={'center'}
             direction={'row'}
