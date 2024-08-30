@@ -102,7 +102,6 @@ export const AppLayout = ({ children }: Props) => {
         <AppBar
           sx={{
             bgcolor: 'white',
-            zIndex: theme.zIndex.drawer + 1,
             mt: 3,
           }}
         >
