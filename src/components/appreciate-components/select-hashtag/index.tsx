@@ -1,6 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Skeleton, Stack, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, IconButton, Skeleton, Stack, Typography } from '@mui/material';
 import TagItem from 'src/components/tag';
 import { useEffect, useState } from 'react';
 import { useFetchItemsContext } from 'src/providers/hashtag-shade';
@@ -72,7 +72,7 @@ const HashtagSelect = ({ onSelect, defaultSelected, control }: Props) => {
             alignItems="center"
             direction="row"
             justifyContent="space-between"
-            px={1}
+            p={0.5}
           >
             <ControlledTextField
               placeholder="Select hashtag"
@@ -82,10 +82,11 @@ const HashtagSelect = ({ onSelect, defaultSelected, control }: Props) => {
                   margin: 0,
                   '& .MuiInputBase-input': {
                     padding: 0,
+                    fontSize: 14,
                   },
                   '& fieldset': {
                     padding: 0,
-                    border: 'none', // Remove the border
+                    border: 'none',
                   },
                 },
               }}
@@ -93,21 +94,22 @@ const HashtagSelect = ({ onSelect, defaultSelected, control }: Props) => {
               control={control}
             />
             {selectedHashtag && (
-              <CloseIcon
+              <IconButton
                 onClick={() => {
                   setSelectedHashtag(null);
                   if (onSelect) {
-                    onSelect(null); // Notify parent component if necessary
+                    onSelect(null);
                   }
                 }}
-                sx={{ fontSize: 20 }}
-              />
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
             )}
           </Stack>
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        <Stack width="100%" gap={0.5} direction={'row'} flexWrap="wrap">
+        <Stack width="100%" gap={0.5} direction="row" flexWrap="wrap">
           {hashtags?.data!.map((hashtag) => (
             <TagItem onClick={() => handleSelectHashtag(hashtag)} key={hashtag._id} tag={hashtag.hashtag} />
           ))}

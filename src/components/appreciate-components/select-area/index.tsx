@@ -63,14 +63,15 @@ const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
                 <IconButton
                   onClick={() => {
                     setSelectedShade(null);
-                    // setValue('')
                   }}
                 >
                   <CloseIcon fontSize="small" />
                 </IconButton>
               </>
             ) : (
-              <Typography fontSize={14}>Select shade</Typography>
+              <Typography color="#b7b7b7" fontSize={14}>
+                Select shade
+              </Typography>
             )}
           </Stack>
         </Stack>
