@@ -1,13 +1,9 @@
 import { retrieveLaunchParams } from '@telegram-apps/sdk';
 
-import Cookies from 'universal-cookie';
-
 import { request } from '~/lib/request';
-import { TAuthUserResponse, TelegramSignUpRequestBody } from './auth.schema';
+import { TAuthUser, TelegramSignUpRequestBody } from './auth.schema';
 
 const CURRENT_BOT = import.meta.env['VITE_APP_CURRENT_BOT'];
-
-const cookies = new Cookies();
 
 export const checkUser = async () => {
   const { initDataRaw } = retrieveLaunchParams();
@@ -22,22 +18,21 @@ export const checkUser = async () => {
     query.set('bot', CURRENT_BOT);
   }
 
-  return await request('/api/auth/telegram').post({ query }, TAuthUserResponse);
+  return await request('/api/auth/telegram').post({ query }, TAuthUser);
 };
 
-// /**
-//  * Reissues a token using the refresh token stored in cookies.
-//  *
-//  * @returns A promise that resolves with the authentication response containing updated tokens.
-//  */
-export const reissueToken = async () => {
+export type RefreshTokenInput = {
+  refreshToken: string;
+};
+
+export const refreshToken = async ({ refreshToken }: RefreshTokenInput) => {
   return await request('/auth/refreshToken').post(
     {
       body: {
-        token: cookies.get('refreshToken'),
+        token: refreshToken,
       },
     },
-    TAuthUserResponse,
+    TAuthUser,
   );
 };
 
@@ -46,7 +41,7 @@ export const telegramSignUp = async (body: TelegramSignUpRequestBody) => {
     {
       body,
     },
-    TAuthUserResponse,
+    TAuthUser,
   );
 };
 

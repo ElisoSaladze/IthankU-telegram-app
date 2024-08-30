@@ -20,6 +20,8 @@ const TLinkedAccount = z.object({
   value: z.string(),
 });
 
+export type LinkedAccount = z.infer<typeof TLinkedAccount>;
+
 export const TUser = z.intersection(
   TAuthor,
   z.object({

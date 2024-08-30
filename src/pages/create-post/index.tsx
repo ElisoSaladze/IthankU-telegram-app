@@ -22,7 +22,6 @@ import paid from 'src/assets/images/paid.png';
 import { useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Params, useNavigate, useParams } from 'react-router-dom';
-import { useAuthContext } from 'src/providers/auth';
 import { createPost } from 'src/api/posts';
 import VisibilityStatus from 'src/components/visibility-status';
 import { ControlledTextField } from 'src/components/form/controlled/controlled-text-field';
@@ -31,6 +30,7 @@ import PreviewImg from 'src/components/preview-img';
 import TagItem from 'src/components/tag';
 import ConfirmationDialog from 'src/components/confirmation-diallog';
 import { Visibility } from '~/constants/enums';
+import { useAuthUser } from '~/app/auth';
 type Tag = {
   value: string;
 };
@@ -67,9 +67,11 @@ const CreatePostPage = () => {
   const { groupId } = useParams<Params>();
   const maxFileSize = 25 * 1024 * 1024;
   const maxLength = 300;
+
   const actualGroupId = groupId === ':groupId' ? undefined : groupId;
-  const { userData } = useAuthContext();
-  console.log(groupId);
+
+  const authUser = useAuthUser();
+
   const { control, watch, setValue, handleSubmit } = useForm({
     defaultValues: {
       ...defaultPostValue,
@@ -185,11 +187,11 @@ const CreatePostPage = () => {
           <Box width={40}></Box>
         </Toolbar>
       </AppBar>
-      {userData.isFetched && (
-        <Stack p={2} gap={1} alignItems={'center'} direction={'row'}>
-          <Avatar src={userData.data?.user.picture} sx={{ width: 65, height: 65 }} />
+      {authUser && (
+        <Stack p={2} gap={1} alignItems="center" direction="row">
+          <Avatar src={authUser.user.picture} sx={{ width: 65, height: 65 }} />
           <Typography fontSize={20} fontWeight={600}>
-            {userData.data?.user.name}
+            {authUser.user.name}
           </Typography>
         </Stack>
       )}
