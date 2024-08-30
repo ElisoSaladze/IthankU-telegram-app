@@ -1,37 +1,28 @@
-import { get } from "src/lib/_request/request";
-import {
-  CurrentUser,
-  ListingApiResponse,
-  LocationQueryParams,
-  UserQueryParams,
-} from "./types";
+import { request } from '~/lib/request';
 
-export const getUsers = async (params?: UserQueryParams) => {
-  const queryParams = new URLSearchParams();
+import { GetCurrentUserResponse, GetUsersInput, LocationQueryParams, TListingApiResponse } from '../users';
+
+export const getUsers = async (params?: GetUsersInput) => {
+  const query = new URLSearchParams();
 
   if (params?.radius) {
-    queryParams.append("radius", params.radius);
+    query.append('radius', params.radius);
   }
   if (params?.shade) {
-    queryParams.append("shade", params.shade);
+    query.append('shade', params.shade);
   }
   if (params?.hashtag) {
-    queryParams.append("hashtag", params.hashtag);
+    query.append('hashtag', params.hashtag);
   }
 
-  const queryString = queryParams.toString();
-  return get<ListingApiResponse>(
-    `users/listing${queryString ? `?${queryString}` : ""}`
-  );
+  return request('users/listing').get({ query }, TListingApiResponse);
 };
 
 export const getUser = async (userId: string) =>
-  get<{ status: string; user: CurrentUser }>(`users/listing/${userId}`);
+  request('users/listing').get({ params: { userId } }, GetCurrentUserResponse);
 
 export const getUsersByLocation = async (params: LocationQueryParams) => {
-  const queryString = new URLSearchParams(
-    params as unknown as Record<string, string>
-  ).toString();
+  const query = new URLSearchParams(params as unknown as Record<string, string>);
 
-  return get<ListingApiResponse>(`users/nearby?${queryString}`);
+  return request('users/nearby').get({ query }, TListingApiResponse);
 };

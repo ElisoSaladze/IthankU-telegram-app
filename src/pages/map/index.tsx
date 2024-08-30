@@ -17,6 +17,7 @@ const MapPage = () => {
   const initialRadius = watch('distance') || 1000;
   const shade = watch('area') || undefined;
   const hashtag = watch('hashtag') || undefined;
+  const location = watch('userLocation');
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [locationLoaded, setLocationLoaded] = useState(false);
@@ -34,7 +35,7 @@ const MapPage = () => {
         fillColor: '#21A54D',
         fillOpacity: 0.35,
         map,
-        center: watch('userLocation'),
+        center: location,
         radius,
       });
       setCircle(newCircle);
@@ -46,7 +47,7 @@ const MapPage = () => {
         }
       });
     },
-    [watch, radius],
+    [location, radius],
   );
 
   const $nearbyUsers = useQuery({
@@ -54,12 +55,12 @@ const MapPage = () => {
       shade: shade,
       radius: initialRadius.toString(),
       hashtag: hashtag,
-      userLocation: watch('userLocation'),
+      userLocation: location,
     }),
     queryFn: () =>
       getUsersByLocation({
-        latitude: watch('userLocation').lat,
-        longitude: watch('userLocation').lng,
+        latitude: location.lat,
+        longitude: location.lng,
         radius: radius / 1000,
         area: shade,
         hashtag: hashtag,
@@ -142,7 +143,7 @@ const MapPage = () => {
       </AppBar>
       <GoogleMap
         mapContainerStyle={{ width: '100%', height: '100%' }}
-        center={watch('userLocation')}
+        center={location}
         zoom={14}
         onLoad={onLoad}
         onDragEnd={handleMapDragEnd}
@@ -184,7 +185,7 @@ const MapPage = () => {
               }
             />
           )}
-          {watch('hashtag') && <Chip sx={{ backgroundColor: selectedShade?.color }} label={watch('hashtag')} />}
+          {hashtag && <Chip sx={{ backgroundColor: selectedShade?.color }} label={hashtag} />}
         </Box>
 
         {$nearbyUsers.data?.users.map((user) => <UserMarker key={user._id} user={user} />)}
