@@ -223,7 +223,7 @@ const UserDetailsPage = () => {
                 </Stack>
               </Stack>
 
-              {!isCurrent && user.bio.length > 0 && (
+              {!isCurrent && user.bio && (
                 <Stack mt={1} gap={0.5}>
                   <Typography fontSize={14} color="#9C9C9C" fontWeight={500}>
                     About me

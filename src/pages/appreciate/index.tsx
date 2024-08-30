@@ -29,7 +29,7 @@ const AppreciatePage = () => {
   const { data: appreciateData } = useQuery({
     queryKey: qk.appreciate.getUser.toKeyWithArgs({ appreciateId: appreciateId! }),
     queryFn: () => getAppreciateUser({ appreciateId: appreciateId! }),
-    enabled: !!appreciateId && !phoneNumber,
+    enabled: !!appreciateId && !phoneNumber && !postAuthor,
     onSuccess: (data) => {
       if (data?.data.area) setValue('shade', data.data.area);
       if (data?.data.hashtag) setValue('hashtag', data.data.hashtag);
@@ -46,7 +46,7 @@ const AppreciatePage = () => {
   });
 
   return (
-    <Stack mx={2}>
+    <Stack mb={10} mx={2}>
       <BackButtonAppBar pageName="" />
       <Stack marginTop={2} gap={2}>
         <AreaSelect
@@ -54,19 +54,20 @@ const AppreciatePage = () => {
           onSelect={(shade) => (shade ? setValue('shade', shade.en) : setValue('shade', ''))}
         />
         <HashtagSelect
+          control={control}
           defaultSelected={appreciateData?.data.hashtag}
           onSelect={(hashtag) => (hashtag ? setValue('hashtag', hashtag.hashtag) : setValue('hashtag', ''))}
         />
-        <Box borderRadius={5} boxShadow={'0px 0px 8px -2px #00000040'} p={1.5}>
-          <Stack marginBottom={1} alignItems={'center'} direction={'row'}>
+        <Box borderRadius={5} boxShadow="0px 0px 8px -2px #00000040" p={1.5}>
+          <Stack mt={1} alignItems="center" direction="row">
             <Typography>Add comment</Typography>
-            <Typography fontSize={10} color={'secondary'}>
+            <Typography fontSize={10} color="secondary">
               optional
             </Typography>
           </Stack>
           <ControlledTextArea fullWidth rows={6} multiline control={control} name="comment" />
         </Box>
-        <Stack gap={2} direction={'row'}>
+        <Stack gap={2} direction="row">
           <Button size="large" fullWidth variant="contained" color="secondary">
             Skip
           </Button>

@@ -51,7 +51,6 @@ const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
             minWidth={200}
             border={'1px solid #D1D1D175'}
             borderRadius={3}
-            bgcolor={selectedShade ? 'white' : '#EEEEEE8A'}
             boxShadow={'0px 1px 5px -1px #00000014'}
             alignItems={'center'}
             direction={'row'}
@@ -62,16 +61,18 @@ const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
               <>
                 <ShadeComponent name={selectedShade.en} color={selectedShade.color} />
                 <IconButton
-                  onClick={() => {
+                  onClick={(event) => {
+                    event.stopPropagation();
                     setSelectedShade(null);
-                    // setValue('')
                   }}
                 >
                   <CloseIcon fontSize="small" />
                 </IconButton>
               </>
             ) : (
-              <Typography fontSize={14}>Select shade</Typography>
+              <Typography color="#b7b7b7" fontSize={14}>
+                Select shade
+              </Typography>
             )}
           </Stack>
         </Stack>

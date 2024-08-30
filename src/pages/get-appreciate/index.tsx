@@ -46,7 +46,7 @@ function QRCodePage() {
   }
 
   return (
-    <Stack justifyContent={'space-between'} height={'100vh'}>
+    <Stack justifyContent="space-between" height="100vh">
       <BackButtonAppBar pageName="" color="transparent" />
       <Box
         sx={{
@@ -58,18 +58,18 @@ function QRCodePage() {
           backgroundRepeat: 'no-repeat',
         }}
       />
-      <Stack gap={1} padding={2}>
+      <Stack gap={1} p={2}>
         <Typography textAlign={'center'} variant="h6">
           One time Code: <span style={{ color: 'green' }}>{qrCode.data}</span>
         </Typography>
         <Stack
           gap={2}
-          alignItems={'center'}
-          justifyContent={'center'}
-          border={'2px solid #21954D'}
+          alignItems="center"
+          justifyContent="center"
+          border="2px solid #21954D"
           borderRadius={4}
-          paddingY={2}
-          marginTop={2}
+          py={2}
+          mt={2}
         >
           <Avatar sx={{ width: 85, height: 85 }} src={authUser?.user.picture} />
           <img
@@ -89,7 +89,7 @@ function QRCodePage() {
             Hashtags: <span>{hashtag}</span>
           </Typography>
         )}
-        <Stack direction={'row'} gap={1}>
+        <Stack direction="row" gap={1}>
           <Button
             size="medium"
             fullWidth
