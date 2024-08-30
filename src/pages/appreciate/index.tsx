@@ -29,7 +29,7 @@ const AppreciatePage = () => {
   const { data: appreciateData } = useQuery({
     queryKey: qk.appreciate.getUser.toKeyWithArgs({ appreciateId: appreciateId! }),
     queryFn: () => getAppreciateUser({ appreciateId: appreciateId! }),
-    enabled: !!appreciateId && !phoneNumber,
+    enabled: !!appreciateId && !phoneNumber && !postAuthor,
     onSuccess: (data) => {
       if (data?.data.area) setValue('shade', data.data.area);
       if (data?.data.hashtag) setValue('hashtag', data.data.hashtag);
@@ -46,7 +46,7 @@ const AppreciatePage = () => {
   });
 
   return (
-    <Stack mx={2}>
+    <Stack mb={10} mx={2}>
       <BackButtonAppBar pageName="" />
       <Stack marginTop={2} gap={2}>
         <AreaSelect

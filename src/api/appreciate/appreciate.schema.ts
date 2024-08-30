@@ -5,10 +5,11 @@ export const TAppreciateQRCode = z.object({
   success: z.boolean(),
   data: z.object({
     code: z.string(),
-    area: z.string(),
-    hashtag: z.string(),
+    area: z.string().optional(),
+    hashtag: z.string().optional(),
     oneTimeUse: z.boolean(),
-    receiver: z.boolean(),
+    receiver: z.string(),
+    used: z.boolean(),
   }),
 });
 

@@ -77,7 +77,7 @@ export const TCurrentUser = z.intersection(
     placemark: z.string().nullable(),
     location: TLocation.nullable(),
     isLocationPublic: z.boolean(),
-    bio: z.string(),
+    bio: z.string().nullable(),
     topHashtags: z.array(
       z.object({
         hashtag: z.string(),
