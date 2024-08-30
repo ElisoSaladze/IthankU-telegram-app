@@ -9,15 +9,23 @@ import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { getUsers } from '~/api/users';
 import { qk } from '~/api/query-keys';
+import TagItem from '~/components/tag';
+import { useFilterUsersContext } from '~/providers/filter-provider';
 import { paths } from '~/app/routes';
 
 const UsersList = () => {
+  const { watch } = useFilterUsersContext();
   const [ref, inView] = useInView();
   const navigate = useNavigate();
 
+  const radius = watch('distance') || undefined;
+  const shade = watch('area') || undefined;
+  const hashtag = watch('hashtag') || undefined;
+
   const $users = useInfiniteQuery({
-    queryKey: qk.users.list.toKey(), // TODO
-    queryFn: async ({ pageParam = 1 }) => getUsers({ page: pageParam }),
+    queryKey: qk.users.list.toKeyWithArgs({ shade: shade, radius: radius?.toString(), hashtag: hashtag }),
+    queryFn: async ({ pageParam = 1 }) =>
+      getUsers({ page: pageParam, radius: radius?.toString(), shade: shade, hashtag: hashtag }),
     getNextPageParam: (result) => {
       const nextPage = result.page + 1;
       return nextPage <= result.totalPages ? nextPage : undefined;
@@ -37,12 +45,12 @@ const UsersList = () => {
       <Stack paddingBottom={10} marginY={1} gap={1}>
         {pages
           .flatMap((page) => page.users)
-          .map((user) => (
+          .map((user, index) => (
             <ListItemButton
               onClick={() => {
                 navigate(generatePath(paths.userDetails, { userId: user._id ?? '' }));
               }}
-              key={user._id}
+              key={user._id! + index}
               sx={{
                 width: '100%',
                 borderRadius: 5,
@@ -69,6 +77,7 @@ const UsersList = () => {
                         name={user.topShades[0]!.shadeInfo?.en}
                       />
                     )}
+                    {user.topHashtags && user.topHashtags.length > 0 && <TagItem tag={user.topHashtags[0]!.hashtag} />}
                   </Stack>
                 </Stack>
                 <Stack alignItems="center" direction="row" gap={1}>

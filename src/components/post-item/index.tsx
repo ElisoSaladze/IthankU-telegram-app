@@ -95,7 +95,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
           {!imageLoaded[i] && <Skeleton variant="rectangular" width={1} height={194} sx={{ borderRadius: 1 }} />}
           <img
             height="194"
-            width={1}
+            width="100%"
             src={m}
             alt={m}
             onLoad={() => handleImageLoad(i)}

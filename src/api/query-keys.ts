@@ -52,4 +52,7 @@ export const qk = buildModuleCacheKey({
     details: (input: GetTransactionDetailsInput) => [input],
     pendingTransactions: (input: GetPendingTransactionsInput) => [input],
   },
+  map: {
+    list: (input: GetUsersInput) => [input],
+  },
 });
