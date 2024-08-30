@@ -1,21 +1,14 @@
-import {
-  TextField,
-  TextFieldProps,
-} from "src/components/form/basic/text-field";
-import { isRequired } from "src/components/form/validations";
-import {
-  FieldPath,
-  FieldValues,
-  useController,
-  UseControllerProps,
-} from "react-hook-form";
+import { TextField, TextFieldProps } from 'src/components/form/basic/text-field';
+import { isRequired } from 'src/components/form/validations';
+import { FieldPath, FieldValues, useController, UseControllerProps } from 'react-hook-form';
 
 export type ControlledTextFieldProps<
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = TextFieldProps &
   UseControllerProps<TFieldValues, TName> & {
     disableAutofill?: boolean;
+    disableError?: boolean;
     onChange?: (value: string) => void; // Define onChange prop
   };
 
@@ -53,7 +46,7 @@ export type ControlledTextFieldProps<
  */
 export const ControlledTextField = <
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
   name,
   control,
@@ -67,6 +60,7 @@ export const ControlledTextField = <
   InputProps,
   type,
   disableAutofill,
+  disableError,
   onChange,
   onFocus,
   ...otherProps
@@ -79,12 +73,14 @@ export const ControlledTextField = <
       required: isRequired(required),
     },
   });
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     field.onChange(event); // Invoke original onChange
     if (onChange) {
       onChange(event.target.value); // Invoke provided onChange
     }
   };
+
   return (
     <TextField
       fullWidth={fullWidth}
@@ -92,8 +88,10 @@ export const ControlledTextField = <
       value={field.value}
       onChange={handleChange}
       onFocus={onFocus}
-      error={Boolean(fieldState.error)}
-      helperText={fieldState.error?.message || helperText}
+      {...(!disableError && {
+        error: Boolean(fieldState.error),
+        helperText: fieldState.error?.message || helperText,
+      })}
       label={label}
       disabled={disabled}
       required={required}

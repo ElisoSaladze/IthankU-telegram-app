@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, IconButton, InputAdornment, Stack, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 
 import { ControlledTextArea } from 'src/components/form/controlled/controlled-text-area';
@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { qk } from 'src/api/query-keys';
 import { updateUserBio } from '~/api/auth';
 import { useUserDetails } from '~/lib/hooks';
+import { IconCheck } from '~/assets/icons';
 
 type AccountsFormValues = {
   bio: string;
@@ -19,11 +20,12 @@ type AccountsFormValues = {
 
 const Accounts = () => {
   const navigate = useNavigate();
-  const { user: userDetails, isLoading } = useUserDetails();
+  const { user: userDetails, isLoading, refetch } = useUserDetails();
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { isDirty },
   } = useForm<AccountsFormValues>({
     defaultValues: {
@@ -40,29 +42,55 @@ const Accounts = () => {
     mutationFn: updateUserBio,
   });
 
+  const disabled = !isDirty || $updateUserBio.isLoading;
+
+  console.log({ isDirty, disabled, loading: $updateUserBio.isLoading });
+
   if (isLoading) return <Loader />;
 
   return (
-    <Stack
-      component="form"
-      onSubmit={handleSubmit((values) => {
-        $updateUserBio.mutate({
-          bio: values.bio,
-        });
-      })}
-      mb={10}
-      height={1}
-      gap={1}
-      px={2}
-      alignItems="center"
-    >
+    <Stack mb={10} height={1} gap={1} px={2} alignItems="center">
       <Typography fontSize={24}>Accounts</Typography>
 
       <Typography fontSize={12} alignSelf={'flex-start'}>
         About me
       </Typography>
 
-      <ControlledTextArea fullWidth control={control} name="bio" multiline rows={2} />
+      <ControlledTextArea
+        fullWidth
+        control={control}
+        name="bio"
+        multiline
+        rows={2}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                size="small"
+                edge="end"
+                onClick={handleSubmit((values) => {
+                  $updateUserBio.mutate(
+                    {
+                      bio: values.bio,
+                    },
+                    {
+                      onSuccess: () => {
+                        refetch();
+                        reset({
+                          bio: values.bio,
+                        });
+                      },
+                    },
+                  );
+                })}
+                disabled={disabled}
+              >
+                <IconCheck fontSize="small" color={!disabled ? 'primary' : 'disabled'} />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
 
       <Typography fontSize={12} alignSelf={'flex-start'}>
         Socials
@@ -102,10 +130,6 @@ const Accounts = () => {
           <ArrowForwardIosIcon />
         </Stack>
       </Box>
-
-      <Button fullWidth disabled={!isDirty} color="primary" size="large">
-        Save Changes
-      </Button>
     </Stack>
   );
 };

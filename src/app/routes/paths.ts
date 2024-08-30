@@ -3,7 +3,6 @@ export const paths = {
   interests: '/interests',
   onboarding: '/onboarding',
   joinGroup: '/join-group',
-  createPost: '/create-post/:groupId?',
   post: '/post/:postId',
   privatePost: '/private-post/:postId',
   invitationQR: '/invitation-qr/:groupId',

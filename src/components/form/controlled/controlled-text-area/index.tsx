@@ -1,24 +1,20 @@
-import { TextArea, TextAreaProps } from "src/components/form/basic/text-area";
-import { isRequired } from "src/components/form/validations";
-import {
-  FieldPath,
-  FieldValues,
-  useController,
-  UseControllerProps,
-} from "react-hook-form";
+import { TextArea, TextAreaProps } from 'src/components/form/basic/text-area';
+import { isRequired } from 'src/components/form/validations';
+import { FieldPath, FieldValues, useController, UseControllerProps } from 'react-hook-form';
 
 export type ControlledTextFieldProps<
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = TextAreaProps &
   UseControllerProps<TFieldValues, TName> & {
     disableAutofill?: boolean;
+    disableError?: boolean;
     maxLength?: number;
   };
 
 export const ControlledTextArea = <
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
   name,
   control,
@@ -31,6 +27,7 @@ export const ControlledTextArea = <
   InputProps,
   type,
   disableAutofill,
+  disableError,
   variant,
   minRows,
   rows,
@@ -60,8 +57,10 @@ export const ControlledTextArea = <
       value={field.value}
       onChange={field.onChange}
       onFocus={onFocus}
-      error={Boolean(fieldState.error)}
-      helperText={fieldState.error?.message || helperText}
+      {...(!disableError && {
+        error: Boolean(fieldState.error),
+        helperText: fieldState.error?.message || helperText,
+      })}
       label={label}
       disabled={disabled}
       required={required}

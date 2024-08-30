@@ -4,22 +4,17 @@ import { paths } from './paths';
 export const authRoutes = [
   createRoute({
     path: paths.joinGroup,
-    factory: () => import('src/pages/join-group/index'),
+    factory: () => import('src/pages/join-group'),
     title: 'Join Group',
   }),
   createRoute({
-    path: paths.createPost,
-    factory: () => import('src/pages/create-post/index'),
-    title: 'Create Post',
-  }),
-  createRoute({
     path: paths.post,
-    factory: () => import('src/pages/postPage/index'),
+    factory: () => import('src/pages/postPage'),
     title: 'Post Details',
   }),
   createRoute({
     path: paths.privatePost,
-    factory: () => import('src/pages/postPage/index'),
+    factory: () => import('src/pages/postPage'),
     title: 'Private Post',
   }),
   createRoute({
@@ -34,12 +29,12 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.groupDetails,
-    factory: () => import('src/pages/group-details/index'),
+    factory: () => import('src/pages/group-details'),
     title: 'Group Details',
   }),
   createRoute({
     path: paths.createGroup,
-    factory: () => import('src/pages/create-group/index'),
+    factory: () => import('src/pages/create-group'),
     title: 'Create Group',
   }),
   createRoute({
@@ -74,12 +69,12 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.appreciate,
-    factory: () => import('src/pages/appreciate/index'),
+    factory: () => import('src/pages/appreciate'),
     title: 'Appreciate',
   }),
   createRoute({
     path: paths.getAppreciate,
-    factory: () => import('src/pages/get-appreciate/index'),
+    factory: () => import('src/pages/get-appreciate'),
     title: 'Get Appreciate',
   }),
   createRoute({
@@ -89,7 +84,7 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.transactions,
-    factory: () => import('src/pages/transaction-details/index'),
+    factory: () => import('src/pages/transaction-details'),
     title: 'Transactions',
   }),
   createRoute({
@@ -104,12 +99,12 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.home,
-    factory: () => import('src/pages/home/index'),
+    factory: () => import('src/pages/home'),
     title: 'Home',
   }),
   createRoute({
     path: paths.groups,
-    factory: () => import('src/pages/groups/index'),
+    factory: () => import('src/pages/groups'),
     title: 'Groups',
   }),
   createRoute({
@@ -129,17 +124,17 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.map,
-    factory: () => import('src/pages/map/index'),
+    factory: () => import('src/pages/map'),
     title: 'Map',
   }),
   createRoute({
     path: paths.more,
-    factory: () => import('src/pages/more/index'),
+    factory: () => import('src/pages/more'),
     title: 'More',
   }),
   createRoute({
     path: paths.listing,
-    factory: () => import('src/pages/listing/index'),
+    factory: () => import('src/pages/listing'),
     title: 'Listing',
   }),
   createRoute({
@@ -154,12 +149,12 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.accounts,
-    factory: () => import('src/pages/accounts/index'),
+    factory: () => import('src/pages/accounts'),
     title: 'Accounts',
   }),
   createRoute({
     path: paths.transactionsList,
-    factory: () => import('src/pages/transactions/index'),
+    factory: () => import('src/pages/transactions'),
     title: 'Transactions',
   }),
   createRoute({
@@ -174,12 +169,12 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.language,
-    factory: () => import('src/pages/language/index'),
+    factory: () => import('src/pages/language'),
     title: 'Language',
   }),
   createRoute({
     path: paths.pendingTransactions,
-    factory: () => import('src/pages/pending-transactions/index'),
+    factory: () => import('src/pages/pending-transactions'),
     title: 'Pending Transactions',
   }),
   createRoute({
@@ -197,12 +192,12 @@ export const authRoutes = [
 export const unauthRoutes = [
   createRoute({
     path: paths.introduceYourself,
-    factory: () => import('src/pages/introduce-yourself/index'),
+    factory: () => import('src/pages/introduce-yourself'),
     title: 'Introduce Yourself',
   }),
   createRoute({
     path: paths.interests,
-    factory: () => import('src/pages/interests/index'),
+    factory: () => import('src/pages/interests'),
     title: 'Interests',
   }),
   createRoute({

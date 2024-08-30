@@ -5,10 +5,7 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Box,
-  Divider,
   IconButton,
-  Menu,
-  MenuItem,
   Paper,
   styled,
   Toolbar,
@@ -26,7 +23,7 @@ import homeIconSelected from 'src/assets/icons/selectedHome.svg';
 import mapIconSelected from 'src/assets/icons/selectedMap.svg';
 import moreIconSelected from 'src/assets/icons/selectedMore.svg';
 import ituIcon from 'src/assets/images/itu.svg';
-import React, { ReactNode, Suspense, useState } from 'react';
+import { ReactNode, Suspense, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from 'src/components/loader';
 import AppreciateComponent from 'src/components/appreciate-components/appreciate-buttons';
@@ -34,6 +31,7 @@ import { IconNotification } from 'src/assets/icons';
 import { useNotifications } from '~/lib/hooks';
 import { paths } from '~/app/routes';
 import { GlobalLoadingIndicator } from '~/components/global-loading-indicator';
+import { CreatePostGroupMenu } from '~/components/create-post-group-menu';
 
 const useActiveIndex = () => {
   const location = useLocation();
@@ -68,17 +66,6 @@ export const AppLayout = ({ children }: Props) => {
   const notifications = useNotifications();
 
   const [showAppreciate, setShowAppreciate] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const getPageName = () => {
     switch (activeIndex) {
@@ -121,35 +108,18 @@ export const AppLayout = ({ children }: Props) => {
               </Typography>
             </Box>
 
-            <IconButton
-              sx={{
-                visibility: activeIndex === 4 || activeIndex === 1 ? 'hidden' : 'visible',
-              }}
-              onClick={handleClick}
-            >
-              <AddCircleOutlineIcon fontSize="large" color="primary" />
-            </IconButton>
+            <CreatePostGroupMenu
+              button={
+                <IconButton
+                  sx={{
+                    visibility: activeIndex === 4 || activeIndex === 1 ? 'hidden' : 'visible',
+                  }}
+                >
+                  <AddCircleOutlineIcon fontSize="large" color="primary" />
+                </IconButton>
+              }
+            />
 
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-            >
-              <MenuItem onClick={() => navigate(paths.createPost)}>Create Post</MenuItem>
-              <Divider
-                sx={{
-                  backgroundColor: theme.palette.primary.main,
-                  '&.MuiDivider-root': {
-                    margin: '0 !important',
-                  },
-                }}
-              />
-              <MenuItem onClick={() => navigate(paths.createGroupDetails)}>Create Group</MenuItem>
-            </Menu>
             <IconButton onClick={() => navigate(paths.incomingPendingTransactions)}>
               <Badge
                 color="error"
