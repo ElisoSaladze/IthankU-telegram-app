@@ -61,7 +61,8 @@ const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
               <>
                 <ShadeComponent name={selectedShade.en} color={selectedShade.color} />
                 <IconButton
-                  onClick={() => {
+                  onClick={(event) => {
+                    event.stopPropagation();
                     setSelectedShade(null);
                   }}
                 >

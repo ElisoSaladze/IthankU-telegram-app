@@ -95,7 +95,8 @@ const HashtagSelect = ({ onSelect, defaultSelected, control }: Props) => {
             />
             {selectedHashtag && (
               <IconButton
-                onClick={() => {
+                onClick={(event) => {
+                  event.stopPropagation();
                   setSelectedHashtag(null);
                   if (onSelect) {
                     onSelect(null);
