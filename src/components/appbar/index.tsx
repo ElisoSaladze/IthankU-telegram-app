@@ -8,6 +8,7 @@ type Props = {
   color?: string;
   showNotif?: boolean;
 };
+
 const BackButtonAppBar = ({ pageName, color = 'white', showNotif = true }: Props) => {
   const navigate = useNavigate();
   return (

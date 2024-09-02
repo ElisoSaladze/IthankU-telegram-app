@@ -1,23 +1,25 @@
-import { RequestType } from "./create-request";
+import { RequestType } from './create-request';
 
 export const createRequestBody = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body: Record<string, any> | undefined,
-  type: RequestType
+  type: RequestType,
 ): FormData | string | undefined => {
   if (!body) return;
 
-  if (type === "json") return JSON.stringify(body);
+  if (type === 'json') return JSON.stringify(body);
 
   const formData = new FormData();
 
   for (const [key, value] of Object.entries(body)) {
-    if (Array.isArray(value)) {
-      for (const file of value) {
-        formData.append(key, file);
+    if (value) {
+      if (Array.isArray(value)) {
+        for (const file of value) {
+          formData.append(key, file);
+        }
+      } else {
+        formData.append(key, value);
       }
-    } else {
-      formData.append(key, value);
     }
   }
 

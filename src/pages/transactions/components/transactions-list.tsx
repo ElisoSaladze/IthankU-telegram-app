@@ -8,7 +8,7 @@ import { qk } from '~/api/query-keys';
 import { getUserTransactions } from '~/api/transactions';
 import { useAuthUser } from '~/app/auth';
 
-const TransactionsList = ({ type }: { type: 'incoming' | 'outgoing' }) => {
+export const TransactionsList = ({ type }: { type: 'incoming' | 'outgoing' }) => {
   const [ref, inView] = useInView();
   const authUser = useAuthUser();
 
@@ -68,5 +68,3 @@ const TransactionsList = ({ type }: { type: 'incoming' | 'outgoing' }) => {
     </Stack>
   );
 };
-
-export default TransactionsList;

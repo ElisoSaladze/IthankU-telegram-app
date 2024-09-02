@@ -1,5 +1,5 @@
-import { LinearProgress } from "@mui/material";
-import { useIsFetching, useIsMutating } from "@tanstack/react-query";
+import { LinearProgress } from '@mui/material';
+import { useIsFetching, useIsMutating } from '@tanstack/react-query';
 
 export const GlobalLoadingIndicator = () => {
   const queries = useIsFetching();
@@ -9,10 +9,5 @@ export const GlobalLoadingIndicator = () => {
     return null;
   }
 
-  return (
-    <LinearProgress
-      color="success"
-      sx={{ position: "absolute", top: 0, width: "100%" }}
-    />
-  );
+  return <LinearProgress color="success" sx={{ position: 'absolute', top: 0, width: '100%', zIndex: 100 }} />;
 };

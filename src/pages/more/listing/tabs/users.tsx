@@ -13,7 +13,7 @@ import TagItem from '~/components/tag';
 import { useFilterUsersContext } from '~/providers/filter-provider';
 import { paths } from '~/app/routes';
 
-const UsersList = () => {
+export const UsersList = () => {
   const { watch } = useFilterUsersContext();
   const [ref, inView] = useInView();
   const navigate = useNavigate();
@@ -104,5 +104,3 @@ const UsersList = () => {
     ))
     .exhaustive();
 };
-
-export default UsersList;

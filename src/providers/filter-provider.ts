@@ -32,7 +32,7 @@ const useFilterUsers = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname !== paths.usersList && location.pathname !== paths.map) {
+    if (location.pathname !== `${paths.listing}&tab=users` && location.pathname !== paths.map) {
       clear();
     }
   }, [location.pathname, clear]);

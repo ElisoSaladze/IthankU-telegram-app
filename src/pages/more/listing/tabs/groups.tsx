@@ -6,7 +6,7 @@ import Loader from 'src/components/loader';
 import GroupItem from 'src/components/group-item';
 import { qk } from 'src/api/query-keys';
 
-const GroupsList = () => {
+export const GroupsList = () => {
   const { data: groups, isFetching } = useQuery({
     queryKey: qk.groups.list.toKey(),
     queryFn: getGroups,
@@ -20,5 +20,3 @@ const GroupsList = () => {
     </Stack>
   );
 };
-
-export default GroupsList;
