@@ -95,14 +95,15 @@ const PostItem = ({ post, isDetails = false }: Props) => {
           {post.visibility === 'Private' && <IconPrivatePost />}
         </Box>
         <Box mt={1}>
-          {post.visibility === 'Private' && post.preview.length > 0 ? (
+          {post.visibility === 'Private' && post.preview.length > 0 && (
             <>
               <Typography color="#A0A0A0" fontSize={12}>
                 Preview
               </Typography>
               <Typography>{post.preview}</Typography>
             </>
-          ) : (
+          )}
+          {post.visibility === 'Public' && (
             <Typography>
               {renderContent(post.content)}{' '}
               {!isDetails && post.content.length >= 100 && (

@@ -9,7 +9,6 @@ import { useFilterUsersContext } from '~/providers/filter-provider';
 import { qk } from '~/api/query-keys';
 import Loader from '~/components/loader';
 import CircleIcon from '@mui/icons-material/Circle';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 const MapPage = () => {
   const { watch, setValue, selectedShade } = useFilterUsersContext();
@@ -131,14 +130,14 @@ const MapPage = () => {
 
   return (
     <Stack height="100vh" overflow="hidden">
-      <AppBar>
+      <AppBar sx={{ pr: 2, position: 'relative' }}>
         <Toolbar>
-          <Box sx={{ flexGrow: 1 }}>
+          <Box>
             <Typography color={'black'} fontWeight={500} variant="h6" component="div" fontSize={20}>
               People nearby
             </Typography>
           </Box>
-          <FilterDrawer buttonColor="info.main" Icon={<FilterAltIcon />} />
+          <FilterDrawer buttonColor="info.main" />
         </Toolbar>
       </AppBar>
       <GoogleMap
