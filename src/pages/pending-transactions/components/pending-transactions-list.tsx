@@ -11,7 +11,7 @@ type TransactionsListProps = {
   type: TransactionType;
 };
 
-const TransactionsList = ({ type }: TransactionsListProps) => {
+export const PendingTransactionsList = ({ type }: TransactionsListProps) => {
   const [ref, inView] = useInView();
 
   const $pendingTransactions = useInfiniteQuery({
@@ -92,5 +92,3 @@ const TransactionsList = ({ type }: TransactionsListProps) => {
     </Stack>
   );
 };
-
-export default TransactionsList;

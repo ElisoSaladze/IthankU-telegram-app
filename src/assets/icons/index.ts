@@ -5,3 +5,5 @@ export { IconCheck } from './check';
 export { IconClose } from './close';
 export { IconAttach } from './attach';
 export { IconPhoto } from './photo';
+export { IconArrow } from './arrow';
+export { IconFilter } from './filter';

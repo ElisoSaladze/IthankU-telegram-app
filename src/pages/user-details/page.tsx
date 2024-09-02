@@ -20,7 +20,7 @@ import { useAuthUser } from '~/app/auth';
 import { useUserDetails } from '~/lib/hooks';
 import { paths } from '~/app/routes';
 
-const UserDetailsPage = () => {
+export const UserDetailsPage = () => {
   const navigate = useNavigate();
   const authUser = useAuthUser();
 
@@ -79,7 +79,7 @@ const UserDetailsPage = () => {
         })
         .with({ isSuccess: true, data: P.select() }, ({ user }) => {
           return (
-            <Stack height={'100%'} overflow="auto" gap={1} mx={3} mt={3}>
+            <Stack height={1} overflow="auto" gap={1} mx={3} mt={3}>
               <BackButtonAppBar pageName="Profile" />
               <Stack borderRadius={5} bgcolor="info.main" p={2} gap={1} position="relative">
                 {user.location && (
@@ -285,5 +285,3 @@ const UserDetailsPage = () => {
     </>
   );
 };
-
-export default UserDetailsPage;

@@ -29,16 +29,10 @@ export const paths = {
   map: '/map',
   more: '/more',
   listing: '/more/listing',
-  groupsList: '/more/listing/groups-list',
-  usersList: '/more/listing/users-list',
   accounts: '/more/accounts',
   transactionsList: '/more/transactions',
-  incomingTransactions: '/more/transactions/incoming',
-  outgoingTransactions: '/more/transactions/outgoing',
   language: '/more/language',
   pendingTransactions: '/more/pending-transactions',
-  incomingPendingTransactions: '/more/pending-transactions/incoming',
-  outgoingPendingTransactions: '/more/pending-transactions/outgoing',
 } as const;
 
 export type PathKey = keyof typeof paths;

@@ -114,12 +114,12 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.groupSettingsFollowings,
-    factory: () => import('src/pages/groups/following'),
+    factory: () => import('src/pages/groups/group-settings/following'),
     title: 'Group Followings',
   }),
   createRoute({
     path: paths.groupSettingsInvitations,
-    factory: () => import('src/pages/groups/invitations'),
+    factory: () => import('src/pages/groups/group-settings/invitations'),
     title: 'Group Invitations',
   }),
   createRoute({
@@ -134,38 +134,18 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.listing,
-    factory: () => import('src/pages/listing'),
+    factory: () => import('src/pages/more/listing'),
     title: 'Listing',
   }),
   createRoute({
-    path: paths.groupsList,
-    factory: () => import('src/pages/listing/groups'),
-    title: 'Groups',
-  }),
-  createRoute({
-    path: paths.usersList,
-    factory: () => import('src/pages/listing/users'),
-    title: 'Users',
-  }),
-  createRoute({
     path: paths.accounts,
-    factory: () => import('src/pages/accounts'),
+    factory: () => import('src/pages/more/accounts'),
     title: 'Accounts',
   }),
   createRoute({
     path: paths.transactionsList,
     factory: () => import('src/pages/transactions'),
     title: 'Transactions',
-  }),
-  createRoute({
-    path: paths.incomingTransactions,
-    factory: () => import('src/pages/transactions/incoming'),
-    title: 'Incoming Transactions',
-  }),
-  createRoute({
-    path: paths.outgoingTransactions,
-    factory: () => import('src/pages/transactions/outgoing'),
-    title: 'Outgoing Transactions',
   }),
   createRoute({
     path: paths.language,
@@ -176,16 +156,6 @@ export const authRoutes = [
     path: paths.pendingTransactions,
     factory: () => import('src/pages/pending-transactions'),
     title: 'Pending Transactions',
-  }),
-  createRoute({
-    path: paths.incomingPendingTransactions,
-    factory: () => import('src/pages/pending-transactions/incoming'),
-    title: 'Incoming Pending Transactions',
-  }),
-  createRoute({
-    path: paths.outgoingPendingTransactions,
-    factory: () => import('src/pages/pending-transactions/outgoing'),
-    title: 'Outgoing Pending Transactions',
   }),
 ];
 

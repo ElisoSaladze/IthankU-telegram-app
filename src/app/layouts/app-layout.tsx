@@ -1,17 +1,4 @@
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import {
-  AppBar,
-  Badge,
-  BottomNavigation,
-  BottomNavigationAction,
-  Box,
-  IconButton,
-  Paper,
-  styled,
-  Toolbar,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, Box, IconButton, Paper, styled, useTheme } from '@mui/material';
 import nav from 'src/assets/images/nav.png';
 import groupsIcon from 'src/assets/icons/groups.svg';
 import homeIcon from 'src/assets/icons/home.svg';
@@ -22,16 +9,12 @@ import groupsIconSelected from 'src/assets/icons/selectedGroups.svg';
 import homeIconSelected from 'src/assets/icons/selectedHome.svg';
 import mapIconSelected from 'src/assets/icons/selectedMap.svg';
 import moreIconSelected from 'src/assets/icons/selectedMore.svg';
-import ituIcon from 'src/assets/images/itu.svg';
 import { ReactNode, Suspense, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from 'src/components/loader';
 import AppreciateComponent from 'src/components/appreciate-components/appreciate-buttons';
-import { IconNotification } from 'src/assets/icons';
-import { useNotifications } from '~/lib/hooks';
 import { paths } from '~/app/routes';
 import { GlobalLoadingIndicator } from '~/components/global-loading-indicator';
-import { CreatePostGroupMenu } from '~/components/create-post-group-menu';
 
 const useActiveIndex = () => {
   const location = useLocation();
@@ -63,78 +46,12 @@ export const AppLayout = ({ children }: Props) => {
   const theme = useTheme();
   const activeIndex = useActiveIndex();
 
-  const notifications = useNotifications();
-
   const [showAppreciate, setShowAppreciate] = useState(false);
-
-  const getPageName = () => {
-    switch (activeIndex) {
-      case 0:
-        return 'Home';
-      case 1:
-        return 'Groups';
-      case 3:
-        return 'Map';
-      case 4:
-        return '';
-      default:
-        return 'Home';
-    }
-  };
 
   return (
     <Box overflow="auto" height="100%" display="flex" flexDirection="column">
       <GlobalLoadingIndicator />
-      {activeIndex !== 3 && (
-        <AppBar
-          sx={{
-            bgcolor: 'white',
-            mt: 3,
-          }}
-        >
-          <Toolbar sx={{ px: 3 }}>
-            <img src={ituIcon} />
-            <Box sx={{ flexGrow: 1 }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  textAlign: 'center',
-                  color: 'black',
-                  fontSize: 20,
-                  fontWeight: 500,
-                }}
-              >
-                {getPageName()}
-              </Typography>
-            </Box>
 
-            <CreatePostGroupMenu
-              button={
-                <IconButton
-                  sx={{
-                    visibility: activeIndex === 4 || activeIndex === 1 ? 'hidden' : 'visible',
-                  }}
-                >
-                  <AddCircleOutlineIcon fontSize="large" color="primary" />
-                </IconButton>
-              }
-            />
-
-            <IconButton onClick={() => navigate(paths.incomingPendingTransactions)}>
-              <Badge
-                color="error"
-                badgeContent={notifications?.pendingTransactions}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-              >
-                <IconNotification sx={{ color: 'info.main' }} />
-              </Badge>
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-      )}
       <Box height={1}>
         <Box height={1}>
           <Suspense fallback={<Loader />}>{children}</Suspense>
