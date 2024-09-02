@@ -14,7 +14,7 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.privatePost,
-    factory: () => import('src/pages/postPage'),
+    factory: () => import('src/pages/private-post'),
     title: 'Private Post',
   }),
   createRoute({
