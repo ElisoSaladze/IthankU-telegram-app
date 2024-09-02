@@ -34,7 +34,7 @@ import { qk } from 'src/api/query-keys';
 import { Post } from 'src/api/posts';
 import { useAuthUser } from '~/app/auth';
 
-const GroupDetailsPage = () => {
+export const GroupDetailsPage = () => {
   const authUser = useAuthUser();
   const { groupId } = useParams<Params>();
 
@@ -84,7 +84,7 @@ const GroupDetailsPage = () => {
 
   const navigate = useNavigate();
   return (
-    <Stack height={'100vh'}>
+    <Stack height="100vh">
       <AppBar
         sx={{
           position: 'fixed',
@@ -119,10 +119,10 @@ const GroupDetailsPage = () => {
           }}
         >
           <Stack
-            bgcolor={'white'}
+            bgcolor="white"
             m={2}
             marginTop={10}
-            boxShadow={'0px 3px 8.6px -4px #00000040'}
+            boxShadow="0px 3px 8.6px -4px #00000040"
             gap={1}
             p={2}
             borderRadius={5}
@@ -246,5 +246,3 @@ const GroupDetailsPage = () => {
     </Stack>
   );
 };
-
-export default GroupDetailsPage;

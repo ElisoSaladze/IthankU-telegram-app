@@ -49,7 +49,7 @@ export const AppLayout = ({ children }: Props) => {
   const [showAppreciate, setShowAppreciate] = useState(false);
 
   return (
-    <Box overflow="auto" height="100%" display="flex" flexDirection="column">
+    <Box overflow="auto" height={1} display="flex" flexDirection="column">
       <GlobalLoadingIndicator />
 
       <Box height={1}>
@@ -58,60 +58,63 @@ export const AppLayout = ({ children }: Props) => {
         </Box>
         <AppreciateComponent show={showAppreciate} setShow={setShowAppreciate} />
       </Box>
-      <Paper
-        sx={{
-          backgroundImage: showAppreciate ? `url(${nav})` : '',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          paddingY: 0.8,
-          backgroundColor: showAppreciate ? 'transparent' : 'white',
-          boxShadow: showAppreciate ? 'none' : '0px 1px 10.4px -2px rgba(0, 0, 0, 0.25)',
-          zIndex: theme.zIndex.drawer,
-        }}
-        elevation={3}
-      >
-        <StyledBottomNavigation
-          value={activeIndex}
+
+      {!location.pathname.includes('create-group') && (
+        <Paper
           sx={{
-            boxShadow: 'none',
-            backgroundColor: 'transparent',
+            backgroundImage: showAppreciate ? `url(${nav})` : '',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            py: 0.8,
+            backgroundColor: showAppreciate ? 'transparent' : 'white',
+            boxShadow: showAppreciate ? 'none' : '0px 1px 10.4px -2px rgba(0, 0, 0, 0.25)',
+            zIndex: theme.zIndex.drawer,
           }}
-          showLabels
+          elevation={3}
         >
-          <BottomNavigationAction
-            onClick={() => navigate(paths.home)}
-            icon={activeIndex === 0 ? <img src={homeIconSelected} /> : <img src={homeIcon} />}
-            label="Home"
-          />
-          <BottomNavigationAction
-            onClick={() => navigate(paths.groups)}
-            icon={activeIndex === 1 ? <img src={groupsIconSelected} /> : <img src={groupsIcon} />}
-            label="Groups"
-          />
-          <IconButton
-            onClick={() => setShowAppreciate(true)}
+          <StyledBottomNavigation
+            value={activeIndex}
             sx={{
-              visibility: showAppreciate ? 'hidden' : 'visible',
+              boxShadow: 'none',
+              backgroundColor: 'transparent',
             }}
+            showLabels
           >
-            <img src={qrCodeIcon} />
-          </IconButton>
-          <BottomNavigationAction
-            onClick={() => navigate(paths.map)}
-            icon={activeIndex === 3 ? <img src={mapIconSelected} /> : <img src={mapIcon} />}
-            label="Map"
-          />
-          <BottomNavigationAction
-            onClick={() => navigate(paths.more)}
-            icon={activeIndex === 4 ? <img src={moreIconSelected} /> : <img src={moreIcon} />}
-            label="More"
-          />
-        </StyledBottomNavigation>
-      </Paper>
+            <BottomNavigationAction
+              onClick={() => navigate(paths.home)}
+              icon={activeIndex === 0 ? <img src={homeIconSelected} /> : <img src={homeIcon} />}
+              label="Home"
+            />
+            <BottomNavigationAction
+              onClick={() => navigate(paths.groups)}
+              icon={activeIndex === 1 ? <img src={groupsIconSelected} /> : <img src={groupsIcon} />}
+              label="Groups"
+            />
+            <IconButton
+              onClick={() => setShowAppreciate(true)}
+              sx={{
+                visibility: showAppreciate ? 'hidden' : 'visible',
+              }}
+            >
+              <img src={qrCodeIcon} />
+            </IconButton>
+            <BottomNavigationAction
+              onClick={() => navigate(paths.map)}
+              icon={activeIndex === 3 ? <img src={mapIconSelected} /> : <img src={mapIcon} />}
+              label="Map"
+            />
+            <BottomNavigationAction
+              onClick={() => navigate(paths.more)}
+              icon={activeIndex === 4 ? <img src={moreIconSelected} /> : <img src={moreIcon} />}
+              label="More"
+            />
+          </StyledBottomNavigation>
+        </Paper>
+      )}
     </Box>
   );
 };

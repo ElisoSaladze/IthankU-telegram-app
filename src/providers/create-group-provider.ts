@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Visibility } from '~/constants/enums';
 
 // TODO!
-export type CreateGroupRequest = {
+export type CreateGroupFormValues = {
   name: string;
   description: string;
   shade: string;
@@ -17,7 +17,7 @@ export type CreateGroupRequest = {
   }[];
 };
 
-const defaultValues: CreateGroupRequest = {
+const defaultValues: CreateGroupFormValues = {
   name: '',
   description: '',
   tags: [],
@@ -32,13 +32,6 @@ const useCreateGroup = () => {
     defaultValues: defaultValues,
   });
 
-  const formValues = watch();
-
-  // Add form validation logic here
-  const isFormValid = () => {
-    return formValues.name.trim() !== '' && formValues.description.trim() !== '';
-  };
-
-  return { handleSubmit, setValue, control, watch, isFormValid } as const;
+  return { handleSubmit, setValue, control, watch } as const;
 };
 export const [CreateGroupProvider, useCreateGroupContext] = constate(useCreateGroup);

@@ -1,14 +1,4 @@
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  //   CircularProgress,
-  IconButton,
-  Stack,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { AppBar, Avatar, Box, Button, IconButton, Stack, Toolbar, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { ControlledTextField } from 'src/components/form/controlled/controlled-text-field';
@@ -20,7 +10,7 @@ import { getInvitationCode, getUsersToInvite, inviteUser } from '~/api/groups';
 import { handleShare } from 'src/helpers';
 import { qk } from 'src/api/query-keys';
 
-const InviteUserPage = () => {
+export const InviteUserPage = () => {
   const { groupId } = useParams<Params>();
   const navigate = useNavigate();
   const { control, watch } = useForm({
@@ -136,12 +126,12 @@ const InviteUserPage = () => {
                 <Typography>{user.name}</Typography>
               </Stack>
               {/* {isLoading ? (
-                <CircularProgress />
-              ) : isSuccess ? (
-                <Typography color={"primary"}>invited</Typography>
-              ) : (
-                <Button variant="outlined">Invite</Button>
-              )} */}
+                  <CircularProgress />
+                ) : isSuccess ? (
+                  <Typography color={"primary"}>invited</Typography>
+                ) : (
+                  <Button variant="outlined">Invite</Button>
+                )} */}
               <Button variant="outlined">Invite</Button>
             </Stack>
           </Box>
@@ -165,5 +155,3 @@ const InviteUserPage = () => {
     </Stack>
   );
 };
-
-export default InviteUserPage;

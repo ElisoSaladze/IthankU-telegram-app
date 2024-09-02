@@ -22,6 +22,9 @@ const ThemeProvider = ({ children }: Props) => {
       info: {
         main: '#222222',
       },
+      text: {
+        secondary: '#222222B5',
+      },
     },
     components: {
       MuiButton: {

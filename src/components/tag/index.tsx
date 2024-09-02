@@ -1,5 +1,5 @@
-import CloseIcon from "@mui/icons-material/Close";
-import { Box, Typography } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import { Box, Typography } from '@mui/material';
 
 type Props = {
   tag: string;
@@ -10,13 +10,13 @@ const TagItem = ({ tag, clickable, onClick }: Props) => {
   return (
     <Box
       sx={{
-        cursor: "pointer",
+        cursor: 'pointer',
       }}
       onClick={onClick}
-      display={"flex"}
-      justifyContent={"center"}
-      alignItems={"center"}
-      border={"1px solid #000000"}
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      border="1px solid #000000"
       borderRadius="15px"
       width="fit-content"
       paddingX={0.5}

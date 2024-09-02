@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { handleShare } from 'src/helpers';
 import { qk } from 'src/api/query-keys';
 
-const InviteWithQr = () => {
+export const InviteWithQr = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const { groupId } = useParams<Params>();
   const location = useLocation();
@@ -115,5 +115,3 @@ const InviteWithQr = () => {
     </Stack>
   );
 };
-
-export default InviteWithQr;
