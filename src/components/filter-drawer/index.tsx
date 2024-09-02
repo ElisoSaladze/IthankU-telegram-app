@@ -5,7 +5,7 @@ import { useFetchItemsContext } from 'src/providers/hashtag-shade';
 import ShadeComponent from '../shade-component';
 import CustomAccordion from './accordion';
 import { ControlledTextField } from '../form/controlled/controlled-text-field';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
 import { Shade } from '~/api/shades/shades.schema';
 import TagItem from '../tag';
@@ -52,7 +52,12 @@ const FilterDrawer = ({ Icon = <FilterAltOutlinedIcon />, buttonColor = 'primary
 
   const handleShowInListing = () => {
     setIsOpen(false);
-    navigate(paths.usersList);
+    navigate({
+      pathname: paths.listing,
+      search: createSearchParams({
+        tab: 'users',
+      }).toString(),
+    });
   };
 
   const handleShowInMap = () => {
