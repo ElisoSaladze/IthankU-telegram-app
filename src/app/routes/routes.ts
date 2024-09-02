@@ -19,7 +19,7 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.invitationQR,
-    factory: () => import('src/pages/group-details/invitation-qr'),
+    factory: () => import('src/pages/group-details/invite-with-qr'),
     title: 'QR Invitatrion',
   }),
   createRoute({
@@ -36,21 +36,23 @@ export const authRoutes = [
     path: paths.createGroup,
     factory: () => import('src/pages/create-group'),
     title: 'Create Group',
-  }),
-  createRoute({
-    path: paths.createGroupDetails,
-    factory: () => import('src/pages/create-group/details'),
-    title: 'Group Details',
-  }),
-  createRoute({
-    path: paths.createGroupInterests,
-    factory: () => import('src/pages/create-group/interests'),
-    title: 'Group Interests',
-  }),
-  createRoute({
-    path: paths.createGroupFinal,
-    factory: () => import('src/pages/create-group/finish'),
-    title: 'Group Final',
+    children: [
+      createRoute({
+        path: paths.createGroupDetails,
+        factory: () => import('src/pages/create-group/details'),
+        title: 'Group Details',
+      }),
+      createRoute({
+        path: paths.createGroupInterests,
+        factory: () => import('src/pages/create-group/interests'),
+        title: 'Group Interests',
+      }),
+      createRoute({
+        path: paths.createGroupFinal,
+        factory: () => import('src/pages/create-group/finish'),
+        title: 'Group Final',
+      }),
+    ],
   }),
   createRoute({
     path: paths.thankYou,

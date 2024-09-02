@@ -1,8 +1,8 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { AppHeader } from '~/components/header';
-import { Tab, Tabs } from '~/components/tabs';
-import { GroupsList, UsersList } from './tabs';
 import { IconFilter } from '~/assets/icons';
+import { GroupsList, UsersList } from './tabs';
+import { Tab, Tabs } from '~/components/tabs';
 
 type TabTypes = 'groups' | 'users';
 
