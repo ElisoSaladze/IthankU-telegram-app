@@ -7,12 +7,18 @@ const TMedia = z.object({
   filename: z.string(),
 });
 
+const TPostGroup = z.object({
+  _id: z.string(),
+  name: z.string(),
+  groupImage: z.string().optional(),
+});
+
 export const TPost = z.object({
   _id: z.string(),
   content: z.string(),
   summary: z.string().optional(),
   preview: z.string(),
-  group: z.string().nullable(),
+  group: TPostGroup.nullable(),
   tags: z.array(z.string()),
   images: z.array(z.string()).optional(),
   files: z.any().optional(),
