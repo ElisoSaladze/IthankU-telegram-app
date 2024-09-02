@@ -1,8 +1,8 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { AppHeader } from '~/components/header';
-import { IconFilter } from '~/assets/icons';
-import { GroupsList, UsersList } from './tabs';
 import { Tab, Tabs } from '~/components/tabs';
+import { GroupsList, UsersList } from './tabs';
+import FilterDrawer from '~/components/filter-drawer';
 
 type TabTypes = 'groups' | 'users';
 
@@ -29,7 +29,6 @@ export const ListingPage = () => {
           zIndex: 10,
         }}
       />
-
       <Stack p={3} pt={1} spacing={2}>
         <Box
           sx={{
@@ -41,27 +40,7 @@ export const ListingPage = () => {
           }}
         >
           <Typography fontSize={24}>Listing</Typography>
-
-          <Box
-            sx={{
-              width: 40,
-              height: 40,
-              borderRadius: 3,
-              bgcolor: 'primary.main',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'absolute',
-              right: 0,
-              cursor: 'pointer',
-              transition: '.3s',
-              ':hover': {
-                bgcolor: 'primary.dark',
-              },
-            }}
-          >
-            <IconFilter sx={{ color: 'white', fontSize: 17 }} />
-          </Box>
+          <FilterDrawer />
         </Box>
 
         <Tabs<TabTypes> defaultTab="groups" tabs={tabs} />

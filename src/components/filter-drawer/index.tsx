@@ -1,6 +1,5 @@
-import { Box, Button, Divider, Drawer, IconButton, Slider, Stack, Typography } from '@mui/material';
-import { useState, useCallback, ReactNode } from 'react';
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import { Box, Button, Divider, Drawer, Slider, Stack, Typography } from '@mui/material';
+import { useState, useCallback } from 'react';
 import { useFetchItemsContext } from 'src/providers/hashtag-shade';
 import ShadeComponent from '../shade-component';
 import CustomAccordion from './accordion';
@@ -12,13 +11,13 @@ import TagItem from '../tag';
 import CustomSearch from './autocomplete';
 import { useFilterUsersContext } from '~/providers/filter-provider';
 import { paths } from '~/app/routes';
+import { IconFilter } from '~/assets/icons';
 
 type Props = {
-  Icon?: ReactNode;
   buttonColor?: string;
 };
 
-const FilterDrawer = ({ Icon = <FilterAltOutlinedIcon />, buttonColor = 'primary.main' }: Props) => {
+const FilterDrawer = ({ buttonColor = 'primary.main' }: Props) => {
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -69,21 +68,28 @@ const FilterDrawer = ({ Icon = <FilterAltOutlinedIcon />, buttonColor = 'primary
     setValue('distance', (newValue as number) * 1000);
   };
   return (
-    <Stack>
-      <IconButton
+    <Stack sx={{ position: 'absolute', right: 0 }}>
+      <Box
         onClick={toggleDrawer(true)}
         sx={{
-          backgroundColor: buttonColor,
-          color: 'white',
-          borderRadius: '12px',
-          '&:hover': {
-            backgroundColor: 'info.dark',
+          width: 40,
+          height: 40,
+          borderRadius: 3,
+          bgcolor: buttonColor,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+
+          cursor: 'pointer',
+          transition: '.3s',
+          ':hover': {
+            bgcolor: 'primary.dark',
           },
         }}
-        size="small"
       >
-        {Icon}
-      </IconButton>
+        <IconFilter sx={{ color: 'white', fontSize: 17 }} />
+      </Box>
+
       <Drawer anchor="bottom" open={isOpen} onClose={toggleDrawer(false)}>
         <Stack px={1} spacing={0.5}>
           <Stack direction="row" justifyContent="space-between">

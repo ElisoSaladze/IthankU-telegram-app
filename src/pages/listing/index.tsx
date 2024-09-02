@@ -27,19 +27,6 @@ const Listing = () => {
         <Box width={40}></Box>
         <Typography>Listing</Typography>
         <FilterDrawer />
-        {/* <IconButton
-          sx={{
-            backgroundColor: 'primary.main',
-            color: 'white',
-            borderRadius: '12px',
-            '&:hover': {
-              backgroundColor: 'primary.dark',
-            },
-          }}
-          size="small"
-        >
-          <FilterAltOutlinedIcon />
-        </IconButton> */}
       </Stack>
       <Stack spacing={1}>
         <ToggleButtonGroup color="primary" fullWidth value={list} exclusive onChange={handleListChange}>

@@ -62,11 +62,18 @@ const PostItem = ({ post, isDetails = false }: Props) => {
     });
   };
 
+  const renderContent = (content: string) => {
+    if (!isDetails) {
+      return content.length >= 100 ? content.slice(0, 100) + '...' : content;
+    }
+    return content;
+  };
+
   return (
-    <Card onClick={navigateToDetails} sx={{ width: 1 }}>
+    <Card onClick={navigateToDetails}>
       <CardHeader
-        avatar={post.author !== undefined && <Avatar src={post.author ? post.author.picture : ''} />}
-        title={post.author !== undefined && post.author ? post.author.name : ''}
+        avatar={<Avatar src={post.group ? post.group.groupImage : post.author?.picture} />}
+        title={post.group ? post.group.name : post.author?.name}
         subheader={
           <Stack gap={0.5} direction="row" alignItems="center" fontSize="small" color="secondary.dark">
             {timeAgo(post.createdAt)} •
@@ -78,13 +85,45 @@ const PostItem = ({ post, isDetails = false }: Props) => {
           </Stack>
         }
       />
-      <CardContent>
+      <CardContent
+        sx={{
+          paddingY: 0,
+        }}
+      >
         <Box gap={1} display="flex">
           <Typography fontWeight={600}>{post.summary}</Typography>
           {post.visibility === 'Private' && <IconPrivatePost />}
         </Box>
-        <Typography paragraph>{post.preview}</Typography>
-        <Stack spacing={0.5} direction="row">
+        <Box mt={1}>
+          {post.visibility === 'Private' && post.preview.length > 0 && (
+            <>
+              <Typography color="#A0A0A0" fontSize={12}>
+                Preview
+              </Typography>
+              <Typography>{post.preview}</Typography>
+            </>
+          )}
+          {post.visibility === 'Public' && (
+            <Typography>
+              {renderContent(post.content)}{' '}
+              {!isDetails && post.content.length >= 100 && (
+                <Button
+                  onClick={navigateToDetails}
+                  sx={{
+                    p: 0,
+                    textDecoration: 'underline',
+                    fontWeight: 600,
+                    fontStyle: 'initial',
+                  }}
+                  color="info"
+                >
+                  Read more
+                </Button>
+              )}
+            </Typography>
+          )}
+        </Box>
+        <Stack mt={1.5} spacing={0.5} direction="row">
           {post.tags!.map((tag, index) => (
             <TagItem key={index} tag={tag} />
           ))}
