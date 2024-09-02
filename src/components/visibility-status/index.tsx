@@ -12,9 +12,10 @@ type Props = {
   name: string;
   labels: [string, string];
 };
+
 const VisibilityStatus = ({ control, name, labels }: Props) => {
   return (
-    <Box width={'100%'}>
+    <Box width={1}>
       <ControlledRadioGroup
         fullWidth
         name={name}
@@ -22,29 +23,49 @@ const VisibilityStatus = ({ control, name, labels }: Props) => {
         options={[
           {
             label: (
-              <Stack gap={1} alignItems={'center'} direction={'row'}>
-                <Box borderRadius={1.5} p={1} bgcolor={'secondary.main'}>
+              <Box display="flex" gap={2} alignItems="center">
+                <Box
+                  sx={{
+                    width: 46,
+                    height: 46,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 2.5,
+                    bgcolor: 'secondary.main',
+                  }}
+                >
                   <PublicIcon />
                 </Box>
                 <Stack>
                   <Typography fontWeight={600}>Public</Typography>
                   <Typography fontSize={'small'}>{labels[0]}</Typography>
                 </Stack>
-              </Stack>
+              </Box>
             ),
             value: Visibility.Public,
           },
           {
             label: (
-              <Stack gap={1} alignItems={'center'} direction={'row'}>
-                <Box borderRadius={1.5} p={1} bgcolor={'secondary.main'}>
+              <Box display="flex" gap={2} alignItems="center" mt={1}>
+                <Box
+                  sx={{
+                    width: 46,
+                    height: 46,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 2.5,
+                    bgcolor: 'secondary.main',
+                  }}
+                >
                   <LockIcon />
                 </Box>
                 <Stack>
-                  <Typography fontWeight={600}>Private</Typography>
+                  <Typography fontWeight={600}>Paid</Typography>
                   <Typography fontSize={'small'}>{labels[1]}</Typography>
                 </Stack>
-              </Stack>
+              </Box>
             ),
             value: Visibility.Private,
           },

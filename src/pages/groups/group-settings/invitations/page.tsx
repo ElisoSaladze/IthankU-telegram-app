@@ -5,8 +5,10 @@ import { getInvitations } from '~/api/groups';
 import { qk } from 'src/api/query-keys';
 import { useAuthUser } from '~/app/auth';
 import { Progress } from '~/components/progress';
+import { AppHeader } from '~/components/header';
+import { paths } from '~/app/routes';
 
-const Invitation = () => {
+export const Invitation = () => {
   const authUser = useAuthUser();
 
   const userId = authUser?.user._id || '';
@@ -38,20 +40,22 @@ const Invitation = () => {
   }
 
   return (
-    <Stack alignItems={'center'} p={2}>
-      <Typography variant="h6" gutterBottom>
-        Invitation
-      </Typography>
+    <>
+      <AppHeader backPath={paths.groupSettings} />
 
-      {invitations?.data.length > 0 ? (
-        invitations!.data.map((invitation) => (
-          <InvitationItem id={invitation._id} refetch={refetch} key={invitation._id} group={invitation.group} />
-        ))
-      ) : (
-        <Typography>You do not have any invitation</Typography>
-      )}
-    </Stack>
+      <Stack alignItems={'center'} p={2}>
+        <Typography variant="h6" gutterBottom>
+          Invitation
+        </Typography>
+
+        {invitations?.data.length > 0 ? (
+          invitations!.data.map((invitation) => (
+            <InvitationItem id={invitation._id} refetch={refetch} key={invitation._id} group={invitation.group} />
+          ))
+        ) : (
+          <Typography>You do not have any invitation</Typography>
+        )}
+      </Stack>
+    </>
   );
 };
-
-export default Invitation;

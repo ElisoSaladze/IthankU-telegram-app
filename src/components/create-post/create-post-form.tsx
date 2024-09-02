@@ -1,0 +1,183 @@
+import { Avatar, Box, Button, IconButton, Stack, Typography } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { Params, useNavigate, useParams } from 'react-router-dom';
+import { createPost } from 'src/api/posts';
+import VisibilityStatus from 'src/components/visibility-status';
+import { Visibility } from '~/constants/enums';
+import { useAuthUser } from '~/app/auth';
+import { IconClose } from '~/assets/icons';
+import { PostTextInput, PreviewInput, SummaryInput, TagsInput } from './inputs';
+import { useBoolean } from '~/lib/hooks';
+import { PaidPostDialog } from './paid-post-dialog';
+import { Progress } from '../progress';
+
+export type CreatePostFormValues = {
+  content: string;
+  group: string | null;
+  images: Array<{
+    value: File;
+  }>;
+  summary: string;
+  tags: Array<{
+    value: string;
+  }>;
+  visibility: Visibility;
+  currentTag: string;
+  preview?: string;
+  files: Array<{
+    value: File;
+  }>;
+};
+
+const defaultPostValue: CreatePostFormValues = {
+  content: '',
+  group: null,
+  images: [],
+  summary: '',
+  tags: [],
+  visibility: Visibility.Public, //TODO!
+  currentTag: '#',
+  preview: '',
+  files: [],
+};
+
+type Props = {
+  onClose: () => void;
+};
+
+export const CreatePostForm = ({ onClose }: Props) => {
+  const navigate = useNavigate();
+  const authUser = useAuthUser();
+
+  const { groupId } = useParams<Params>();
+
+  const actualGroupId = groupId === ':groupId' ? undefined : groupId;
+
+  const isPaidPostDialogOpen = useBoolean();
+
+  const {
+    control,
+    watch,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreatePostFormValues>({
+    defaultValues: {
+      ...defaultPostValue,
+      group: actualGroupId ?? null,
+    },
+  });
+
+  const [content, currentTag] = watch(['content', 'currentTag']);
+
+  const $createPost = useMutation({
+    mutationFn: createPost,
+  });
+
+  const onSubmit = handleSubmit((data) => {
+    if (data.visibility === 'Public') {
+      $createPost.mutate({
+        ...data,
+        tags: data.tags.map((tag) => tag.value),
+        images: data.images.map((image) => image.value),
+        files: data.files.map((file) => file.value),
+      });
+      return;
+    }
+
+    isPaidPostDialogOpen.setTrue();
+  });
+
+  return (
+    <Stack p={3} pt={0} position="relative">
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'sticky',
+          top: 0,
+          py: 3,
+          bgcolor: 'white',
+          zIndex: 10,
+        }}
+      >
+        <IconButton
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            left: 0,
+          }}
+        >
+          <IconClose sx={{ color: 'info.main', fontSize: 19 }} />
+        </IconButton>
+
+        <Typography fontSize={20} fontWeight={600}>
+          Create post
+        </Typography>
+      </Box>
+      {authUser && (
+        <Box display="flex" gap={1} alignItems="center" mb={3}>
+          <Avatar src={authUser.user.picture} sx={{ width: 65, height: 65 }} />
+          <Typography fontSize={20} fontWeight={600}>
+            {authUser.user.name}
+          </Typography>
+        </Box>
+      )}
+
+      <Stack width={1} gap={3}>
+        <VisibilityStatus
+          name="visibility"
+          control={control}
+          labels={['Fully visible to everyone.', 'Preview only. 1 coin to unlock']}
+        />
+
+        <SummaryInput control={control} error={errors.summary} />
+
+        <PostTextInput control={control} contentLength={content.length} error={errors.content} />
+
+        {watch('visibility') === 'Private' && <PreviewInput control={control} />}
+
+        <TagsInput control={control} setValue={setValue} currentTag={currentTag} />
+      </Stack>
+
+      <Button
+        onClick={onSubmit}
+        disabled={$createPost.isLoading}
+        variant="contained"
+        size="large"
+        sx={{
+          position: 'sticky',
+          bottom: 20,
+          borderRadius: 5,
+          boxShadow: '0px 4px 7px 0px #21A54D40',
+        }}
+      >
+        {$createPost.isLoading ? <Progress /> : 'Post'}
+      </Button>
+
+      <PaidPostDialog
+        isOpen={isPaidPostDialogOpen.isTrue}
+        onClose={isPaidPostDialogOpen.setFalse}
+        isLoading={$createPost.isLoading}
+        onSubmit={handleSubmit((data) => {
+          $createPost.mutate(
+            {
+              ...data,
+              tags: data.tags.map((tag) => tag.value),
+              images: data.images.map((image) => image.value),
+              files: data.files.map((file) => file.value),
+            },
+            {
+              onSuccess: () => {
+                isPaidPostDialogOpen.setFalse();
+                navigate(-1); // TODO!
+              },
+            },
+          );
+        })}
+      />
+    </Stack>
+  );
+};

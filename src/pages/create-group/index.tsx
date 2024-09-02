@@ -27,7 +27,7 @@ const CreateGroup = () => {
   }, [isFormValid, navigate]);
 
   return (
-    <Stack height={'100vh'}>
+    <Stack height="100vh">
       <AppBar
         sx={{
           paddingX: 2,
@@ -37,9 +37,9 @@ const CreateGroup = () => {
       >
         <Stack justifyContent="space-between" alignItems="center" direction="row">
           <IconButton onClick={() => (activePath === 'details' ? navigate(paths.home) : navigate(-1))}>
-            <ArrowBackIosIcon fontSize={'small'} sx={{ color: activePath === 'details' ? 'white' : 'black' }} />
+            <ArrowBackIosIcon fontSize="small" sx={{ color: activePath === 'details' ? 'white' : 'black' }} />
           </IconButton>
-          <Typography color={activePath === 'details' ? 'white' : 'black'} textAlign={'center'}>
+          <Typography color={activePath === 'details' ? 'white' : 'black'} textAlign="center">
             Create Group
           </Typography>
           {activePath !== 'final' ? (

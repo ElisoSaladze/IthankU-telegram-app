@@ -2,6 +2,7 @@ import constate from 'constate';
 import { useForm } from 'react-hook-form';
 import { Visibility } from '~/constants/enums';
 
+// TODO!
 export type CreateGroupRequest = {
   name: string;
   description: string;
@@ -15,6 +16,7 @@ export type CreateGroupRequest = {
     value: string;
   }[];
 };
+
 const defaultValues: CreateGroupRequest = {
   name: '',
   description: '',
@@ -24,6 +26,7 @@ const defaultValues: CreateGroupRequest = {
   privacy: Visibility.Public,
   currentTag: '#',
 };
+
 const useCreateGroup = () => {
   const { handleSubmit, setValue, control, watch } = useForm({
     defaultValues: defaultValues,
