@@ -7,9 +7,7 @@ import {
   TUserToInviteResponse,
 } from './groups.schema';
 import { TPostsResponse } from '../posts';
-import { globalAccessToken } from '~/app/auth/access-token';
-
-const VITE_APP_API_URL = import.meta.env['VITE_APP_API_URL'];
+import { CreateGroupFormValues } from '~/providers/create-group-provider';
 
 export const getGroups = async () => {
   return await request('/api/groups').get({}, TGroupsResponse);
@@ -133,29 +131,37 @@ export const getUsersToInvite = async ({ groupId }: GroupId) => {
 };
 
 // TODO!
-export const createGroup = async (body: FormData) => {
-  try {
-    const response = await fetch(`${VITE_APP_API_URL}api/groups`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${globalAccessToken}`,
-      },
-      body: body,
-      // No need to set Content-Type header for FormData; the browser will set it automatically
-    });
 
-    if (!response.ok) {
-      // Read and log error response body
-      const errorDetails = await response.text();
-
-      console.error('Error details:', errorDetails);
-      throw new Error(`Network response was not ok: ${response.statusText}`);
-    }
-
-    // Parse and return the JSON response if successful
-    return response.json();
-  } catch (error) {
-    console.error('Error creating post:', error);
-    throw error;
-  }
+export const createGroup = async (input: CreateGroupFormValues) => {
+  return await request('/api/groups').post({
+    type: 'file',
+    body: { ...input, tags: input.tags.map((tag) => tag.value) },
+  });
 };
+
+// export const createGroup = async (body: FormData) => {
+//   try {
+//     const response = await fetch(`${VITE_APP_API_URL}api/groups`, {
+//       method: 'POST',
+//       headers: {
+//         Authorization: `Bearer ${globalAccessToken}`,
+//       },
+//       body: body,
+//       // No need to set Content-Type header for FormData; the browser will set it automatically
+//     });
+
+//     if (!response.ok) {
+//       // Read and log error response body
+//       const errorDetails = await response.text();
+
+//       console.error('Error details:', errorDetails);
+//       throw new Error(`Network response was not ok: ${response.statusText}`);
+//     }
+
+//     // Parse and return the JSON response if successful
+//     return response.json();
+//   } catch (error) {
+//     console.error('Error creating post:', error);
+//     throw error;
+//   }
+// };

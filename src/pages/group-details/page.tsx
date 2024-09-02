@@ -5,21 +5,9 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 import SearchIcon from '@mui/icons-material/Search';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  Divider,
-  IconButton,
-  ListItemButton,
-  Stack,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { AppBar, Avatar, Box, Button, Divider, IconButton, ListItemButton, Stack, Typography } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import arrowBackIosIcon from 'src/assets/icons/goBack.svg';
 import notificationsIcon from 'src/assets/icons/white-notif.svg';
 import defaultImageUrl from 'src/assets/images/itu-circle.png';
 
@@ -33,8 +21,32 @@ import qrIcon from 'src/assets/icons/qr.png';
 import { qk } from 'src/api/query-keys';
 import { Post } from 'src/api/posts';
 import { useAuthUser } from '~/app/auth';
+import { IconArrow } from '~/assets/icons';
+import { paths } from '~/app/routes';
+import { ReactNode } from 'react';
 
-const GroupDetailsPage = () => {
+const IconWrapper = ({ children, onClick }: { children: ReactNode; onClick?: () => void }) => {
+  return (
+    <Box
+      sx={{
+        width: 40,
+        height: 40,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 2,
+        cursor: 'pointer',
+        bgcolor: 'rgba(217, 217, 217, 0.33)',
+      }}
+      onClick={onClick}
+    >
+      {children}
+    </Box>
+  );
+};
+
+export const GroupDetailsPage = () => {
+  const navigate = useNavigate();
   const authUser = useAuthUser();
   const { groupId } = useParams<Params>();
 
@@ -82,28 +94,30 @@ const GroupDetailsPage = () => {
     );
   };
 
-  const navigate = useNavigate();
   return (
-    <Stack height={'100vh'}>
+    <Stack height="100vh">
       <AppBar
         sx={{
           position: 'fixed',
-          backgroundColor: 'transparent',
+          bgcolor: 'transparent',
+          p: 3,
         }}
       >
-        <Toolbar>
-          <Box sx={{ flexGrow: 1 }}>
-            <IconButton sx={{ background: '#D9D9D954', borderRadius: 3, width: 38 }} onClick={() => navigate(-1)}>
-              <img src={arrowBackIosIcon} />
-            </IconButton>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <IconWrapper onClick={() => navigate(paths.groups)}>
+            <IconArrow direction="left" sx={{ color: 'white', fontSize: 18 }} />
+          </IconWrapper>
+
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <IconWrapper>
+              <img src={notificationsIcon} />
+            </IconWrapper>
+
+            <IconWrapper>
+              <SearchIcon sx={{ color: 'white' }} />
+            </IconWrapper>
           </Box>
-          <IconButton sx={{ background: '#D9D9D954', borderRadius: 3, marginRight: 0.5 }}>
-            <img src={notificationsIcon} />
-          </IconButton>
-          <IconButton sx={{ background: '#D9D9D954', borderRadius: 3 }}>
-            <SearchIcon sx={{ color: 'white' }} />
-          </IconButton>
-        </Toolbar>
+        </Box>
       </AppBar>
       {isFetching ? (
         <Loader />
@@ -119,10 +133,10 @@ const GroupDetailsPage = () => {
           }}
         >
           <Stack
-            bgcolor={'white'}
+            bgcolor="white"
             m={2}
             marginTop={10}
-            boxShadow={'0px 3px 8.6px -4px #00000040'}
+            boxShadow="0px 3px 8.6px -4px #00000040"
             gap={1}
             p={2}
             borderRadius={5}
@@ -246,5 +260,3 @@ const GroupDetailsPage = () => {
     </Stack>
   );
 };
-
-export default GroupDetailsPage;
