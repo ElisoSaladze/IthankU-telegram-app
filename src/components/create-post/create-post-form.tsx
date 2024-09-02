@@ -76,7 +76,6 @@ export const CreatePostForm = ({ onClose }: Props) => {
   });
 
   const onSubmit = handleSubmit((data) => {
-    console.log({ data });
     if (data.visibility === 'Public') {
       $createPost.mutate({
         ...data,
@@ -163,7 +162,6 @@ export const CreatePostForm = ({ onClose }: Props) => {
         onClose={isPaidPostDialogOpen.setFalse}
         isLoading={$createPost.isLoading}
         onSubmit={handleSubmit((data) => {
-          console.log('in');
           $createPost.mutate(
             {
               ...data,

@@ -39,8 +39,6 @@ export const PostTextInput = ({ contentLength, control, error: inputError }: Pro
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, isImage: boolean) => {
     const files = event.target.files;
 
-    console.log({ files });
-
     if (files && files[0]) {
       const file = files[0];
       if (file.size > maxFileSize) {

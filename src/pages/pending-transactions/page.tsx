@@ -22,26 +22,10 @@ const tabs: Array<Tab<TabTypes>> = [
 ];
 
 export const PendingTransactionsPage = () => {
-  //   const location = useLocation();
-  //   const [list, setList] = useState('incoming');
   const navigate = useNavigate();
-
-  //   useEffect(() => {
-  //     const pathSegment = location.pathname.split('/')[3]!; //TODO
-  //     setList(pathSegment);
-  //   }, [location.pathname]);
-
-  //   const handleListChange = (_event: React.MouseEvent<HTMLElement>, newList: string) => {
-  //     if (newList !== null) {
-  //       setList(newList);
-  //       navigate(newList);
-  //     }
-  //   };
 
   const [searchparams] = useSearchParams();
   const activeTab = searchparams.get('tab');
-
-  console.log({ activeTab });
 
   return (
     <Box position="relative">

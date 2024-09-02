@@ -45,8 +45,6 @@ export const AccountsPage = () => {
 
   const disabled = !isDirty || $updateUserBio.isLoading;
 
-  console.log({ isDirty, disabled, loading: $updateUserBio.isLoading });
-
   if (isLoading) return <Loader />;
 
   return (

@@ -15,7 +15,6 @@ export const createRequestBody = (
     if (value) {
       if (Array.isArray(value)) {
         for (const file of value) {
-          console.log({ key, file });
           formData.append(key, file);
         }
       } else {

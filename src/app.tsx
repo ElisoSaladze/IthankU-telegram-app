@@ -12,11 +12,9 @@ export const App = () => {
     console.error('TelegramWebApp is not available.');
 
     return (
-      <Providers>
-        <Box width={1} height={1} p={3}>
-          <Typography>Telegram Web App Is not available</Typography>
-        </Box>
-      </Providers>
+      <Box width={1} height={1} p={3}>
+        <Typography>Telegram Web App Is not available</Typography>
+      </Box>
     );
   }
 
