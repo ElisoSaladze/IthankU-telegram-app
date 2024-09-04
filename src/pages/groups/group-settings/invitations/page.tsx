@@ -43,7 +43,7 @@ export const Invitation = () => {
     <>
       <AppHeader backPath={paths.groupSettings} />
 
-      <Stack alignItems={'center'} p={2}>
+      <Stack alignItems={'center'} px={2}>
         <Typography variant="h6" gutterBottom>
           Invitation
         </Typography>
