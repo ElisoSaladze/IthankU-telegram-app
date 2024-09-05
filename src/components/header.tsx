@@ -1,10 +1,10 @@
 import { Badge, Box, IconButton, SxProps, Theme, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import { useNavigate, To } from 'react-router-dom';
-import ituIcon from 'src/assets/images/itu.svg';
 import { paths } from '~/app/routes';
-import { IconArrow, IconNotification } from '~/assets/icons';
+import { IconNotification } from '~/assets/icons';
 import { useNotifications } from '~/lib/hooks';
+import ituIcon from 'src/assets/images/itu.svg';
 
 type Props = {
   backPath?: To;
@@ -18,6 +18,16 @@ export const AppHeader = ({ backPath, pageName, additionalContent, headerSx }: P
 
   const notifications = useNotifications();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const app = (window as any).Telegram!.WebApp;
+  if (backPath) {
+    app.BackButton.show();
+    app.BackButton.onClick(() => {
+      navigate(backPath);
+    });
+  } else {
+    app.BackButton.hide();
+  }
   return (
     <Box
       sx={{
@@ -31,7 +41,7 @@ export const AppHeader = ({ backPath, pageName, additionalContent, headerSx }: P
         ...headerSx,
       }}
     >
-      {backPath ? (
+      {/* {backPath ? (
         <IconButton
           onClick={() => {
             navigate(backPath);
@@ -49,7 +59,16 @@ export const AppHeader = ({ backPath, pageName, additionalContent, headerSx }: P
             navigate(paths.home);
           }}
         />
-      )}
+      )} */}
+      <Box
+        component="img"
+        src={ituIcon}
+        alt="Logo"
+        sx={{ cursor: 'pointer' }}
+        onClick={() => {
+          navigate(paths.home);
+        }}
+      />
 
       {pageName && (
         <Typography

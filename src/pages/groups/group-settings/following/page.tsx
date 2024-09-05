@@ -25,7 +25,7 @@ export const Following = () => {
     <>
       <AppHeader backPath={paths.groupSettings} />
 
-      <Stack p={3} pb={10} gap={1} alignItems="center">
+      <Stack px={3} pb={10} gap={1} alignItems="center">
         <Typography variant="h6" gutterBottom>
           Following
         </Typography>
