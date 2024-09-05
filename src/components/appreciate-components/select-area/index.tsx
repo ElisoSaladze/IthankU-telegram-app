@@ -5,10 +5,12 @@ import ShadeComponent from 'src/components/shade-component';
 import { useEffect, useState } from 'react';
 import { useFetchItemsContext } from 'src/providers/hashtag-shade';
 import { Shade } from '~/api/shades';
+
 type Props = {
   onSelect?: (shade: Shade | null) => void;
-  defaultSelected?: string;
+  defaultSelected?: string | null;
 };
+
 const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
   const [selectedShade, setSelectedShade] = useState<Shade | null>(null);
 
@@ -81,7 +83,7 @@ const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
         <Stack width={'100%'} gap={0.5} direction={'row'} flexWrap={'wrap'}>
           {shades?.data.map((shade) => (
             <ShadeComponent
-              key={shade._id}
+              key={shade.id}
               selectable
               selected={selectedShade?.en === shade.en}
               onSelect={() => handleSelectShade(shade)}

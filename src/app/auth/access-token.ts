@@ -2,10 +2,10 @@ import { z } from 'zod';
 import { TUserRole } from '~/api/auth';
 
 export const TAccessTokenPayload = z.object({
-  exp: z.number(),
-  iat: z.number(),
-  id: z.string(),
+  userId: z.string(),
   role: TUserRole,
+  iat: z.number(),
+  exp: z.number(),
 });
 
 export type AccessTokenPayload = z.infer<typeof TAccessTokenPayload>;

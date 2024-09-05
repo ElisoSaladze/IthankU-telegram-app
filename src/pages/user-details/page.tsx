@@ -15,7 +15,7 @@ import PfpComponent from 'src/components/pfp-component';
 import { fileToBase64, formatNumber } from 'src/helpers';
 import { match, P } from 'ts-pattern';
 import { qk } from '~/api/query-keys';
-import { getUser } from '~/api/users';
+import { getUserDetails } from '~/api/users';
 import { useAuthUser } from '~/app/auth';
 import { useUserDetails } from '~/lib/hooks';
 import { paths } from '~/app/routes';
@@ -30,11 +30,11 @@ export const UserDetailsPage = () => {
 
   const [isEditable, setIsEditable] = useState(false);
 
-  const isCurrent = authUser?.user._id === userId;
+  const isCurrent = authUser?.user.id === userId;
 
   const $user = useQuery({
     queryKey: qk.users.details.toKeyWithArgs({ userId: userId! }),
-    queryFn: () => getUser({ userId: userId! }),
+    queryFn: () => getUserDetails({ userId: userId! }),
   });
 
   const { control, setValue, handleSubmit } = useForm({
@@ -78,7 +78,7 @@ export const UserDetailsPage = () => {
         .with({ isError: true }, () => {
           return <Typography>Failed to get user details</Typography>;
         })
-        .with({ isSuccess: true, data: P.select() }, ({ user }) => {
+        .with({ isSuccess: true, data: P.select() }, ({ data: user }) => {
           return (
             <>
               <AppHeader backPath={paths.more} />
@@ -116,7 +116,7 @@ export const UserDetailsPage = () => {
                     <PfpComponent
                       showEditIcon={false}
                       size={[80, 80]}
-                      imageUrl={user.picture}
+                      imageUrl={user.picture ?? ''}
                       isEditable={isCurrent}
                       onChange={handleImageChange}
                     />
@@ -166,11 +166,7 @@ export const UserDetailsPage = () => {
                           {user.name}
                         </Typography>
                       )}
-
-                      <Typography fontSize={14} color={'white'}>
-                        {user.email}
-                      </Typography>
-                      <Stack direction={'row'}>{user.linkedAccounts.map((acc) => acc.type)}</Stack>
+                      <Stack direction={'row'}>{user.linkedAccounts.map((acc) => acc.provider)}</Stack>
                     </Stack>
                   </Stack>
                   {!isCurrent && (
@@ -198,7 +194,7 @@ export const UserDetailsPage = () => {
                       p={0.5}
                     >
                       <Typography fontSize={36} fontWeight={600} color="#0058A9">
-                        {user.physicalPoints}
+                        {user.points}
                       </Typography>
                       <Typography fontSize={14} fontWeight={500} color="#0058A9">
                         My wallet
@@ -217,7 +213,7 @@ export const UserDetailsPage = () => {
                     p={0.5}
                   >
                     <Typography fontSize={36} fontWeight={600} color="white">
-                      {formatNumber(user.generalRating)}
+                      {formatNumber(user.ratingPoints)}
                     </Typography>
                     <Typography fontSize={14} fontWeight={500} color="white">
                       General score
@@ -242,16 +238,16 @@ export const UserDetailsPage = () => {
                   </Typography>
                 ) : (
                   <>
-                    {user.topShades.length > 0 && (
+                    {user.shadePoints.length > 0 && (
                       <>
                         <Typography fontSize={14} color="#9C9C9C" fontWeight={500} mt={1}>
                           Areas
                         </Typography>
                         <Stack flexWrap="wrap" gap={1} direction="row">
-                          {user.topShades.map((shade) => (
-                            <ChipComponent key={shade._id} color={shade.shadeInfo.color}>
-                              <Typography fontSize={16} fontWeight={500} color={shade.shadeInfo.color}>
-                                {`${shade.shade} ${shade.points}`}
+                          {user.shadePoints.map((shade) => (
+                            <ChipComponent key={shade.shade.id} color={shade.shade.color}>
+                              <Typography fontSize={16} fontWeight={500} color={shade.shade.color}>
+                                {`${shade.shade.en} ${shade.points}`}
                               </Typography>
                             </ChipComponent>
                           ))}

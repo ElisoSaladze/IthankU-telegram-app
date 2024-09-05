@@ -33,12 +33,12 @@ const InvitationItem: React.FC<InvitationItemProps> = ({ group, refetch, id }) =
       }}
     >
       <Box>
-        <Avatar sx={{ width: 70, height: 70, borderRadius: 4 }} variant="rounded" src={group.groupImage} />
+        <Avatar sx={{ width: 70, height: 70, borderRadius: 4 }} variant="rounded" src={group.picture ?? ''} />
       </Box>
       <Stack gap={0.5} width={'100%'}>
         <Typography>{group.name}</Typography>
 
-        <ShadeComponent color={group.shade} name={group.shade} />
+        <ShadeComponent color={group.shade.color} name={group.shade.en} />
         <Box display={'flex'} gap={1}>
           <Button
             onClick={() =>

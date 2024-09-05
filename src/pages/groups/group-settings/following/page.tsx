@@ -6,15 +6,19 @@ import ShadeComponent from 'src/components/shade-component';
 import TagItem from 'src/components/tag';
 import defaultImageUrl from 'src/assets/images/itu-circle.png';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { leaveGroup, userGroups } from '~/api/groups';
+import { getUserGroups, leaveGroup } from '~/api/groups';
 import { qk } from '~/api/query-keys';
 import { AppHeader } from '~/components/header';
 import { paths } from '~/app/routes';
+import { useAuthUser } from '~/app/auth';
 
 export const Following = () => {
+  const authUser = useAuthUser();
+
   const $groups = useQuery({
-    queryKey: qk.groups.userGroups.toKey(),
-    queryFn: userGroups,
+    queryKey: qk.groups.getUserGroups.toKeyWithArgs({ userId: authUser?.user.id ?? '' }),
+    queryFn: () => getUserGroups({ userId: authUser?.user.id ?? '' }),
+    enabled: authUser !== null,
   });
 
   const $leaveGroup = useMutation({
@@ -42,7 +46,7 @@ export const Following = () => {
           .with({ isSuccess: true, data: P.select() }, (groups) =>
             groups.data.map((group) => (
               <ListItemButton
-                key={group._id}
+                key={group.id}
                 sx={{
                   width: '100%',
                   borderRadius: 5,
@@ -56,13 +60,13 @@ export const Following = () => {
                       <Avatar
                         sx={{ width: 70, height: 70, borderRadius: 4 }}
                         variant="rounded"
-                        src={group.groupImage || defaultImageUrl}
+                        src={group.picture || defaultImageUrl}
                       />
                       <Avatar
                         sx={{
                           height: 35,
                           width: 35,
-                          bgcolor: group.shadeInfo?.color,
+                          bgcolor: group.shade?.color,
                           position: 'absolute',
                           bottom: -5,
                           right: -10,
@@ -77,14 +81,14 @@ export const Following = () => {
                       <Typography fontSize={15} fontWeight={600}>
                         {group.name}
                       </Typography>
-                      <ShadeComponent color={group.shadeInfo?.color} name={group.shadeInfo?.en} />
+                      <ShadeComponent color={group.shade?.color} name={group.shade?.en} />
                       <Stack direction="row">{group.tags?.map((tag, i) => <TagItem key={i} tag={tag} />)}</Stack>
                     </Stack>
                   </Stack>
                   <IconButton
                     onClick={() => {
                       $leaveGroup.mutate(
-                        { groupId: group._id },
+                        { groupId: group.id },
                         {
                           onSuccess: () => {
                             $groups.refetch();

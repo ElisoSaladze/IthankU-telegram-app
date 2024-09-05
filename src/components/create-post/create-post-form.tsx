@@ -14,32 +14,30 @@ import { Progress } from '../progress';
 
 export type CreatePostFormValues = {
   content: string;
-  group: string | null;
-  images: Array<{
-    value: File;
-  }>;
+  groupId: string | null;
   summary: string;
+  preview?: string;
+  visibility: Visibility;
   tags: Array<{
     value: string;
   }>;
-  visibility: Visibility;
-  currentTag: string;
-  preview?: string;
-  files: Array<{
+  media: Array<{
+    value: File;
+  }>;
+  attachments: Array<{
     value: File;
   }>;
 };
 
 const defaultPostValue: CreatePostFormValues = {
   content: '',
-  group: null,
-  images: [],
+  groupId: null,
   summary: '',
-  tags: [],
-  visibility: Visibility.Public, //TODO!
-  currentTag: '#',
   preview: '',
-  files: [],
+  visibility: Visibility.Public, //TODO!
+  tags: [],
+  media: [],
+  attachments: [],
 };
 
 type Props = {
@@ -65,23 +63,23 @@ export const CreatePostForm = ({ onClose }: Props) => {
   } = useForm<CreatePostFormValues>({
     defaultValues: {
       ...defaultPostValue,
-      group: actualGroupId ?? null,
+      groupId: actualGroupId ?? null,
     },
   });
 
-  const [content, currentTag] = watch(['content', 'currentTag']);
+  const [content, visibility] = watch(['content', 'visibility']);
 
   const $createPost = useMutation({
     mutationFn: createPost,
   });
 
   const onSubmit = handleSubmit((data) => {
-    if (data.visibility === 'Public') {
+    if (data.visibility === 'PUBLIC') {
       $createPost.mutate({
         ...data,
         tags: data.tags.map((tag) => tag.value),
-        images: data.images.map((image) => image.value),
-        files: data.files.map((file) => file.value),
+        media: data.media.map((image) => image.value),
+        attachments: data.attachments.map((file) => file.value),
       });
       return;
     }
@@ -137,9 +135,9 @@ export const CreatePostForm = ({ onClose }: Props) => {
 
         <PostTextInput control={control} contentLength={content.length} error={errors.content} />
 
-        {watch('visibility') === 'Private' && <PreviewInput control={control} />}
+        {visibility === 'PRIVATE' && <PreviewInput control={control} />}
 
-        <TagsInput control={control} setValue={setValue} currentTag={currentTag} />
+        <TagsInput control={control} setValue={setValue} />
       </Stack>
 
       <Button
@@ -166,8 +164,8 @@ export const CreatePostForm = ({ onClose }: Props) => {
             {
               ...data,
               tags: data.tags.map((tag) => tag.value),
-              images: data.images.map((image) => image.value),
-              files: data.files.map((file) => file.value),
+              media: data.media.map((image) => image.value),
+              attachments: data.attachments.map((file) => file.value),
             },
             {
               onSuccess: () => {

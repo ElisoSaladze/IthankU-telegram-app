@@ -24,7 +24,7 @@ function AdvancedSelectionPage() {
   };
 
   return (
-    <Stack pb={2} justifyContent="space-between" height="100vh" mx={2}>
+    <Stack pb={10} justifyContent="space-between" height="100vh" mx={2}>
       <Stack gap={2}>
         <BackButtonAppBar pageName="" />
         <AreaSelect onSelect={(area) => setValue('area', area?.en)} />

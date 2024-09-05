@@ -18,7 +18,7 @@ export const paths = {
   appreciate: '/appreciate/:appreciateId',
   getAppreciate: '/get-appreciate',
   qrOptions: '/get-appreciate/qr-options',
-  transactions: '/list/transactions/:transactionId',
+  transactionDetails: '/list/transactions/:transactionId',
   userDetails: '/more/:userId',
   userLocation: '/more/:userId/location',
   home: '/home',

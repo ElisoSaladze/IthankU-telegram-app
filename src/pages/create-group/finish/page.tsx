@@ -28,7 +28,7 @@ export const FinishNewGroup = () => {
   //     return createGroup(formData);
   //   },
   //   onSuccess: (data) => {
-  //     const groupId = data.data._id;
+  //     const groupId = data.data.id;
   //     navigate(generatePath(paths.groupDetails, { groupId }));
   //   },
   // });
@@ -104,7 +104,7 @@ export const FinishNewGroup = () => {
           onClick={handleSubmit((values) => {
             $createGroup.mutate(values, {
               onSuccess: (data) => {
-                const groupId = data.data._id;
+                const groupId = data.data.id;
                 navigate(generatePath(paths.groupDetails, { groupId }));
               },
             });

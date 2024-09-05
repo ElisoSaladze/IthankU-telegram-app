@@ -13,7 +13,6 @@ import defaultImageUrl from 'src/assets/images/itu-circle.png';
 
 import { Params, useNavigate, useParams } from 'react-router-dom';
 import { getGroupDetails, getGroupPosts, joinGroup, leaveGroup } from '~/api/groups';
-import LikesItem from 'src/components/likes';
 import Loader from 'src/components/loader';
 import PostItem from 'src/components/post-item';
 import TagItem from 'src/components/tag';
@@ -24,6 +23,7 @@ import { useAuthUser } from '~/app/auth';
 import { IconArrow } from '~/assets/icons';
 import { paths } from '~/app/routes';
 import { ReactNode } from 'react';
+import { GroupUsers } from './components';
 
 const IconWrapper = ({ children, onClick }: { children: ReactNode; onClick?: () => void }) => {
   return (
@@ -126,10 +126,10 @@ export const GroupDetailsPage = () => {
           sx={{
             width: '100%',
             height: 200,
-            backgroundImage: `url(${data?.data.groupCover})`,
+            backgroundImage: `url(${data?.data.cover})`,
             backgroundSize: 'cover',
             backgroundPosition: 'top',
-            backgroundColor: data?.data.groupCover ? 'transparent' : '#222222',
+            backgroundColor: data?.data.cover ? 'transparent' : '#222222',
           }}
         >
           <Stack
@@ -148,18 +148,18 @@ export const GroupDetailsPage = () => {
               <Avatar
                 sx={{ width: 70, height: 70, borderRadius: 4 }}
                 variant="rounded"
-                src={data?.data.groupImage || defaultImageUrl}
+                src={data?.data.picture || defaultImageUrl}
               />
               <Stack>
                 <Stack gap={0.5} alignItems={'center'} direction={'row'}>
                   <CircleIcon color="primary" />
                   <Typography fontSize={20} color={'info'}>
-                    {data?.data.shade}
+                    {data?.data.shade.en}
                   </Typography>
                 </Stack>
 
                 <Typography>
-                  {data?.data.groupPrivacy === 'Public' ? 'Public group ' : 'Private Group '}• {data?.data.membersCount}{' '}
+                  {data?.data.privacy === 'PUBLIC' ? 'Public group ' : 'Private Group '}• {data?.data.membersCount}{' '}
                   members
                 </Typography>
               </Stack>
@@ -167,7 +167,7 @@ export const GroupDetailsPage = () => {
             <Stack gap={0.5} direction={'row'} flexWrap={'wrap'}>
               {data?.data.tags?.map((tag: string, index: number) => <TagItem key={index} tag={tag} />)}
             </Stack>
-            <LikesItem size="medium" likes={data?.data.users ? data?.data.users : []} />
+            {groupId && <GroupUsers groupId={groupId} />}
             <Stack gap={1} direction={'row'}>
               {data?.data.isUserJoined ? (
                 <Button
@@ -208,8 +208,8 @@ export const GroupDetailsPage = () => {
                   navigate(`/invitation-qr/${groupId}`, {
                     state: {
                       groupName: data?.data.name,
-                      image: data?.data.groupImage!,
-                      background: data?.data.groupCover!,
+                      image: data?.data.picture,
+                      background: data?.data.cover,
                     },
                   })
                 }
@@ -252,7 +252,7 @@ export const GroupDetailsPage = () => {
             {posts.isFetching ? (
               <Loader />
             ) : (
-              posts.data?.data.map((post: Post) => <PostItem key={post._id} post={post} />)
+              posts.data?.data.map((post: Post) => <PostItem key={post.id} post={post} />)
             )}
           </Stack>
         </Stack>

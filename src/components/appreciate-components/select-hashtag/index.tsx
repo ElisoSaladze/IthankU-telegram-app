@@ -10,7 +10,7 @@ import { Control } from 'react-hook-form';
 
 type Props = {
   onSelect?: (hashtag: Hashtag | null) => void;
-  defaultSelected?: string;
+  defaultSelected?: string | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>;
 };
@@ -19,6 +19,7 @@ const HashtagSelect = ({ onSelect, defaultSelected, control }: Props) => {
   const [selectedHashtag, setSelectedHashtag] = useState<Hashtag | null>(null);
 
   const { hashtags, hashtagsLoading, hashtagsError } = useFetchItemsContext();
+
   useEffect(() => {
     if (defaultSelected && hashtags?.data) {
       const initialHashtag = hashtags.data.find((hashtag) => hashtag.hashtag === defaultSelected);
@@ -112,7 +113,7 @@ const HashtagSelect = ({ onSelect, defaultSelected, control }: Props) => {
       <AccordionDetails>
         <Stack width="100%" gap={0.5} direction="row" flexWrap="wrap">
           {hashtags?.data!.map((hashtag) => (
-            <TagItem onClick={() => handleSelectHashtag(hashtag)} key={hashtag._id} tag={hashtag.hashtag} />
+            <TagItem onClick={() => handleSelectHashtag(hashtag)} key={hashtag.id} tag={hashtag.hashtag} />
           ))}
         </Stack>
       </AccordionDetails>

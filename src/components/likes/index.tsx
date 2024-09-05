@@ -21,7 +21,7 @@ const LikesItem = ({ likes, size = 'small' }: Props) => {
   return (
     <Stack spacing={-2} direction={'row'}>
       {likes.map((like) => (
-        <Avatar sx={getSize()} key={like._id} src={like.picture} />
+        <Avatar sx={getSize()} key={like.id} src={like.picture ?? ''} />
       ))}
     </Stack>
   );

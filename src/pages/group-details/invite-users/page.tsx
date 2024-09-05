@@ -107,10 +107,10 @@ export const InviteUserPage = () => {
             onClick={() => {
               $inviteUser.mutate({
                 groupId: groupId!,
-                inviteeId: user._id,
+                inviteeId: user.id,
               });
             }}
-            key={user._id}
+            key={user.id}
           >
             <Stack
               borderRadius={2}

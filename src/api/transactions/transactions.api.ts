@@ -1,6 +1,6 @@
 import { request } from '~/lib/request';
-import { TransactionType, TTransaction, TTransactionData, TUserTransactionsResponse } from './transactions.schema';
-import { withPagination } from '../common';
+import { TransactionAction, TransactionType, TTransaction } from './transactions.schema';
+import { decodeBody, decodeBodyWithPagination } from '../common';
 
 export type GetUserTransactionsInput = {
   userId: string;
@@ -11,11 +11,17 @@ export type GetUserTransactionsInput = {
 export const getUserTransactions = async ({ userId, type, page }: GetUserTransactionsInput & { page: number }) => {
   const query = new URLSearchParams();
 
-  query.set('user', userId);
   query.set('type', type);
   query.set('page', String(page));
 
-  return await request('/transactions').get({}, TUserTransactionsResponse);
+  return await request('/api/v1/users/:userId/transactions').get(
+    {
+      params: {
+        userId,
+      },
+    },
+    decodeBodyWithPagination(TTransaction),
+  );
 };
 
 export type GetTransactionDetailsInput = {
@@ -23,61 +29,54 @@ export type GetTransactionDetailsInput = {
 };
 
 export const getTransactionDetails = async ({ transactionId }: GetTransactionDetailsInput) => {
-  return await request('/transactions/:transactionId').get(
+  return await request('/api/v1/transactions/:transactionId').get(
     {
       params: {
         transactionId,
       },
     },
-    TTransactionData,
+    decodeBody(TTransaction),
   );
 };
 
 export type GetPendingTransactionsInput = {
+  userId: string;
   type: TransactionType;
 };
 
-export const getPendingTransactions = async ({ type, page }: GetPendingTransactionsInput & { page: number }) => {
+export const getPendingTransactions = async ({
+  userId,
+  type,
+  page,
+}: GetPendingTransactionsInput & { page: number }) => {
   const query = new URLSearchParams();
 
   query.set('type', type);
   query.set('page', String(page));
 
-  return await request('/transactions/pending').get({ query }, withPagination(TTransaction));
-};
-
-type AcceptTransactionInput = {
-  transactionId: string;
-};
-
-export const acceptTransaction = async ({ transactionId }: AcceptTransactionInput) => {
-  return await request('/transactions/pending/:transactionId').post(
-    {
-      params: {
-        transactionId,
-      },
-      body: {
-        status: 'accepted',
-      },
-    },
-    TTransactionData,
+  return await request('/api/v1/users/:userId/transactions/pending').get(
+    { query, params: { userId } },
+    decodeBodyWithPagination(TTransaction),
   );
 };
 
-type DeclineTransactionInput = {
+type AcceptTransactionInput = {
+  userId: string;
   transactionId: string;
+  action: TransactionAction;
 };
 
-export const declineTransaction = async ({ transactionId }: DeclineTransactionInput) => {
-  return await request('/transactions/pending/:transactionId').post(
+export const pendingTransactionAction = async ({ userId, transactionId, action }: AcceptTransactionInput) => {
+  return await request('/api/v1/users/:userId/transactions/pending/:transactionId').post(
     {
       params: {
+        userId,
         transactionId,
       },
       body: {
-        status: 'cancelled',
+        status: action,
       },
     },
-    TTransactionData,
+    decodeBody(TTransaction),
   );
 };

@@ -32,13 +32,13 @@ type Props = {
 };
 const PostItem = ({ post, isDetails = false }: Props) => {
   const navigate = useNavigate();
-  const [imageLoaded, setImageLoaded] = useState<boolean[]>(Array(post.images?.length).fill(false));
+  const [imageLoaded, setImageLoaded] = useState<boolean[]>(Array(post.media?.length).fill(false)); // TODO!!
 
   const navigateToDetails = () => {
-    const postId = post._id;
+    const postId = post.id;
 
     if (!isDetails) {
-      if (post.visibility === 'Private') {
+      if (post.visibility === 'PRIVATE') {
         navigate({
           pathname: generatePath(paths.privatePost, {
             postId,
@@ -69,15 +69,17 @@ const PostItem = ({ post, isDetails = false }: Props) => {
     return content;
   };
 
+  const cardImage = post.group ? post.group.groupImage : post.author?.picture;
+
   return (
     <Card onClick={navigateToDetails}>
       <CardHeader
-        avatar={<Avatar src={post.group ? post.group.groupImage : post.author?.picture} />}
+        avatar={<Avatar src={cardImage ?? ''} />}
         title={post.group ? post.group.name : post.author?.name}
         subheader={
           <Stack gap={0.5} direction="row" alignItems="center" fontSize="small" color="secondary.dark">
             {timeAgo(post.createdAt)} •
-            {post.visibility === 'Public' ? (
+            {post.visibility === 'PUBLIC' ? (
               <PublicIcon sx={{ fontSize: '12px' }} />
             ) : (
               <LockIcon sx={{ fontSize: '12px' }} />
@@ -92,10 +94,10 @@ const PostItem = ({ post, isDetails = false }: Props) => {
       >
         <Box gap={1} display="flex">
           <Typography fontWeight={600}>{post.summary}</Typography>
-          {post.visibility === 'Private' && <IconPrivatePost />}
+          {post.visibility === 'PRIVATE' && <IconPrivatePost />}
         </Box>
         <Box mt={1}>
-          {post.visibility === 'Private' && post.preview.length > 0 && (
+          {post.visibility === 'PUBLIC' && post.preview && post.preview.length > 0 && (
             <>
               <Typography color="#A0A0A0" fontSize={12}>
                 Preview
@@ -103,7 +105,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
               <Typography>{post.preview}</Typography>
             </>
           )}
-          {post.visibility === 'Public' && (
+          {post.visibility === 'PUBLIC' && post.content && (
             <Typography>
               {renderContent(post.content)}{' '}
               {!isDetails && post.content.length >= 100 && (
@@ -129,14 +131,14 @@ const PostItem = ({ post, isDetails = false }: Props) => {
           ))}
         </Stack>
       </CardContent>
-      {post.images!.map((m, i) => (
+      {post.media?.map((media, i) => (
         <Box m={2} key={i}>
           {!imageLoaded[i] && <Skeleton variant="rectangular" width={1} height={194} sx={{ borderRadius: 1 }} />}
           <img
             height="194"
             width="100%"
-            src={m}
-            alt={m}
+            src={media.originalUrl}
+            alt={media.originalUrl}
             onLoad={() => handleImageLoad(i)}
             style={{
               display: imageLoaded[i] ? 'block' : 'none',
@@ -161,9 +163,9 @@ const PostItem = ({ post, isDetails = false }: Props) => {
             ) : (
               <IconButton
                 onClick={() =>
-                  navigate(`/appreciate/${post._id}`, {
+                  navigate(`/appreciate/${post.id}`, {
                     state: {
-                      postAuthor: post.author?._id,
+                      postAuthor: post.author?.id,
                     },
                   })
                 }
@@ -171,7 +173,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
                 <FavoriteBorderIcon />
               </IconButton>
             ))}
-          <LikesItem likes={post.likes} />
+          <LikesItem likes={post.likes ?? []} />
           <Typography fontSize="small">{post.likesCount} likes</Typography>
         </Stack>
         <Button color="secondary" variant="text">

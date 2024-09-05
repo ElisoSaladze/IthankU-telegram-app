@@ -11,7 +11,7 @@ import { paths } from '~/app/routes';
 export const Invitation = () => {
   const authUser = useAuthUser();
 
-  const userId = authUser?.user._id || '';
+  const userId = authUser?.user.id || '';
 
   const {
     data: invitations,
@@ -50,7 +50,7 @@ export const Invitation = () => {
 
         {invitations?.data.length > 0 ? (
           invitations!.data.map((invitation) => (
-            <InvitationItem id={invitation._id} refetch={refetch} key={invitation._id} group={invitation.group} />
+            <InvitationItem id={invitation.id} refetch={refetch} key={invitation.id} group={invitation.group} />
           ))
         ) : (
           <Typography>You do not have any invitation</Typography>

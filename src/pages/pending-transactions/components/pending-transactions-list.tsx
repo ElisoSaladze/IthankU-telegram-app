@@ -6,21 +6,25 @@ import { useCallback, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { getPendingTransactions, TransactionType } from '~/api/transactions';
 import { qk } from '~/api/query-keys';
+import { useAuthUser } from '~/app/auth';
 
 type TransactionsListProps = {
   type: TransactionType;
 };
 
 export const PendingTransactionsList = ({ type }: TransactionsListProps) => {
+  const authUser = useAuthUser();
+
   const [ref, inView] = useInView();
 
   const $pendingTransactions = useInfiniteQuery({
-    queryKey: qk.transactions.pendingTransactions.toKeyWithArgs({ type }),
-    queryFn: async ({ pageParam = 1 }) => getPendingTransactions({ type, page: pageParam }),
+    queryKey: qk.transactions.pendingTransactions.toKeyWithArgs({ userId: authUser!.user.id, type }),
+    queryFn: async ({ pageParam = 1 }) => getPendingTransactions({ userId: authUser!.user.id, type, page: pageParam }),
     getNextPageParam: (result) => {
-      const nextPage = result.meta.currentPage + 1;
+      const nextPage = result.meta.page + 1;
       return nextPage <= result.meta.totalPages ? nextPage : undefined;
     },
+    enabled: authUser !== null,
   });
 
   const handleFetchNextPage = useCallback(() => {
@@ -57,9 +61,9 @@ export const PendingTransactionsList = ({ type }: TransactionsListProps) => {
             <Stack gap={2}>
               {transactions.map((transaction) => (
                 <PendingTransactionItem
-                  key={transaction._id}
+                  key={transaction.id}
                   transaction={{
-                    id: transaction._id,
+                    id: transaction.id,
                     user: {
                       name:
                         type === 'incoming'

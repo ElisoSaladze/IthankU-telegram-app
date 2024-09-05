@@ -1,6 +1,6 @@
 import { request } from '~/lib/request';
-import { TPostDetailsResponse, TPost } from './posts.schema';
-import { withPagination } from '../common';
+import { TPost } from './posts.schema';
+import { decodeBody, decodeBodyWithPagination } from '../common';
 import { Visibility } from '~/constants/enums';
 
 export type GetPostsInput = {
@@ -12,7 +12,7 @@ export const getPosts = async ({ page }: GetPostsInput) => {
 
   query.set('page', String(page));
 
-  return await request('/api/posts').get({ query }, withPagination(TPost));
+  return await request('/api/v1/posts').get({ query }, decodeBodyWithPagination(TPost));
 };
 
 export type GetPostDetailsInput = {
@@ -20,18 +20,18 @@ export type GetPostDetailsInput = {
 };
 
 export const getPost = async ({ postId }: GetPostDetailsInput) => {
-  return await request('/api/posts/:postId').get(
+  return await request('/api/v1/posts/:postId').get(
     {
       params: {
         postId,
       },
     },
-    TPostDetailsResponse,
+    decodeBody(TPost),
   );
 };
 
 export const viewPrivatePost = async ({ postId }: GetPostDetailsInput) => {
-  return await request('/api/posts/:postId/unlock').post({
+  return await request('/api/v1/posts/:postId/unlock').post({
     params: {
       postId,
     },
@@ -40,18 +40,17 @@ export const viewPrivatePost = async ({ postId }: GetPostDetailsInput) => {
 
 type CreatePostInput = {
   content: string;
-  group: string | null;
-  images: Array<File>;
+  groupId: string | null;
   summary: string;
-  tags: Array<string>;
-  visibility: Visibility;
-  currentTag: string;
   preview?: string;
-  files: Array<File>;
+  visibility: Visibility;
+  tags: Array<string>;
+  media: Array<File>;
+  attachments: Array<File>;
 };
 
 export const createPost = async (input: CreatePostInput) => {
-  return await request('/api/posts').post({
+  return await request('/api/v1/posts').post({
     type: 'file',
     body: input,
   });

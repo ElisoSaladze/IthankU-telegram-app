@@ -21,7 +21,7 @@ const GroupItem = ({ group }: Props) => {
   const handleJoinGroup = () => {
     $joinGroup.mutate(
       {
-        groupId: group._id,
+        groupId: group.id,
       },
       {
         onSuccess: () => {
@@ -34,7 +34,7 @@ const GroupItem = ({ group }: Props) => {
   return (
     <Stack width={1} justifyContent="space-between" alignItems="center" direction="row">
       <Stack gap={1} alignItems="center" direction="row">
-        <Avatar sx={{ height: 62, width: 62 }} src={group.groupImage} />
+        <Avatar sx={{ height: 62, width: 62 }} src={group.picture ?? ''} />
         <Stack>
           <Typography fontSize={15} fontWeight={600}>
             {group.name}
@@ -42,7 +42,7 @@ const GroupItem = ({ group }: Props) => {
           <Typography fontSize={12} color="secondary.dark">
             {group.membersCount} Members
           </Typography>
-          <ShadeComponent color="green" name={group.shade} />
+          <ShadeComponent color="green" name={group.shade.en} />
         </Stack>
       </Stack>
       {$joinGroup.isLoading ? (

@@ -1,25 +1,23 @@
 import { z } from 'zod';
+import { TShade } from '../shades';
+import { TAuthor } from '../groups';
 
 export const TAppreciateQRCode = z.object({
-  code: z.number(),
-  success: z.boolean(),
-  data: z.object({
-    code: z.string(),
-    area: z.string().optional(),
-    hashtag: z.string().optional(),
-    oneTimeUse: z.boolean(),
-    receiver: z.string(),
-    used: z.boolean(),
-  }),
+  requestId: z.string(),
+  shade: TShade.nullable(),
+  hashtag: z.string().nullable(),
+  // oneTimeUse: z.boolean(),
+  receiver: TAuthor,
 });
 
 export const TAppreciateUserInput = z.object({
-  _id: z.string(),
+  receiverId: z.string(),
+  requestId: z.string(),
   postId: z.string().optional(),
-  shade: z.string().optional(),
+  shadeId: z.string().optional(),
   hashtag: z.string().optional(),
   comment: z.string().optional(),
-  mobileNumber: z.string().optional(),
+  // mobileNumber: z.string().optional(),
 });
 
 export type AppreciateUserInput = z.infer<typeof TAppreciateUserInput>;
@@ -32,7 +30,11 @@ export const TGetAppreciateUser = z.object({
 export type GetAppreciateUser = z.infer<typeof TGetAppreciateUser>;
 
 export const TGetAppreciateQRCode = z.object({
-  success: z.boolean(),
-  code: z.number(),
-  data: z.string(),
+  id: z.string(),
+  hashtag: z.string().nullable(),
+  qrCodeData: z.string(),
+  qrCodeUrl: z.string(),
+  requestId: z.string(),
+  shade: TShade.nullable(),
+  status: z.string(), // TODO add valid literals
 });

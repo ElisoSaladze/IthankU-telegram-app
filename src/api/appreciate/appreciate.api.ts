@@ -1,8 +1,9 @@
 import { request } from '~/lib/request';
 import { AppreciateUserInput, GetAppreciateUser, TAppreciateQRCode, TGetAppreciateQRCode } from './appreciate.schema';
+import { decodeBody } from '../common';
 
 export const appreciateUser = async (body: AppreciateUserInput) => {
-  return await request('/transactions').post({
+  return await request('/api/v1/transactions').post({
     body,
   });
 };
@@ -12,27 +13,29 @@ export type GetAppreciateUserInput = {
 };
 
 export const getAppreciateUser = async ({ appreciateId }: GetAppreciateUserInput) => {
-  return await request('/appreciations/check/:appreciateId').get(
+  const query = new URLSearchParams();
+
+  query.set('requestId', appreciateId);
+
+  return await request('/api/v1/transactions/request-info').get(
     {
-      params: {
-        appreciateId,
-      },
+      query,
     },
-    TAppreciateQRCode,
+    decodeBody(TAppreciateQRCode),
   );
 };
 
 export const getQRCode = async (body: GetAppreciateUser) => {
-  return await request('/appreciations/request').post(
+  return await request('/api/v1/transactions/requests').post(
     {
       body,
     },
-    TGetAppreciateQRCode,
+    decodeBody(TGetAppreciateQRCode),
   );
 };
 
 export const appreciateWithMobile = async (body: AppreciateUserInput) => {
-  return await request('/transactions/pending').post({
+  return await request('/api/v1/transactions/pending').post({
     body,
   });
 };

@@ -5,7 +5,7 @@ import { ControlledTextArea } from 'src/components/form/controlled/controlled-te
 import Loader from 'src/components/loader';
 
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { userGroups } from '~/api/groups';
+import { getUserGroups } from '~/api/groups';
 import LikesItem from 'src/components/likes';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';
@@ -21,6 +21,7 @@ type AccountsFormValues = {
 
 export const AccountsPage = () => {
   const navigate = useNavigate();
+
   const { user: userDetails, isLoading, refetch } = useUserDetails();
 
   const {
@@ -30,13 +31,14 @@ export const AccountsPage = () => {
     formState: { isDirty },
   } = useForm<AccountsFormValues>({
     defaultValues: {
-      bio: userDetails?.user.bio ?? '',
+      bio: userDetails?.bio ?? '',
     },
   });
 
   const { data, isLoading: groupsLoading } = useQuery({
-    queryKey: qk.groups.userGroups.toKey(),
-    queryFn: userGroups,
+    queryKey: qk.groups.getUserGroups.toKeyWithArgs({ userId: userDetails?.id ?? '' }),
+    queryFn: () => getUserGroups({ userId: userDetails?.id ?? '' }),
+    enabled: userDetails !== undefined,
   });
 
   const $updateUserBio = useMutation({
@@ -99,8 +101,8 @@ export const AccountsPage = () => {
         </Typography>
 
         <Box width={1} display="flex" flexWrap="wrap" gap={1}>
-          {userDetails?.user.linkedAccounts.map((social, index) => (
-            <Typography key={social.value + index}>{social.type}</Typography>
+          {userDetails?.linkedAccounts.map((social, index) => (
+            <Typography key={social.value + index}>{social.provider}</Typography>
           ))}
         </Box>
 
@@ -122,8 +124,8 @@ export const AccountsPage = () => {
                 size="medium"
                 likes={data!.data
                   .map((data) => ({
-                    _id: data._id,
-                    picture: data.groupImage,
+                    id: data.id,
+                    picture: data?.picture,
                     name: data.name,
                   }))
                   .slice(0, 5)}

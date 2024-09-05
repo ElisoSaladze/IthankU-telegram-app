@@ -67,7 +67,7 @@ const InterestsPage = () => {
           <Stack gap={0.5} direction={'row'} flexWrap={'wrap'}>
             {shades.data?.data.map((shade) => (
               <ShadeComponent
-                key={shade._id}
+                key={shade.id}
                 selectable
                 selected={selectedShades.includes(shade.en)}
                 onSelect={() => handleSelectShade(shade.en)}

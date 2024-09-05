@@ -8,39 +8,35 @@ const TLocation = z.object({
 });
 
 const TTopShade = z.object({
-  _id: z.string(),
-  user: z.string(),
-  shade: z.string(),
+  shade: TShade,
   points: z.number(),
-  shadeInfo: TShade,
 });
 
 const TLinkedAccount = z.object({
-  type: z.string(),
+  provider: z.string(),
   value: z.string(),
 });
 
 const TTopHashtag = z.object({
-  hashtag: z.string(),
+  name: z.string(),
   count: z.number(),
 });
+
 export type LinkedAccount = z.infer<typeof TLinkedAccount>;
 
 export const TUser = z.intersection(
   TAuthor,
   z.object({
-    linkedAccounts: z.array(TLinkedAccount),
-    hashtagCount: z.number().nullable(),
-    shadePoint: z.number().nullable(),
-    location: TLocation.nullable(),
-    generalRating: z.number(),
-    topShades: z.array(TTopShade),
-    topHashtags: z.array(TTopHashtag).optional(),
+    shade: TShade,
+    point: z.number(),
+    hashtag: TTopHashtag,
   }),
 );
 
+export const TUsers = z.array(TUser);
+
 export const TMapUser = z.object({
-  _id: z.string(),
+  id: z.string(),
   name: z.string(),
   picture: z.string().url(),
   givingRating: z.number(),
@@ -49,50 +45,41 @@ export const TMapUser = z.object({
   location: TLocation,
 });
 
-export const TMapingApiResponse = z.object({
-  status: z.literal('success'),
-  users: z.array(TMapUser),
-});
+export const TMapUsers = z.array(TMapUser);
 
 export type MapUser = z.infer<typeof TMapUser>;
 
 export type User = z.infer<typeof TUser>;
 
-export const TListingApiResponse = z.object({
-  totalPages: z.number(),
-  totalResults: z.number(),
-  page: z.number(),
-  users: z.array(TUser),
-});
-
-export const TCurrentUser = z.intersection(
+export const TPublicUser = z.intersection(
   TAuthor,
   z.object({
-    isPrivate: z.boolean(),
-    physicalPoints: z.number(),
-    email: z.string(),
-    linkedAccounts: z.array(TLinkedAccount),
-    topShades: z.array(TTopShade),
-    generalRating: z.number(),
-    placemark: z.string().nullable(),
-    location: TLocation.nullable(),
-    isLocationPublic: z.boolean(),
     bio: z.string().nullable(),
+    points: z.number(), //physicalPoints
+    location: TLocation.nullable(),
+    ratingPoints: z.number(), //generalRating
+    shadePoints: z.array(TTopShade), //topShades
     topHashtags: z.array(
       z.object({
         hashtag: z.string(),
         count: z.number(),
       }),
     ),
-    phoneNumber: z.string().nullable().optional(),
+    linkedAccounts: z.array(TLinkedAccount),
+  }),
+);
+
+export const TCurrentUser = z.intersection(
+  TPublicUser,
+  z.object({
+    email: z.string().optional().nullable(),
+    placemark: z.string().nullable(),
+    isAccountPublic: z.boolean(), //isAccountPublic
+    isLocationPublic: z.boolean(),
   }),
 );
 
 export type CurrentUser = z.infer<typeof TCurrentUser>;
-
-export const GetCurrentUserResponse = z.object({
-  user: TCurrentUser,
-});
 
 export const TLocationQueryParams = z.object({
   latitude: z.number(),

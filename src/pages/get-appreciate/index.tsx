@@ -28,7 +28,7 @@ function QRCodePage() {
     queryFn: () => getQRCode({ area, hashtag }),
   });
 
-  const appreciationUrl = qrCode ? `https://web.itu-net.com/appreciate/${qrCode.data}` : '';
+  const appreciationUrl = qrCode ? `https://web.itu-net.com/appreciate/${qrCode.data.requestId}` : '';
 
   const handleCopy = () => {
     const textToCopy = `Thank me by QR: ${appreciationUrl}`;
@@ -60,7 +60,7 @@ function QRCodePage() {
       />
       <Stack gap={1} p={2}>
         <Typography textAlign={'center'} variant="h6">
-          One time Code: <span style={{ color: 'green' }}>{qrCode.data}</span>
+          One time Code: <span style={{ color: 'green' }}>{qrCode.data.requestId}</span>
         </Typography>
         <Stack
           gap={2}

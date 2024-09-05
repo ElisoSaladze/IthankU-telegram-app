@@ -32,7 +32,7 @@ const AppreciateComponent = ({ show, setShow }: Props) => {
       {appreciate && (
         <Button
           onClick={() => {
-            navigate('/scan-qr-code');
+            navigate(paths.scanQRCode);
             setShow(false);
           }}
           color="info"

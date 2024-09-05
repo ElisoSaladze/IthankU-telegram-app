@@ -1,6 +1,7 @@
 import { request } from '~/lib/request';
-import { THashtagResponse } from './hashtag.schema';
+import { THashtags } from './hashtag.schema';
+import { decodeBody } from '../common';
 
 export const getHashtags = async () => {
-  return await request('/api/hashtags').get({}, THashtagResponse);
+  return await request('/api/v1/hashtags').get({}, decodeBody(THashtags));
 };

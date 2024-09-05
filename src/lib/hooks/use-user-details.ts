@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import constate from 'constate';
-import { getUser } from '~/api/users';
 import { qk } from '~/api/query-keys';
+import { getCurrentUser } from '~/api/users';
 import { useAuthUser } from '~/app/auth';
 
 const useUserDetailsContext = () => {
@@ -13,12 +13,12 @@ const useUserDetailsContext = () => {
     refetch,
   } = useQuery({
     enabled: authUser !== null,
-    queryKey: qk.users.details.toKeyWithArgs({ userId: authUser?.user._id ?? '' }),
-    queryFn: () => getUser({ userId: authUser?.user._id ?? '' }),
+    queryKey: qk.users.me.toKey(),
+    queryFn: getCurrentUser,
   });
 
   return {
-    user,
+    user: user?.data,
     refetch,
     isLoading,
   } as const;

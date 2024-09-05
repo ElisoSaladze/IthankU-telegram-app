@@ -1,13 +1,16 @@
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import { Box, IconButton, Stack, Typography } from '@mui/material';
+import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { ControlledTextArea } from 'src/components/form/controlled/controlled-text-area';
 import { ControlledTextField } from 'src/components/form/controlled/controlled-text-field';
 import PfpComponent from 'src/components/pfp-component';
 import VisibilityStatus from 'src/components/visibility-status';
 import { useCreateGroupContext } from 'src/providers/create-group-provider';
+import { paths } from '~/app/routes';
 
 export const NewGroupDetails = () => {
-  const { control, setValue, watch } = useCreateGroupContext();
+  const navigate = useNavigate();
+  const { control, setValue, watch, handleSubmit } = useCreateGroupContext();
 
   const coverFile = watch('cover');
   const coverUrl = coverFile ? URL.createObjectURL(coverFile) : '';
@@ -81,6 +84,22 @@ export const NewGroupDetails = () => {
           labels={['Anyone can join this group', 'Only visible to those you share with']}
         />
       </Stack>
+
+      <Button
+        variant="contained"
+        size="large"
+        fullWidth
+        sx={{
+          mt: 3,
+          position: 'sticky',
+          bottom: 10,
+        }}
+        onClick={handleSubmit(() => {
+          navigate(paths.createGroupInterests);
+        })}
+      >
+        Next
+      </Button>
     </Stack>
   );
 };

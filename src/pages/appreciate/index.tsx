@@ -19,9 +19,9 @@ const AppreciatePage = () => {
 
   const { control, setValue, handleSubmit } = useForm<AppreciateUserInput>({
     defaultValues: {
-      _id: postAuthor,
-      postId: !phoneNumber && String(postAuthor).length > 0 ? appreciateId : undefined,
-      mobileNumber: phoneNumber ? appreciateId : undefined,
+      receiverId: postAuthor,
+      // postId: !phoneNumber && String(postAuthor).length > 0 ? appreciateId : undefined,
+      // mobileNumber: phoneNumber ? appreciateId : undefined,
     },
   });
 
@@ -30,9 +30,9 @@ const AppreciatePage = () => {
     queryFn: () => getAppreciateUser({ appreciateId: appreciateId! }),
     enabled: !!appreciateId && !phoneNumber && !postAuthor,
     onSuccess: (data) => {
-      if (data?.data.area) setValue('shade', data.data.area);
+      if (data?.data.shade) setValue('shadeId', data.data.shade.id);
       if (data?.data.hashtag) setValue('hashtag', data.data.hashtag);
-      setValue('_id', data.data.code);
+      setValue('requestId', data.data.requestId);
     },
   });
 
@@ -45,12 +45,12 @@ const AppreciatePage = () => {
   });
 
   return (
-    <Stack mx={2}>
+    <>
       <AppHeader backPath={paths.home} />
-      <Stack marginTop={2} gap={2}>
+      <Stack mt={2} gap={2} mx={3} pb={15}>
         <AreaSelect
-          defaultSelected={appreciateData?.data.area}
-          onSelect={(shade) => (shade ? setValue('shade', shade.en) : setValue('shade', ''))}
+          defaultSelected={appreciateData?.data.shade?.en}
+          onSelect={(shade) => (shade ? setValue('shadeId', shade.id) : setValue('shadeId', ''))}
         />
         <HashtagSelect
           control={control}
@@ -101,7 +101,7 @@ const AppreciatePage = () => {
           </Button>
         </Stack>
       </Stack>
-    </Stack>
+    </>
   );
 };
 

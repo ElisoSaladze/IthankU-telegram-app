@@ -27,8 +27,8 @@ export const UsersList = () => {
     queryFn: async ({ pageParam = 1 }) =>
       getUsers({ page: pageParam, radius: radius?.toString(), shade: shade, hashtag: hashtag }),
     getNextPageParam: (result) => {
-      const nextPage = result.page + 1;
-      return nextPage <= result.totalPages ? nextPage : undefined;
+      const nextPage = result.meta.page + 1;
+      return nextPage <= result.meta.totalPages ? nextPage : undefined;
     },
   });
 
@@ -44,13 +44,13 @@ export const UsersList = () => {
     .with({ isSuccess: true, data: P.select() }, ({ pages }) => (
       <Stack paddingBottom={10} marginY={1} gap={1}>
         {pages
-          .flatMap((page) => page.users)
+          .flatMap((page) => page.data)
           .map((user, index) => (
             <ListItemButton
               onClick={() => {
-                navigate(generatePath(paths.userDetails, { userId: user._id ?? '' }));
+                navigate(generatePath(paths.userDetails, { userId: user.id ?? '' }));
               }}
-              key={user._id! + index}
+              key={user.id! + index}
               sx={{
                 width: '100%',
                 borderRadius: 5,
@@ -66,22 +66,17 @@ export const UsersList = () => {
                 direction="row"
               >
                 <Stack gap={1} alignItems="center" direction="row">
-                  <Avatar sx={{ width: 70, height: 70 }} src={user.picture} />
+                  <Avatar sx={{ width: 70, height: 70 }} src={user.picture ?? ''} />
                   <Stack gap={0.5}>
                     <Typography fontSize={15} fontWeight={600}>
                       {user.name}
                     </Typography>
-                    {user.topShades && user.topShades.length > 0 && (
-                      <ShadeComponent
-                        color={user.topShades[0]!.shadeInfo?.color}
-                        name={user.topShades[0]!.shadeInfo?.en}
-                      />
-                    )}
-                    {user.topHashtags && user.topHashtags.length > 0 && <TagItem tag={user.topHashtags[0]!.hashtag} />}
+                    {user.shade && <ShadeComponent color={user.shade?.color} name={user.shade?.en} />}
+                    {user.hashtag && <TagItem tag={user.hashtag.name} />}
                   </Stack>
                 </Stack>
                 <Stack alignItems="center" direction="row" gap={1}>
-                  <Typography>{Math.round(user.generalRating)}</Typography>
+                  <Typography>{Math.round(user.point)}</Typography>
                   <ArrowForwardIosIcon
                     sx={{
                       color: 'secondary.main',

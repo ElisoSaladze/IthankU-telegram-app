@@ -2,6 +2,7 @@ import { retrieveLaunchParams } from '@telegram-apps/sdk';
 
 import { request } from '~/lib/request';
 import { TAuthUser, TelegramSignUpRequestBody } from './auth.schema';
+import { decodeBody } from '../common';
 
 const CURRENT_BOT = import.meta.env['VITE_APP_CURRENT_BOT'];
 
@@ -18,7 +19,7 @@ export const checkUser = async () => {
     query.set('bot', CURRENT_BOT);
   }
 
-  return await request('/api/auth/telegram').post({ query }, TAuthUser);
+  return await request('/api/v1/auth/telegram').get({ query }, decodeBody(TAuthUser));
 };
 
 export type RefreshTokenInput = {
@@ -26,22 +27,22 @@ export type RefreshTokenInput = {
 };
 
 export const refreshToken = async ({ refreshToken }: RefreshTokenInput) => {
-  return await request('/auth/refreshToken').post(
+  return await request('/api/v1/auth/refresh-token').post(
     {
       body: {
-        token: refreshToken,
+        refreshToken,
       },
     },
-    TAuthUser,
+    decodeBody(TAuthUser),
   );
 };
 
 export const telegramSignUp = async (body: TelegramSignUpRequestBody) => {
-  return await request('/auth/telegram').post(
+  return await request('/api/v1/auth/telegram').post(
     {
       body,
     },
-    TAuthUser,
+    decodeBody(TAuthUser),
   );
 };
 
@@ -50,7 +51,7 @@ type UpdateUserBioInput = {
 };
 
 export const updateUserBio = async (body: UpdateUserBioInput) => {
-  return await request('/users/bio').post({
+  return await request('/api/v1/users/bio').post({
     body,
   });
 };
@@ -60,7 +61,7 @@ type UpdateLocationVisibilityInput = {
 };
 
 export const updateLocationVisibility = async (body: UpdateLocationVisibilityInput) => {
-  return await request('/users/location').post({
+  return await request('/api/v1/users/location').post({
     body,
   });
 };
@@ -70,7 +71,7 @@ type UpdateAccountVisibilityInput = {
 };
 
 export const updateAccountVisibility = async (body: UpdateAccountVisibilityInput) => {
-  return await request('/users/privacy').patch({
+  return await request('/api/v1/users/privacy').patch({
     body,
   });
 };
@@ -80,7 +81,7 @@ type ChangePfpInput = {
 };
 
 export const changePfp = async ({ picture }: ChangePfpInput) => {
-  return await request('/users').patch({
+  return await request('/api/v1/users').patch({
     body: {
       picture,
     },
@@ -92,7 +93,7 @@ export type ChangeNameInput = {
 };
 
 export const changeName = async ({ name }: ChangeNameInput) => {
-  return await request('/users').patch({
+  return await request('/api/v1/users').patch({
     body: {
       name,
     },
