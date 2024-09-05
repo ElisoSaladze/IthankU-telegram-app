@@ -23,7 +23,7 @@ export const TAppreciateUserInput = z.object({
 export type AppreciateUserInput = z.infer<typeof TAppreciateUserInput>;
 
 export const TGetAppreciateUser = z.object({
-  area: z.string().optional(),
+  shadeId: z.string().optional(),
   hashtag: z.string().optional(),
 });
 

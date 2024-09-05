@@ -10,7 +10,7 @@ import { Progress } from '~/components/progress';
 
 const Onboarding = () => {
   const navigate = useNavigate();
-  const { authorize, user } = useAuth();
+  const { authorize } = useAuth();
 
   const { isLoading, isSuccess } = useQuery({
     queryKey: qk.users.check.toKey(),
