@@ -13,31 +13,9 @@ export const FinishNewGroup = () => {
   const navigate = useNavigate();
   const { watch, handleSubmit } = useCreateGroupContext();
 
-  // const mutation = useMutation({
-  //   mutationKey: ['new-group'],
-  //   mutationFn: (data: CreateGroupFormValues) => {
-  //     const formData = new FormData();
-  //     formData.append('description', data.description);
-  //     formData.append('name', data.name);
-  //     formData.append('privacy', data.privacy);
-  //     formData.append('shade', data.shade);
-  //     formData.append('cover', data.cover!);
-  //     formData.append('image', data.image!);
-  //     for (const tag of data.tags) formData.append('tags', tag.value);
-
-  //     return createGroup(formData);
-  //   },
-  //   onSuccess: (data) => {
-  //     const groupId = data.data.id;
-  //     navigate(generatePath(paths.groupDetails, { groupId }));
-  //   },
-  // });
-
   const $createGroup = useMutation({
     mutationFn: createGroup,
   });
-
-  // const onSubmit = handleSubmit((data) => mutation.mutate(data));
 
   return (
     <Stack mt={10} p={2} gap={2} width={1} alignItems="center">
@@ -72,7 +50,10 @@ export const FinishNewGroup = () => {
           }}
         />
         <Box bgcolor="white" p={1} zIndex={2} mt={6} borderRadius="50%">
-          <Avatar sx={{ height: 120, width: 120 }} src={watch('image') ? URL.createObjectURL(watch('image')!) : ''} />
+          <Avatar
+            sx={{ height: 120, width: 120 }}
+            src={watch('picture') ? URL.createObjectURL(watch('picture')!) : ''}
+          />
         </Box>
 
         <Typography fontSize={24} fontWeight={600}>
@@ -87,7 +68,7 @@ export const FinishNewGroup = () => {
         >
           {watch('description')}
         </Typography>
-        <ShadeComponent color={watch('shadeColor')} name={watch('shade')} />
+        <ShadeComponent color={watch('shadeColor')!} name={watch('shade')!} />
         <Box display="flex" gap={1}>
           {watch('tags').map((tag, index) => (
             <TagItem key={index} tag={tag.value} />
@@ -102,7 +83,9 @@ export const FinishNewGroup = () => {
           disabled={$createGroup.isLoading}
           fullWidth
           onClick={handleSubmit((values) => {
-            $createGroup.mutate(values, {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { currentTag, shadeColor, shade, ...otherValues } = values;
+            $createGroup.mutate(otherValues, {
               onSuccess: (data) => {
                 const groupId = data.data.id;
                 navigate(generatePath(paths.groupDetails, { groupId }));

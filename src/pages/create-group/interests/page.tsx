@@ -35,10 +35,12 @@ export const NewGroupInterests = () => {
       setSelectedShade('');
       setValue('shade', '');
       setValue('shadeColor', '');
+      setValue('shadeId', '');
     } else {
       setSelectedShade(shade.en);
       setValue('shade', shade.en);
       setValue('shadeColor', shade.color);
+      setValue('shadeId', shade.id)
     }
   };
 
@@ -75,7 +77,7 @@ export const NewGroupInterests = () => {
             <InputAdornment position="end">
               <IconButton
                 onClick={() => {
-                  append({ value: watch('currentTag') });
+                  append({ value: watch('currentTag')! });
                   setValue('currentTag', '#');
                 }}
                 edge="end"

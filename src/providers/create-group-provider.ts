@@ -6,12 +6,13 @@ import { Visibility } from '~/constants/enums';
 export type CreateGroupFormValues = {
   name: string;
   description: string;
-  shade: string;
+  shade?: string;
+  shadeId: string;
   privacy: Visibility;
-  image?: File;
+  picture?: File;
   cover?: File;
-  currentTag: string;
-  shadeColor: string;
+  currentTag?: string;
+  shadeColor?: string;
   tags: {
     value: string;
   }[];
@@ -25,6 +26,7 @@ const defaultValues: CreateGroupFormValues = {
   shadeColor: '',
   privacy: Visibility.Public,
   currentTag: '#',
+  shadeId: '',
 };
 
 const useCreateGroup = () => {

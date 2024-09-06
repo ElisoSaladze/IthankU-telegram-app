@@ -61,7 +61,7 @@ export const NewGroupDetails = () => {
         </IconButton>
       </Box>
       <Box zIndex={2} mt={12}>
-        <PfpComponent onChange={(file) => setValue('image', file)} isEditable />
+        <PfpComponent onChange={(file) => setValue('picture', file)} isEditable />
       </Box>
 
       <Stack mt={1} gap={1} width={1}>
