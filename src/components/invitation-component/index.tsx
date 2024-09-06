@@ -38,7 +38,7 @@ const InvitationItem: React.FC<InvitationItemProps> = ({ group, refetch, id }) =
       <Stack gap={0.5} width={'100%'}>
         <Typography>{group.name}</Typography>
 
-        <ShadeComponent color={group.shade.color} name={group.shade.en} />
+        {group.shade && <ShadeComponent color={group.shade.color} name={group.shade.en} />}
         <Box display={'flex'} gap={1}>
           <Button
             onClick={() =>

@@ -56,7 +56,7 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.thankYou,
-    factory: () => import('src/pages/appreciate/thanku'),
+    factory: () => import('src/pages/appreciate/thankyou'),
     title: 'Thank You',
   }),
   createRoute({

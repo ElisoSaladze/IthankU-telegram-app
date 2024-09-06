@@ -13,31 +13,18 @@ export const FinishNewGroup = () => {
   const navigate = useNavigate();
   const { watch, handleSubmit } = useCreateGroupContext();
 
-  // const mutation = useMutation({
-  //   mutationKey: ['new-group'],
-  //   mutationFn: (data: CreateGroupFormValues) => {
-  //     const formData = new FormData();
-  //     formData.append('description', data.description);
-  //     formData.append('name', data.name);
-  //     formData.append('privacy', data.privacy);
-  //     formData.append('shade', data.shade);
-  //     formData.append('cover', data.cover!);
-  //     formData.append('image', data.image!);
-  //     for (const tag of data.tags) formData.append('tags', tag.value);
-
-  //     return createGroup(formData);
-  //   },
-  //   onSuccess: (data) => {
-  //     const groupId = data.data.id;
-  //     navigate(generatePath(paths.groupDetails, { groupId }));
-  //   },
-  // });
-
   const $createGroup = useMutation({
     mutationFn: createGroup,
   });
 
-  // const onSubmit = handleSubmit((data) => mutation.mutate(data));
+  const [shade, tags, name, description, image, cover] = watch([
+    'shade',
+    'tags',
+    'name',
+    'description',
+    'image',
+    'cover',
+  ]);
 
   return (
     <Stack mt={10} p={2} gap={2} width={1} alignItems="center">
@@ -62,7 +49,7 @@ export const FinishNewGroup = () => {
           bgcolor="#222222"
           height={120}
           sx={{
-            backgroundImage: watch('cover') ? `url(${URL.createObjectURL(watch('cover')!)})` : 'none',
+            backgroundImage: cover ? `url(${URL.createObjectURL(cover!)})` : 'none',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
@@ -72,11 +59,11 @@ export const FinishNewGroup = () => {
           }}
         />
         <Box bgcolor="white" p={1} zIndex={2} mt={6} borderRadius="50%">
-          <Avatar sx={{ height: 120, width: 120 }} src={watch('image') ? URL.createObjectURL(watch('image')!) : ''} />
+          <Avatar sx={{ height: 120, width: 120 }} src={image ? URL.createObjectURL(image!) : ''} />
         </Box>
 
         <Typography fontSize={24} fontWeight={600}>
-          {watch('name')}
+          {name}
         </Typography>
         <Typography
           sx={{
@@ -85,11 +72,12 @@ export const FinishNewGroup = () => {
             wordBreak: 'break-all',
           }}
         >
-          {watch('description')}
+          {description}
         </Typography>
-        <ShadeComponent color={watch('shadeColor')} name={watch('shade')} />
+        {shade && <ShadeComponent color={shade.color} name={shade.en} />}
+
         <Box display="flex" gap={1}>
-          {watch('tags').map((tag, index) => (
+          {tags.map((tag, index) => (
             <TagItem key={index} tag={tag.value} />
           ))}
         </Box>
@@ -102,12 +90,18 @@ export const FinishNewGroup = () => {
           disabled={$createGroup.isLoading}
           fullWidth
           onClick={handleSubmit((values) => {
-            $createGroup.mutate(values, {
-              onSuccess: (data) => {
-                const groupId = data.data.id;
-                navigate(generatePath(paths.groupDetails, { groupId }));
+            $createGroup.mutate(
+              {
+                ...values,
+                shadeId: values.shade?.id,
               },
-            });
+              {
+                onSuccess: (data) => {
+                  const groupId = data.data.id;
+                  navigate(generatePath(paths.groupDetails, { groupId }));
+                },
+              },
+            );
           })}
           size="large"
           variant="contained"

@@ -28,7 +28,7 @@ export const TPost = z.object({
   tags: z.array(z.string()),
   media: z.array(TMedia).optional(),
   attachments: z.array(TAttachment).optional(),
-  isRestricted: z.boolean(),
+  isRestricted: z.boolean().optional(),
   likesCount: z.number().optional(),
   likes: z.array(TAuthor).optional(),
   hasLiked: z.boolean().optional(),
@@ -39,3 +39,8 @@ export const TPost = z.object({
 export type Post = z.infer<typeof TPost>;
 
 export const TPosts = z.array(TPost);
+
+export const TCreatePostResponse = z.object({
+  // There are much more items in response but for now we only need post id!
+  id: z.string(),
+});

@@ -5,12 +5,15 @@ import { paths } from '~/app/routes';
 import { useQuery } from '@tanstack/react-query';
 import { qk } from '~/api/query-keys';
 import { checkUser } from '~/api/auth';
-import { useAuth } from '~/app/auth';
+import { useAuth, useAuthUser } from '~/app/auth';
 import { Progress } from '~/components/progress';
 
 const Onboarding = () => {
   const navigate = useNavigate();
   const { authorize } = useAuth();
+  const authUser = useAuthUser();
+
+  console.log({ authUser });
 
   const { isLoading, isSuccess } = useQuery({
     queryKey: qk.users.check.toKey(),
@@ -19,6 +22,7 @@ const Onboarding = () => {
       navigate(paths.home);
       authorize(data.data);
     },
+    enabled: authUser === null,
   });
 
   return (

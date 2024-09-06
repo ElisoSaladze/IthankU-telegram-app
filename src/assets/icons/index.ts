@@ -7,3 +7,4 @@ export { IconAttach } from './attach';
 export { IconPhoto } from './photo';
 export { IconArrow } from './arrow';
 export { IconFilter } from './filter';
+export { IconShare } from './share';

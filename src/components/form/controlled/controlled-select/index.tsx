@@ -1,16 +1,11 @@
-import { Select, SelectProps } from "src/components/form/basic/Select";
-import { isRequired } from "src/components/form/validations";
-import {
-  FieldPath,
-  FieldValues,
-  useController,
-  UseControllerProps,
-} from "react-hook-form";
+import { Select, SelectProps } from 'src/components/form/basic/Select';
+import { isRequired } from 'src/components/form/validations';
+import { FieldPath, FieldValues, useController, UseControllerProps } from 'react-hook-form';
 
 export type ControlledTextFieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  T extends string = string
+  T extends string = string,
 > = SelectProps<T> & UseControllerProps<TFieldValues, TName>;
 
 /**
@@ -42,7 +37,7 @@ export type ControlledTextFieldProps<
 export const ControlledSelect = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  T extends string = string
+  T extends string = string,
 >({
   name,
   control,
@@ -65,7 +60,7 @@ export const ControlledSelect = <
 
   return (
     <Select
-      sx={{ borderRadius: "50px" }}
+      sx={{ borderRadius: '100px', border: 'none' }}
       ref={field.ref}
       value={field.value}
       onChange={field.onChange}
