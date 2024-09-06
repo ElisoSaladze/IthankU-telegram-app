@@ -48,40 +48,62 @@ export const telegramSignUp = async (body: TelegramSignUpRequestBody) => {
 
 type UpdateUserBioInput = {
   bio: string;
+  id: string;
 };
 
-export const updateUserBio = async (body: UpdateUserBioInput) => {
-  return await request('/api/v1/users/bio').post({
-    body,
+export const updateUserBio = async ({ bio, id }: UpdateUserBioInput) => {
+  return await request('/api/v1/users/:id/bio').patch({
+    params: {
+      id,
+    },
+    body: {
+      bio,
+    },
   });
 };
 
-type UpdateLocationVisibilityInput = {
+type UpdateVisibilityInput = {
+  id: string;
   isPrivate: boolean;
+  location?: {
+    latitude: number;
+    longitude: number;
+  };
 };
 
-export const updateLocationVisibility = async (body: UpdateLocationVisibilityInput) => {
-  return await request('/api/v1/users/location').post({
-    body,
+export const updateLocationVisibility = async ({ id, isPrivate, location }: UpdateVisibilityInput) => {
+  return await request('/api/v1/users/:id/location').patch({
+    params: {
+      id,
+    },
+    body: {
+      isLocationPublic: isPrivate,
+      location,
+    },
   });
 };
 
-type UpdateAccountVisibilityInput = {
-  isPrivate: boolean;
-};
-
-export const updateAccountVisibility = async (body: UpdateAccountVisibilityInput) => {
-  return await request('/api/v1/users/privacy').patch({
-    body,
+export const updateAccountVisibility = async ({ id, isPrivate }: UpdateVisibilityInput) => {
+  return await request('/api/v1/users/:id/privacy').patch({
+    params: {
+      id,
+    },
+    body: {
+      isPrivate,
+    },
   });
 };
 
 type ChangePfpInput = {
+  userId: string;
   picture: string;
 };
 
-export const changePfp = async ({ picture }: ChangePfpInput) => {
-  return await request('/api/v1/users').patch({
+export const changePfp = async ({ picture, userId }: ChangePfpInput) => {
+  return await request('/api/v1/users/:userId/profile-picture').patch({
+    params: {
+      userId,
+    },
     body: {
       picture,
     },
@@ -90,10 +112,14 @@ export const changePfp = async ({ picture }: ChangePfpInput) => {
 
 export type ChangeNameInput = {
   name: string;
+  id: string;
 };
 
-export const changeName = async ({ name }: ChangeNameInput) => {
-  return await request('/api/v1/users').patch({
+export const changeName = async ({ name, id }: ChangeNameInput) => {
+  return await request('/api/v1/users/:id/name').patch({
+    params: {
+      id,
+    },
     body: {
       name,
     },

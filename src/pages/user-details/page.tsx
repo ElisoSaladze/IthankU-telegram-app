@@ -57,6 +57,7 @@ export const UserDetailsPage = () => {
       $changePfp.mutate(
         {
           picture: base64Image,
+          userId: userId!,
         },
         {
           onSuccess: () => {
@@ -127,6 +128,7 @@ export const UserDetailsPage = () => {
                             $changeName.mutate(
                               {
                                 name: data.name!,
+                                id: userId!,
                               },
                               {
                                 onSuccess: () => {

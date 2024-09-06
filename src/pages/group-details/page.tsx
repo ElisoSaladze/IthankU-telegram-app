@@ -23,6 +23,8 @@ import { IconArrow } from '~/assets/icons';
 import { paths } from '~/app/routes';
 import { ReactNode } from 'react';
 import { GroupUsers, WritePost } from './components';
+import IntivationDialog from '~/components/invite-users';
+import { useBoolean } from '~/lib/hooks';
 
 const IconWrapper = ({ children, onClick }: { children: ReactNode; onClick?: () => void }) => {
   return (
@@ -91,6 +93,8 @@ export const GroupDetailsPage = () => {
       },
     );
   };
+
+  const isInvitationDialogOpen = useBoolean();
 
   return (
     <Stack height="100vh">
@@ -172,7 +176,7 @@ export const GroupDetailsPage = () => {
               {data?.data.tags?.map((tag: string, index: number) => <TagItem key={index} tag={tag} />)}
             </Stack>
 
-            {groupId && <GroupUsers groupId={groupId} />}
+            {groupId && <GroupUsers owner={data!.data.owner.id} groupId={groupId} />}
 
             <Stack gap={1} direction={'row'}>
               {data?.data.isUserJoined ? (
@@ -199,7 +203,7 @@ export const GroupDetailsPage = () => {
                 </Button>
               )}
               <Button
-                onClick={() => navigate(`/invite-user/${groupId}`)}
+                onClick={() => isInvitationDialogOpen.setTrue()}
                 startIcon={<PersonAddAlt1Icon />}
                 sx={{ borderRadius: 4 }}
                 size="medium"
@@ -260,6 +264,11 @@ export const GroupDetailsPage = () => {
           </Stack>
         </Box>
       )}
+      <IntivationDialog
+        groupId={groupId!}
+        isOpen={isInvitationDialogOpen.isTrue}
+        onClose={isInvitationDialogOpen.setFalse}
+      />
     </Stack>
   );
 };

@@ -38,6 +38,7 @@ export const TGroupDetails = z.object({
   privacy: TVisibility,
   membersCount: z.number(),
   isUserJoined: z.boolean(),
+  owner: TAuthor,
 });
 
 export const TInvitation = z.object({
@@ -55,10 +56,9 @@ export const TInvitationCode = z.object({
   telegramUrl: z.string(),
 });
 
-const TUserToInvite = z.object({
+export const TUserToInvite = z.object({
   id: z.string(),
   name: z.string(),
-  picture: z.string(),
+  picture: z.string().optional(),
+  status: z.string(),
 });
-
-export const TUserToInvites = z.array(TUserToInvite);

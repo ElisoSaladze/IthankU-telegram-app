@@ -1,5 +1,5 @@
 import { buildModuleCacheKey } from 'src/lib/react-query-utils';
-import { GetInvitationsInput, GetUserGroupsInput, GroupId } from './groups';
+import { GetInvitationsInput, GetUserGroupsInput, GroupId, groupUserParams } from './groups';
 import { GetPostDetailsInput } from './posts';
 import { GetUserInput, GetUsersInput } from './users';
 import { GetAppreciateUser, GetAppreciateUserInput } from './appreciate';
@@ -28,7 +28,7 @@ export const qk = buildModuleCacheKey({
     list: null,
     details: (input: GroupId) => [input],
     posts: (input: GroupId) => [input],
-    members: (input: GroupId) => [input],
+    members: (input: groupUserParams) => [input],
     getUserGroups: (input: GetUserGroupsInput) => [input],
     getInvitations: (input: GetInvitationsInput) => [input],
     getInvitationCode: (input: GroupId) => [input],

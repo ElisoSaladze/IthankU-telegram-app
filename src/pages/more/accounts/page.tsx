@@ -76,6 +76,7 @@ export const AccountsPage = () => {
                     $updateUserBio.mutate(
                       {
                         bio: values.bio,
+                        id: userDetails!.id,
                       },
                       {
                         onSuccess: () => {

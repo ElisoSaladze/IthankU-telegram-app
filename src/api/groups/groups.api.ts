@@ -1,5 +1,5 @@
 import { request } from 'src/lib/request';
-import { TAuthor, TGroup, TGroupDetails, TInvitationCode, TInvitations, TUserToInvites } from './groups.schema';
+import { TAuthor, TGroup, TGroupDetails, TInvitationCode, TInvitations, TUserToInvite } from './groups.schema';
 import { TPosts } from '../posts';
 import { CreateGroupFormValues } from '~/providers/create-group-provider';
 import { decodeBodyWithPagination, decodeBody } from '../common';
@@ -10,6 +10,11 @@ export const getGroups = async () => {
 
 export type GroupId = {
   groupId: string;
+};
+
+export type groupUserParams = {
+  groupId: string;
+  page?: number;
 };
 
 export const getGroupDetails = async ({ groupId }: GroupId) => {
@@ -23,9 +28,16 @@ export const getGroupDetails = async ({ groupId }: GroupId) => {
   );
 };
 
-export const getGroupMembers = async ({ groupId }: GroupId) => {
+export const getGroupMembers = async ({ groupId, page }: groupUserParams) => {
+  const query = new URLSearchParams();
+
+  if (page) {
+    query.set('page', page.toString());
+  }
+
   return await request('/api/v1/groups/:groupId/members').get(
     {
+      query,
       params: {
         groupId,
       },
@@ -128,22 +140,30 @@ export type InviteUserInput = {
 };
 
 export const inviteUser = async ({ groupId, inviteeId }: InviteUserInput) => {
-  return request('/api/v1/groups/invite').post({
-    body: {
+  return request('/api/v1/groups/:groupId/invite').post({
+    params: {
       groupId,
-      inviteeId,
+    },
+    body: {
+      userId: inviteeId,
     },
   });
 };
 
-export const getUsersToInvite = async ({ groupId }: GroupId) => {
+export const getUsersToInvite = async ({ groupId, page }: groupUserParams) => {
+  const query = new URLSearchParams();
+
+  if (page) {
+    query.set('page', page.toString());
+  }
   return await request('/api/v1/groups/:groupId/users-to-invite').get(
     {
       params: {
         groupId,
       },
+      query,
     },
-    decodeBody(TUserToInvites),
+    decodeBodyWithPagination(TUserToInvite),
   );
 };
 
@@ -151,5 +171,14 @@ export const createGroup = async (input: Omit<CreateGroupFormValues, 'shade'> & 
   return await request('/api/v1/groups').post({
     type: 'file',
     body: { ...input, tags: input.tags.map((tag) => tag.value) },
+  });
+};
+
+export const removeUserFromGroup = async (groupId: string, userId: string) => {
+  return await request('/api/v1/groups/:groupId/users/:userId').delete({
+    params: {
+      groupId,
+      userId,
+    },
   });
 };
