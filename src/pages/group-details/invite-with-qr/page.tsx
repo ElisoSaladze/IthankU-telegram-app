@@ -1,19 +1,23 @@
 import { Avatar, Box, Button, Snackbar, Stack, Typography } from '@mui/material';
-import BackButtonAppBar from 'src/components/appbar';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
-import { Params, useLocation, useParams } from 'react-router-dom';
+import { generatePath, Params, useLocation, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getInvitationCode } from '~/api/groups';
-import Loader from 'src/components/loader';
 import { useState } from 'react';
 import { handleShare } from 'src/helpers';
 import { qk } from 'src/api/query-keys';
+import { AppHeader } from '~/components/header';
+import { paths } from '~/app/routes';
+import { Progress } from '~/components/progress';
+import copy from 'copy-text-to-clipboard';
 
 export const InviteWithQr = () => {
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const { groupId } = useParams<Params>();
   const location = useLocation();
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const { groupId } = useParams<Params>();
   const { groupName, image, background } = location.state || {};
 
   const {
@@ -26,92 +30,115 @@ export const InviteWithQr = () => {
     enabled: !!groupId,
   });
 
-  const appreciationUrl = invitationResponse
-    ? `https://web.itu-net.com/appreciate/${invitationResponse.data.inviteCode}`
-    : '';
-
   const handleCopyLink = () => {
-    const textToCopy = `Join our group "${groupName}" using this link: ${appreciationUrl}`;
-    navigator.clipboard.writeText(textToCopy).then(() => {
-      setSnackbarOpen(true);
-    });
+    const textToCopy = `Join our group "${groupName}" using this link: ${invitationResponse?.data.telegramUrl}`;
+    copy(textToCopy);
   };
 
   return (
-    <Stack height={'100vh'} overflow={'auto'}>
-      <BackButtonAppBar pageName={'QR Code'} showNotif={false} />
-      <Stack gap={2} marginTop={8} marginX={2}>
+    <Box position="relative">
+      <AppHeader
+        backPath={generatePath(paths.groupDetails, {
+          groupId: groupId!,
+        })}
+        pageName="QR Code"
+        headerSx={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 10,
+        }}
+      />
+      <Box
+        sx={{
+          height: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          p: 3,
+        }}
+      >
         <Stack
-          maxHeight={'90%'}
-          maxWidth={380}
-          width={'100%'}
-          paddingY={2}
-          paddingX={1}
-          borderRadius={10}
-          alignItems={'center'}
-          justifyContent={'center'}
+          width={1}
+          py={2}
+          px={1}
+          borderRadius={9}
+          alignItems="center"
+          justifyContent="center"
           gap={1}
-          boxShadow={'0px 0px 0px 1px #0000000F, 0px 10px 36px 0px #00000029'}
-          position={'relative'}
+          boxShadow="0px 0px 0px 1px #0000000F, 0px 10px 36px 0px #00000029"
+          position="relative"
         >
           <Box
-            position="absolute"
-            top={0}
-            left={0}
-            width="100%"
-            zIndex={1}
-            bgcolor="#222222"
-            height={100}
             sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: 1,
+              zIndex: 1,
+              bgcolor: '#222222',
+              height: 120,
               backgroundImage: `url(${background})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               overflow: 'hidden',
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
+              borderTopLeftRadius: 36,
+              borderTopRightRadius: 36,
             }}
           />
-          <Box bgcolor={'white'} p={1} borderRadius={'50%'} zIndex={2} mt={3}>
+          <Box bgcolor="white" p={1} borderRadius="50%" zIndex={2} mt={3}>
             <Avatar sx={{ height: 100, width: 100 }} src={image} />
           </Box>
 
           <Typography fontSize={24} fontWeight={600}>
             {groupName}
           </Typography>
-          {isLoading || isFetching ? (
-            <Loader />
-          ) : (
-            <img
-              width={250}
-              src={`https://api.qrserver.com/v1/create-qr-code/?data=${appreciationUrl}&size=200x200`}
-              alt="QR Code"
-            />
-          )}
+
+          <Box sx={{ height: 250, position: 'relative' }}>
+            {isLoading || isFetching ? (
+              <Progress centered />
+            ) : (
+              <Box component="img" height={1} src={invitationResponse?.data.qrCode} alt="QR Code" />
+            )}
+          </Box>
+
+          <Typography fontSize={15} textAlign="center">
+            Scan the QR code to join the group
+          </Typography>
         </Stack>
-        <Stack gap={1} maxWidth={380} width={'100%'} direction={'row'}>
+
+        <Box sx={{ width: 1, display: 'flex', gap: 1, mt: 3 }}>
           <Button
             startIcon={<IosShareIcon />}
             size="large"
             fullWidth
             variant="contained"
             color="info"
-            onClick={() => handleShare(appreciationUrl, 'Join our Group', 'Check out this link to join our group!')}
+            onClick={() => {
+              if (invitationResponse) {
+                handleShare(
+                  invitationResponse.data.telegramUrl,
+                  'Join our Group',
+                  'Check out this link to join our group!',
+                );
+              }
+            }}
           >
             Share
           </Button>
           <Button startIcon={<InsertLinkIcon />} fullWidth size="large" variant="contained" onClick={handleCopyLink}>
             Copy
           </Button>
-        </Stack>
-      </Stack>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={2000}
-        onClose={() => setSnackbarOpen(false)}
-        message="Link copied to clipboard!"
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      />
-    </Stack>
+        </Box>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={2000}
+          onClose={() => setSnackbarOpen(false)}
+          message="Link copied to clipboard!"
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        />
+      </Box>
+    </Box>
   );
 };

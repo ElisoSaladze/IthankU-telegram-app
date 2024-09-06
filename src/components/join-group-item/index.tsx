@@ -42,7 +42,7 @@ const GroupItem = ({ group }: Props) => {
           <Typography fontSize={12} color="secondary.dark">
             {group.membersCount} Members
           </Typography>
-          <ShadeComponent color="green" name={group.shade.en} />
+          {group.shade && <ShadeComponent color="green" name={group.shade.en} />}
         </Stack>
       </Stack>
       {$joinGroup.isLoading ? (

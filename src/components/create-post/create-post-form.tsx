@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, IconButton, Stack, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { Params, useNavigate, useParams } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { createPost } from 'src/api/posts';
 import VisibilityStatus from 'src/components/visibility-status';
 import { Visibility } from '~/constants/enums';
@@ -11,6 +11,7 @@ import { PostTextInput, PreviewInput, SummaryInput, TagsInput } from './inputs';
 import { useBoolean } from '~/lib/hooks';
 import { PaidPostDialog } from './paid-post-dialog';
 import { Progress } from '../progress';
+import { paths } from '~/app/routes';
 
 export type CreatePostFormValues = {
   content: string;
@@ -42,28 +43,25 @@ const defaultPostValue: CreatePostFormValues = {
 
 type Props = {
   onClose: () => void;
+  groupId?: string;
+  fromGroupPage?: boolean; // TODO
 };
 
-export const CreatePostForm = ({ onClose }: Props) => {
+export const CreatePostForm = ({ onClose, groupId }: Props) => {
   const navigate = useNavigate();
   const authUser = useAuthUser();
-
-  const { groupId } = useParams<Params>();
-
-  const actualGroupId = groupId === ':groupId' ? undefined : groupId;
 
   const isPaidPostDialogOpen = useBoolean();
 
   const {
     control,
     watch,
-    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<CreatePostFormValues>({
     defaultValues: {
       ...defaultPostValue,
-      groupId: actualGroupId ?? null,
+      groupId: groupId,
     },
   });
 
@@ -71,6 +69,14 @@ export const CreatePostForm = ({ onClose }: Props) => {
 
   const $createPost = useMutation({
     mutationFn: createPost,
+    onSuccess: (post) => {
+      isPaidPostDialogOpen.setFalse();
+      navigate(
+        generatePath(paths.post, {
+          postId: post.data.id,
+        }),
+      );
+    },
   });
 
   const onSubmit = handleSubmit((data) => {
@@ -131,13 +137,15 @@ export const CreatePostForm = ({ onClose }: Props) => {
           labels={['Fully visible to everyone.', 'Preview only. 1 coin to unlock']}
         />
 
+        {/* {fromGroupPage && <UserGroupsSelect control={control} />} */}
+
         <SummaryInput control={control} error={errors.summary} />
 
         <PostTextInput control={control} contentLength={content.length} error={errors.content} />
 
         {visibility === 'PRIVATE' && <PreviewInput control={control} />}
 
-        <TagsInput control={control} setValue={setValue} />
+        <TagsInput control={control} />
       </Stack>
 
       <Button
@@ -160,20 +168,12 @@ export const CreatePostForm = ({ onClose }: Props) => {
         onClose={isPaidPostDialogOpen.setFalse}
         isLoading={$createPost.isLoading}
         onSubmit={handleSubmit((data) => {
-          $createPost.mutate(
-            {
-              ...data,
-              tags: data.tags.map((tag) => tag.value),
-              media: data.media.map((image) => image.value),
-              attachments: data.attachments.map((file) => file.value),
-            },
-            {
-              onSuccess: () => {
-                isPaidPostDialogOpen.setFalse();
-                navigate(-1); // TODO!
-              },
-            },
-          );
+          $createPost.mutate({
+            ...data,
+            tags: data.tags.map((tag) => tag.value),
+            media: data.media.map((image) => image.value),
+            attachments: data.attachments.map((file) => file.value),
+          });
         })}
       />
     </Stack>

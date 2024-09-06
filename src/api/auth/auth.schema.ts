@@ -4,7 +4,7 @@ export const TUserRole = z.literal('USER');
 
 export const TUserType = z.object({
   id: z.string(),
-  email: z.string().optional(),
+  email: z.string().nullable().optional(),
   isLocationPublic: z.boolean().optional(),
   name: z.string(),
   physicalPoints: z.number().optional(),

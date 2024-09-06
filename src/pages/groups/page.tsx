@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Button, IconButton, Skeleton, Stack } from '@mui/material';
+import { Box, Button, IconButton, Skeleton, Stack } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
 import { useNavigate } from 'react-router-dom';
@@ -23,8 +23,15 @@ export const GroupsPage = () => {
   });
 
   return (
-    <>
-      <AppHeader pageName="Groups" />
+    <Box position="relative">
+      <AppHeader
+        pageName="Groups"
+        headerSx={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 10,
+        }}
+      />
       <Stack mx={3} pb={2}>
         <Stack mt={2} justifyContent="space-between" alignItems="center" direction="row">
           <CreatePostGroupMenu
@@ -33,6 +40,7 @@ export const GroupsPage = () => {
                 Create
               </Button>
             }
+            fromGroupPage
           />
 
           <IconButton onClick={() => navigate(paths.groupSettings)}>
@@ -46,11 +54,11 @@ export const GroupsPage = () => {
             ))}
           </Stack>
         ) : (
-          <Stack marginY={1} gap={1} marginBottom={10}>
+          <Stack marginY={1} gap={2}>
             {data?.data.map((group, i) => <GroupItem key={i} group={group} />)}
           </Stack>
         )}
       </Stack>
-    </>
+    </Box>
   );
 };

@@ -1,4 +1,4 @@
-import { Typography, Stack } from '@mui/material';
+import { Typography, Stack, Box, Divider } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
 import NavigationItem from 'src/components/navigation-item';
@@ -7,16 +7,30 @@ import { AppHeader } from '~/components/header';
 
 export const GroupSettings = () => {
   const navigate = useNavigate();
+
   return (
     <>
-      <AppHeader backPath={paths.groups} />
-
-      <Stack mx={3} alignItems="center">
-        <Typography variant="h6" gutterBottom>
-          Group Settings
-        </Typography>
-        <NavigationItem onClick={() => navigate(paths.groupSettingsFollowings)} name="Following" />
-        <NavigationItem name="Invitation" onClick={() => navigate(paths.groupSettingsInvitations)} />
+      <AppHeader backPath={paths.home} />
+      <Stack m={3} mt={0} alignItems="center">
+        <Typography fontSize={24}>Group Settings</Typography>
+        <Box
+          sx={{
+            width: 1,
+            mt: 3,
+            p: 2,
+            borderRadius: 8,
+            border: 1,
+            borderColor: '#EFEFEF',
+          }}
+        >
+          <Box sx={{ pb: 1 }}>
+            <NavigationItem onClick={() => navigate(paths.groupSettingsFollowings)} name="Following" />
+          </Box>
+          <Divider />
+          <Box sx={{ pt: 1 }}>
+            <NavigationItem name="Invitation" onClick={() => navigate(paths.groupSettingsInvitations)} />
+          </Box>
+        </Box>
       </Stack>
     </>
   );

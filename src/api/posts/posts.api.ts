@@ -1,5 +1,5 @@
 import { request } from '~/lib/request';
-import { TPost } from './posts.schema';
+import { TCreatePostResponse, TPost } from './posts.schema';
 import { decodeBody, decodeBodyWithPagination } from '../common';
 import { Visibility } from '~/constants/enums';
 
@@ -50,8 +50,11 @@ type CreatePostInput = {
 };
 
 export const createPost = async (input: CreatePostInput) => {
-  return await request('/api/v1/posts').post({
-    type: 'file',
-    body: input,
-  });
+  return await request('/api/v1/posts').post(
+    {
+      type: 'file',
+      body: input,
+    },
+    decodeBody(TCreatePostResponse),
+  );
 };

@@ -147,7 +147,7 @@ export const getUsersToInvite = async ({ groupId }: GroupId) => {
   );
 };
 
-export const createGroup = async (input: CreateGroupFormValues) => {
+export const createGroup = async (input: Omit<CreateGroupFormValues, 'shade'> & { shadeId?: string }) => {
   return await request('/api/v1/groups').post({
     type: 'file',
     body: { ...input, tags: input.tags.map((tag) => tag.value) },

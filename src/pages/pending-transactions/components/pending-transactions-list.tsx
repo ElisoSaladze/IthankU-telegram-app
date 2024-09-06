@@ -51,10 +51,14 @@ export const PendingTransactionsList = ({ type }: TransactionsListProps) => {
         ))
         .with({ isError: true }, () => <Typography>Failed to load transactions.</Typography>)
         .with({ isSuccess: true, data: P.select() }, ({ pages }) => {
-          const transactions = pages.flatMap((page) => page.data!);
+          const transactions = pages.flatMap((page) => page.data);
 
-          if (!transactions.length) {
-            return <Typography>No transactions found.</Typography>;
+          if (transactions.length === 0) {
+            return (
+              <Typography textAlign="center" color="text.secondary" mt={3}>
+                No transactions found.
+              </Typography>
+            );
           }
 
           return (

@@ -1,4 +1,4 @@
-import { Avatar, ListItemButton, Stack, Typography } from '@mui/material';
+import { Avatar, Box, ListItemButton, Stack, Typography } from '@mui/material';
 
 import defaultImageUrl from '../../assets/images/itu-circle.png';
 
@@ -19,8 +19,8 @@ const GroupItem = ({ group }: Props) => {
     <ListItemButton
       sx={{
         width: '100%',
-        borderRadius: 5,
-        padding: 1,
+        borderRadius: 8,
+        p: 2,
         boxShadow: '0px 0px 8.2px -1px #00000026',
       }}
       onClick={() =>
@@ -31,25 +31,34 @@ const GroupItem = ({ group }: Props) => {
         )
       }
     >
-      <Stack sx={{ width: '100%' }} alignItems={'center'} justifyContent={'space-between'} direction={'row'}>
-        <Stack gap={1} alignItems={'center'} direction={'row'}>
+      <Box sx={{ width: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+          }}
+          gap={1}
+        >
           <Avatar
             sx={{ width: 70, height: 70, borderRadius: 4 }}
             variant="rounded"
             src={group.picture || defaultImageUrl}
           />
-          <Stack gap={0.5}>
+          <Stack gap={1}>
             <Typography fontSize={15} fontWeight={600}>
               {group.name}
             </Typography>
-            <ShadeComponent color={group.shade?.color} name={group.shade?.en} />
-            <Stack direction={'row'}>{group.tags?.map((tag, i) => <TagItem key={i} tag={tag} />)}</Stack>
+            {group.shade && <ShadeComponent color={group.shade.color} name={group.shade.en} />}
+            <Stack direction="row" gap={1}>
+              {group.tags?.map((tag, i) => <TagItem key={i} tag={tag} />)}
+            </Stack>
           </Stack>
-        </Stack>
+        </Box>
         <Avatar sx={{ bgcolor: 'black' }}>
           <Typography color="white">{group.membersCount}</Typography>
         </Avatar>
-      </Stack>
+      </Box>
     </ListItemButton>
   );
 };

@@ -1,5 +1,5 @@
 import { Box, IconButton, Stack, TextField, Typography } from '@mui/material';
-import { Control, useFieldArray, UseFormSetValue } from 'react-hook-form';
+import { Control, useFieldArray } from 'react-hook-form';
 import TagItem from '~/components/tag';
 import { CreatePostFormValues } from '../create-post-form';
 import { useState } from 'react';
@@ -7,7 +7,6 @@ import { IconCheck } from '~/assets/icons';
 
 type Props = {
   control: Control<CreatePostFormValues>;
-  setValue: UseFormSetValue<CreatePostFormValues>;
 };
 
 export const TagsInput = ({ control }: Props) => {

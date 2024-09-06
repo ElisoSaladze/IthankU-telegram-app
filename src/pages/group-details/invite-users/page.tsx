@@ -25,10 +25,6 @@ export const InviteUserPage = () => {
     enabled: !!groupId,
   });
 
-  const appreciationUrl = invitationResponse
-    ? `https://web.itu-net.com/appreciate/${invitationResponse.data.inviteCode}`
-    : '';
-
   const searchTerm = watch('name').toLowerCase();
 
   const { data: usersResponse } = useQuery({
@@ -138,7 +134,15 @@ export const InviteUserPage = () => {
         ))}
       </Stack>
       <Button
-        onClick={() => handleShare(appreciationUrl, 'Join our Group', 'Check out this link to join our group!')}
+        onClick={() => {
+          if (invitationResponse) {
+            handleShare(
+              invitationResponse.data.telegramUrl,
+              'Join our Group',
+              'Check out this link to join our group!',
+            );
+          }
+        }}
         sx={{
           marginX: 2,
           position: 'fixed',
