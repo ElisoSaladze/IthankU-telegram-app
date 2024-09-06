@@ -19,7 +19,7 @@ const LikesItem = ({ likes, size = 'small' }: Props) => {
   };
 
   return (
-    <Stack spacing={-2} direction={'row'}>
+    <Stack spacing={-2} direction="row" px={0.5}>
       {likes.map((like) => (
         <Avatar sx={getSize()} key={like.id} src={like.picture ?? ''} />
       ))}

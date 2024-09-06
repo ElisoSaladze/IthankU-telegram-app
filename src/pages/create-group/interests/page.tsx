@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import DoneIcon from '@mui/icons-material/Done';
-import { Box, Button, IconButton, InputAdornment, Stack, Typography } from '@mui/material';
+import { Box, Button, IconButton, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
 import { useState } from 'react';
@@ -8,7 +8,6 @@ import { useFieldArray } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { qk } from 'src/api/query-keys';
 import { getShades, Shade } from 'src/api/shades';
-import { ControlledTextField } from 'src/components/form/controlled/controlled-text-field';
 import Loader from 'src/components/loader';
 import ShadeComponent from 'src/components/shade-component';
 import TagItem from 'src/components/tag';
@@ -17,7 +16,9 @@ import { paths } from '~/app/routes';
 
 export const NewGroupInterests = () => {
   const navigate = useNavigate();
-  const { control, watch, setValue, handleSubmit } = useCreateGroupContext();
+
+  const [newTag, setNewTag] = useState('#');
+  const { control, setValue, handleSubmit } = useCreateGroupContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'tags',
@@ -31,16 +32,12 @@ export const NewGroupInterests = () => {
   });
 
   const handleSelectShade = (shade: Shade) => {
-    if (selectedShade === shade.en) {
+    if (selectedShade === shade.id) {
       setSelectedShade('');
-      setValue('shade', '');
-      setValue('shadeColor', '');
-      setValue('shadeId', '');
+      setValue('shade', undefined);
     } else {
-      setSelectedShade(shade.en);
-      setValue('shade', shade.en);
-      setValue('shadeColor', shade.color);
-      setValue('shadeId', shade.id)
+      setSelectedShade(shade.id);
+      setValue('shade', shade);
     }
   };
 
@@ -71,14 +68,20 @@ export const NewGroupInterests = () => {
       <Typography fontSize={16} color="text.secondary" fontWeight={500} mt={3} mb={0.5}>
         Tags
       </Typography>
-      <ControlledTextField
+      <TextField
+        onChange={(event) => {
+          setNewTag(event.target.value);
+        }}
+        value={newTag}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
                 onClick={() => {
-                  append({ value: watch('currentTag')! });
-                  setValue('currentTag', '#');
+                  if (newTag && newTag !== '#') {
+                    append({ value: newTag });
+                    setNewTag('#');
+                  }
                 }}
                 edge="end"
               >
@@ -87,8 +90,6 @@ export const NewGroupInterests = () => {
             </InputAdornment>
           ),
         }}
-        name="currentTag"
-        control={control}
       />
       <Stack spacing={0.5} direction={'row'} flexWrap={'wrap'}>
         {fields.map((tag, index) => (

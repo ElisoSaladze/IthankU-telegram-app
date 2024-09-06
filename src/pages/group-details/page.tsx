@@ -1,13 +1,17 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import CircleIcon from '@mui/icons-material/Circle';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+
 import SearchIcon from '@mui/icons-material/Search';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import { AppBar, Avatar, Box, Button, Divider, IconButton, ListItemButton, Stack, Typography } from '@mui/material';
+import { AppBar, Avatar, Box, Button, Divider, IconButton, Stack, Typography } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
+
 import notificationsIcon from 'src/assets/icons/white-notif.svg';
 import defaultImageUrl from 'src/assets/images/itu-circle.png';
-import { Params, useNavigate, useParams } from 'react-router-dom';
+
+import { generatePath, Params, useNavigate, useParams } from 'react-router-dom';
 import { getGroupDetails, getGroupPosts, joinGroup, leaveGroup } from '~/api/groups';
 import Loader from 'src/components/loader';
 import PostItem from 'src/components/post-item';
@@ -15,15 +19,12 @@ import TagItem from 'src/components/tag';
 import qrIcon from 'src/assets/icons/qr.png';
 import { qk } from 'src/api/query-keys';
 import { Post } from 'src/api/posts';
-import { useAuthUser } from '~/app/auth';
 import { IconArrow } from '~/assets/icons';
 import { paths } from '~/app/routes';
 import { ReactNode } from 'react';
-import { GroupUsers } from './components';
-import { match, P } from 'ts-pattern';
-import { useBoolean } from '~/lib/hooks';
-import { CreatePostDialog } from '~/components/create-post';
+import { GroupUsers, WritePost } from './components';
 import IntivationDialog from '~/components/invite-users';
+import { useBoolean } from '~/lib/hooks';
 
 const IconWrapper = ({ children, onClick }: { children: ReactNode; onClick?: () => void }) => {
   return (
@@ -47,14 +48,13 @@ const IconWrapper = ({ children, onClick }: { children: ReactNode; onClick?: () 
 
 export const GroupDetailsPage = () => {
   const navigate = useNavigate();
-  const authUser = useAuthUser();
   const { groupId } = useParams<Params>();
 
   const args = { groupId: groupId! };
 
-  const isPostsDialogOpen = useBoolean();
+  console.log({ args });
 
-  const $groupDetails = useQuery({
+  const { data, isFetching, refetch } = useQuery({
     queryKey: qk.groups.details.toKeyWithArgs(args),
     queryFn: () => getGroupDetails(args),
   });
@@ -73,7 +73,7 @@ export const GroupDetailsPage = () => {
       { groupId: groupId! },
       {
         onSuccess: () => {
-          $groupDetails.refetch();
+          refetch();
         },
       },
     );
@@ -85,10 +85,12 @@ export const GroupDetailsPage = () => {
 
   const handleLeaveGroup = () => {
     $leaveGroup.mutate(
-      { groupId: groupId! },
+      {
+        groupId: groupId!,
+      },
       {
         onSuccess: () => {
-          $groupDetails.refetch();
+          refetch();
         },
       },
     );
@@ -97,7 +99,7 @@ export const GroupDetailsPage = () => {
   const isInvitationDialogOpen = useBoolean();
 
   return (
-    <Stack overflow="auto" height="100vh">
+    <Stack height="100vh">
       <AppBar
         sx={{
           position: 'fixed',
@@ -112,7 +114,7 @@ export const GroupDetailsPage = () => {
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <IconWrapper>
-              <img src={notificationsIcon} alt="Notifications" />
+              <img src={notificationsIcon} />
             </IconWrapper>
 
             <IconWrapper>
@@ -121,150 +123,149 @@ export const GroupDetailsPage = () => {
           </Box>
         </Box>
       </AppBar>
-      {match($groupDetails)
-        .with({ isLoading: true }, () => <Loader />)
-        .with({ isError: true }, () => <Typography color="error">Failed to load group information</Typography>)
-        .with({ isSuccess: true, data: P.select() }, ({ data }) => (
+      {isFetching ? (
+        <Loader />
+      ) : (
+        <Box>
           <Stack
             sx={{
               width: '100%',
               height: 200,
-              backgroundImage: `url(${data.cover})`,
+              minHeight: 200,
+              backgroundImage: `url(${data?.data.cover})`,
               backgroundSize: 'cover',
               backgroundPosition: 'top',
-              backgroundColor: data.cover ? 'transparent' : '#222222',
+              backgroundColor: data?.data.cover ? 'transparent' : '#222222',
             }}
+          />
+          <Stack
+            bgcolor="white"
+            mx={2}
+            mt={-10}
+            boxShadow="0px 3px 8.6px -4px #00000040"
+            gap={1}
+            p={2}
+            borderRadius={5}
           >
-            <Stack
-              bgcolor="white"
-              m={2}
-              marginTop={10}
-              boxShadow="0px 3px 8.6px -4px #00000040"
-              gap={1}
-              p={2}
-              borderRadius={5}
-            >
-              <Typography fontWeight={600} fontSize={'large'}>
-                {data.name}
-              </Typography>
-              <Stack alignItems={'center'} gap={1} direction={'row'}>
-                <Avatar
-                  sx={{ width: 70, height: 70, borderRadius: 4 }}
-                  variant="rounded"
-                  src={data.picture || defaultImageUrl}
-                />
-                <Stack>
+            <Typography fontWeight={600} fontSize={'large'}>
+              {data?.data.name}
+            </Typography>
+
+            <Stack alignItems={'center'} gap={1} direction={'row'}>
+              <Avatar
+                sx={{ width: 70, height: 70, borderRadius: 4 }}
+                variant="rounded"
+                src={data?.data.picture || defaultImageUrl}
+              />
+              <Stack>
+                {data?.data.shade && (
                   <Stack gap={0.5} alignItems={'center'} direction={'row'}>
-                    <CircleIcon
-                      sx={{
-                        color: data.shade.color,
-                      }}
-                    />
+                    <CircleIcon color="primary" />
                     <Typography fontSize={20} color={'info'}>
-                      {data.shade.en}
+                      {data.data.shade.en}
                     </Typography>
                   </Stack>
-
-                  <Typography>
-                    {data.privacy === 'PUBLIC' ? 'Public group ' : 'Private Group '}• {data.membersCount} members
-                  </Typography>
-                </Stack>
-              </Stack>
-              <Stack gap={0.5} direction={'row'} flexWrap={'wrap'}>
-                {data.tags?.map((tag: string, index: number) => <TagItem key={index} tag={tag} />)}
-              </Stack>
-              {groupId && <GroupUsers owner={data.owner.id} groupId={groupId} />}
-              <Stack gap={1} direction={'row'}>
-                {data.isUserJoined ? (
-                  <Button
-                    startIcon={<HowToRegIcon />}
-                    sx={{ borderRadius: 4 }}
-                    size="medium"
-                    fullWidth
-                    variant="contained"
-                    onClick={handleLeaveGroup}
-                  >
-                    Joined
-                  </Button>
-                ) : (
-                  <Button
-                    startIcon={<GroupAddIcon />}
-                    sx={{ borderRadius: 4 }}
-                    size="medium"
-                    fullWidth
-                    variant="contained"
-                    onClick={handleJoinGroup}
-                  >
-                    Join
-                  </Button>
                 )}
+
+                <Typography>
+                  {data?.data.privacy === 'PUBLIC' ? 'Public group ' : 'Private Group '}• {data?.data.membersCount}{' '}
+                  members
+                </Typography>
+              </Stack>
+            </Stack>
+
+            <Stack gap={0.5} direction={'row'} flexWrap={'wrap'}>
+              {data?.data.tags?.map((tag: string, index: number) => <TagItem key={index} tag={tag} />)}
+            </Stack>
+
+            {groupId && <GroupUsers owner={data!.data.owner.id} groupId={groupId} />}
+
+            <Stack gap={1} direction={'row'}>
+              {data?.data.isUserJoined ? (
                 <Button
-                  onClick={() => isInvitationDialogOpen.setTrue()}
-                  startIcon={<PersonAddAlt1Icon />}
+                  startIcon={<HowToRegIcon />}
                   sx={{ borderRadius: 4 }}
                   size="medium"
-                  color="success"
                   fullWidth
                   variant="contained"
+                  onClick={handleLeaveGroup}
                 >
-                  Share
+                  Joined
                 </Button>
-                <IconButton
-                  onClick={() =>
-                    navigate(`/invitation-qr/${groupId}`, {
-                      state: {
-                        groupName: data.name,
-                        image: data.picture,
-                        background: data.cover,
-                      },
-                    })
-                  }
-                >
-                  <img src={qrIcon} alt="QR Code" />
-                </IconButton>
-              </Stack>
-            </Stack>
-            {data.description.trim().length > 0 && (
-              <Stack m={2}>
-                <Typography fontWeight={600} fontSize={'large'}>
-                  About
-                </Typography>
-                <Typography>{data.description}</Typography>
-              </Stack>
-            )}
-            <Divider />
-            <Stack gap={1} m={2}>
-              <Typography fontWeight={600} fontSize={'large'}>
-                Posts
-              </Typography>
-              <ListItemButton
-                sx={{
-                  padding: 2,
-                  boxShadow: '0px 0px 8.9px -3px #00000040',
-                  borderRadius: 3,
-                }}
-                onClick={() => isPostsDialogOpen.setTrue()}
-              >
-                <Stack width={'100%'} justifyContent={'space-between'} alignItems={'center'} direction={'row'}>
-                  <Stack gap={2} alignItems={'center'} direction={'row'}>
-                    <Avatar src={authUser?.user.picture} />
-                    <Typography>Write something...</Typography>
-                  </Stack>
-                  <Button onClick={() => isPostsDialogOpen.setTrue()} variant="outlined">
-                    Post
-                  </Button>
-                </Stack>
-              </ListItemButton>
-              {posts.isFetching ? (
-                <Loader />
               ) : (
-                posts.data?.data.map((post: Post) => <PostItem key={post.id} post={post} />)
+                <Button
+                  startIcon={<GroupAddIcon />}
+                  sx={{ borderRadius: 4 }}
+                  size="medium"
+                  fullWidth
+                  variant="contained"
+                  onClick={handleJoinGroup}
+                >
+                  Join
+                </Button>
               )}
+              <Button
+                onClick={() => navigate(`/invite-user/${groupId}`)}
+                startIcon={<PersonAddAlt1Icon />}
+                sx={{ borderRadius: 4 }}
+                size="medium"
+                color="success"
+                fullWidth
+                variant="contained"
+              >
+                Share
+              </Button>
+              <IconButton
+                onClick={() => {
+                  if (groupId) {
+                    navigate(
+                      generatePath(paths.invitationQR, {
+                        groupId,
+                      }),
+                      {
+                        state: {
+                          groupName: data?.data.name,
+                          image: data?.data.picture,
+                          background: data?.data.cover,
+                        },
+                      },
+                    );
+                  }
+                }}
+              >
+                <img src={qrIcon} />
+              </IconButton>
             </Stack>
           </Stack>
-        ))
-        .run()}
-      <CreatePostDialog isOpen={isPostsDialogOpen.isTrue} onClose={isPostsDialogOpen.setFalse} />
+
+          {data?.data.description.trim().length! > 0 && (
+            <Box m={2}>
+              <Typography fontWeight={700} color="info.main" fontSize={20}>
+                About
+              </Typography>
+              <Typography fontSize={16} color="black">
+                {data?.data.description}
+              </Typography>
+            </Box>
+          )}
+
+          <Divider sx={{ border: 2, borderColor: '#DADEE3' }} />
+
+          <Stack gap={1} m={2}>
+            <Typography fontWeight={700} color="info.main" fontSize={20}>
+              Posts
+            </Typography>
+
+            <WritePost groupId={groupId} />
+
+            {posts.isFetching ? (
+              <Loader />
+            ) : (
+              posts.data?.data.map((post: Post) => <PostItem key={post.id} post={post} />)
+            )}
+          </Stack>
+        </Box>
+      )}
       <IntivationDialog
         groupId={groupId!}
         isOpen={isInvitationDialogOpen.isTrue}

@@ -2,7 +2,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LockIcon from '@mui/icons-material/Lock';
 import PublicIcon from '@mui/icons-material/Public';
-import ShareIcon from '@mui/icons-material/Share';
 import {
   Avatar,
   Box,
@@ -23,13 +22,14 @@ import { timeAgo } from '../../helpers';
 import TagItem from '../tag';
 import LikesItem from '../likes';
 import { Post } from '~/api/posts';
-import { IconPrivatePost } from '~/assets/icons';
+import { IconPrivatePost, IconShare } from '~/assets/icons';
 import { paths } from '~/app/routes';
 
 type Props = {
   post: Post;
   isDetails?: boolean;
 };
+
 const PostItem = ({ post, isDetails = false }: Props) => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState<boolean[]>(Array(post.media?.length).fill(false)); // TODO!!
@@ -72,7 +72,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
   const cardImage = post.group ? post.group.groupImage : post.author?.picture;
 
   return (
-    <Card onClick={navigateToDetails}>
+    <Card sx={{ boxShadow: '0px 8px 24px 0px #959DA533', p: 2 }} onClick={navigateToDetails}>
       <CardHeader
         avatar={<Avatar src={cardImage ?? ''} />}
         title={post.group ? post.group.name : post.author?.name}
@@ -87,6 +87,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
           </Stack>
         }
       />
+
       <CardContent
         sx={{
           paddingY: 0,
@@ -131,6 +132,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
           ))}
         </Stack>
       </CardContent>
+
       {post.media?.map((media, i) => (
         <Box m={2} key={i}>
           {!imageLoaded[i] && <Skeleton variant="rectangular" width={1} height={194} sx={{ borderRadius: 1 }} />}
@@ -150,34 +152,43 @@ const PostItem = ({ post, isDetails = false }: Props) => {
           />
         </Box>
       ))}
+
       <CardActions
         sx={{
           justifyContent: 'space-between',
         }}
         disableSpacing
       >
-        <Stack gap={1} marginLeft={1} alignItems="center" direction="row">
-          {isDetails &&
-            (post.hasLiked ? (
-              <FavoriteIcon color="primary" />
-            ) : (
-              <IconButton
-                onClick={() =>
-                  navigate(`/appreciate/${post.id}`, {
-                    state: {
-                      postAuthor: post.author?.id,
-                    },
-                  })
-                }
-              >
-                <FavoriteBorderIcon />
-              </IconButton>
-            ))}
+        <Stack ml={1} alignItems="center" direction="row">
+          {post.hasLiked ? (
+            <FavoriteIcon color="primary" />
+          ) : (
+            <IconButton
+              onClick={(event) => {
+                event.stopPropagation();
+                navigate({
+                  pathname: generatePath(paths.appreciate, {
+                    appreciateId: post.id,
+                  }),
+                });
+                navigate(`/appreciate/${post.id}`, {
+                  state: {
+                    postAuthorId: post.author?.id,
+                  },
+                });
+              }}
+            >
+              <FavoriteBorderIcon />
+            </IconButton>
+          )}
           <LikesItem likes={post.likes ?? []} />
-          <Typography fontSize="small">{post.likesCount} likes</Typography>
+          <Typography fontSize={13} fontWeight={600}>
+            {post.likesCount} likes
+          </Typography>
         </Stack>
-        <Button color="secondary" variant="text">
-          <ShareIcon />
+
+        <Button color="secondary" variant="text" sx={{ fontSize: 13, fontWeight: 600 }}>
+          <IconShare sx={{ color: 'black', fontSize: 20, mr: 0.5, fontWeight: 600 }} />
           Share
         </Button>
       </CardActions>

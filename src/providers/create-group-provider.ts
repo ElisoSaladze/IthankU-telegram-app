@@ -1,18 +1,16 @@
 import constate from 'constate';
 import { useForm } from 'react-hook-form';
+import { Shade } from '~/api/shades';
 import { Visibility } from '~/constants/enums';
 
 // TODO!
 export type CreateGroupFormValues = {
   name: string;
   description: string;
-  shade?: string;
-  shadeId: string;
+  shade?: Shade;
   privacy: Visibility;
   picture?: File;
   cover?: File;
-  currentTag?: string;
-  shadeColor?: string;
   tags: {
     value: string;
   }[];
@@ -22,11 +20,7 @@ const defaultValues: CreateGroupFormValues = {
   name: '',
   description: '',
   tags: [],
-  shade: '',
-  shadeColor: '',
   privacy: Visibility.Public,
-  currentTag: '#',
-  shadeId: '',
 };
 
 const useCreateGroup = () => {

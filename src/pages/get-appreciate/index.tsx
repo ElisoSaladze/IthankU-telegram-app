@@ -3,7 +3,6 @@ import { Avatar, Box, Button, Snackbar, Stack, Typography } from '@mui/material'
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import ShareIcon from '@mui/icons-material/Share';
 import { useQuery } from '@tanstack/react-query';
-import BackButtonAppBar from 'src/components/appbar';
 import Loader from 'src/components/loader';
 import back from 'src/assets/images/itu.png';
 import { useState } from 'react';
@@ -46,19 +45,17 @@ function QRCodePage() {
   }
 
   return (
-    <Stack justifyContent="space-between" height="100vh">
-      <BackButtonAppBar pageName="" color="transparent" />
+    <Stack justifyContent="space-between" height="100vh" p={3}>
       <Box
         sx={{
-          width: '100%',
-          height: 175,
+          minHeight: 175,
           backgroundImage: `url(${back})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
         }}
       />
-      <Stack gap={1} p={2}>
+      <Stack gap={1}>
         <Typography textAlign={'center'} variant="h6">
           One time Code: <span style={{ color: 'green' }}>{qrCode.data.requestId}</span>
         </Typography>
@@ -91,7 +88,7 @@ function QRCodePage() {
           </Typography>
         )}
 
-        <Stack direction="row" gap={1}>
+        <Stack direction="row" gap={1} mb={3}>
           <Button
             size="medium"
             fullWidth
@@ -106,6 +103,7 @@ function QRCodePage() {
           </Button>
         </Stack>
       </Stack>
+
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={2000}

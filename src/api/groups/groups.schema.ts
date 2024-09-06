@@ -19,7 +19,7 @@ export const TGroup = z.object({
   description: z.string(),
   picture: z.string().nullable(),
   cover: z.string().nullable(),
-  shade: TShade,
+  shade: TShade.nullable(),
   tags: z.array(z.string()).optional(),
   membersCount: z.number(),
   privacy: TVisibility,
@@ -32,7 +32,7 @@ export const TGroupDetails = z.object({
   name: z.string(),
   picture: z.string().nullable(),
   cover: z.string().nullable(),
-  shade: TShade,
+  shade: TShade.nullable(),
   description: z.string(),
   tags: z.array(z.string()).optional(),
   privacy: TVisibility,
@@ -51,7 +51,9 @@ export const TInvitation = z.object({
 export const TInvitations = z.array(TInvitation);
 
 export const TInvitationCode = z.object({
-  inviteCode: z.string(),
+  id: z.string(),
+  qrCode: z.string(),
+  telegramUrl: z.string(),
 });
 
 export const TUserToInvite = z.object({

@@ -7,9 +7,10 @@ import { useBoolean } from '~/lib/hooks';
 
 type Props = {
   button: ReactNode;
+  fromGroupPage?: boolean;
 };
 
-export const CreatePostGroupMenu = ({ button }: Props) => {
+export const CreatePostGroupMenu = ({ button, fromGroupPage }: Props) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -56,7 +57,11 @@ export const CreatePostGroupMenu = ({ button }: Props) => {
         <MenuItem onClick={() => navigate(paths.createGroupDetails)}>Create Group</MenuItem>
       </Menu>
 
-      <CreatePostDialog isOpen={isPostsDialogOpen.isTrue} onClose={isPostsDialogOpen.setFalse} />
+      <CreatePostDialog
+        isOpen={isPostsDialogOpen.isTrue}
+        onClose={isPostsDialogOpen.setFalse}
+        fromGroupPage={fromGroupPage}
+      />
     </>
   );
 };

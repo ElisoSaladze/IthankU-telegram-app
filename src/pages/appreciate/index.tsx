@@ -13,13 +13,16 @@ import { AppHeader } from '~/components/header';
 const AppreciatePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { postAuthor, phoneNumber } = location.state || {};
+
+  const { postAuthorId, phoneNumber } = location.state || {};
 
   const { appreciateId } = useParams<Params>(); // TODO! ERROR It is not real appreciateId it is postId!!
 
+  console.log({ postAuthorId });
+
   const { control, setValue, handleSubmit } = useForm<AppreciateUserInput>({
     defaultValues: {
-      receiverId: postAuthor,
+      receiverId: postAuthorId ?? undefined,
       // postId: !phoneNumber && String(postAuthor).length > 0 ? appreciateId : undefined,
       // mobileNumber: phoneNumber ? appreciateId : undefined,
     },
@@ -28,11 +31,12 @@ const AppreciatePage = () => {
   const { data: appreciateData } = useQuery({
     queryKey: qk.appreciate.getUser.toKeyWithArgs({ appreciateId: appreciateId! }),
     queryFn: () => getAppreciateUser({ appreciateId: appreciateId! }),
-    enabled: !!appreciateId && !phoneNumber && !postAuthor,
+    enabled: appreciateId !== undefined && !postAuthorId,
     onSuccess: (data) => {
       if (data?.data.shade) setValue('shadeId', data.data.shade.id);
       if (data?.data.hashtag) setValue('hashtag', data.data.hashtag);
       setValue('requestId', data.data.requestId);
+      // setValue('receiverId')
     },
   });
 
@@ -45,9 +49,9 @@ const AppreciatePage = () => {
   });
 
   return (
-    <>
+    <Box>
       <AppHeader backPath={paths.home} />
-      <Stack mt={2} gap={2} mx={3} pb={15}>
+      <Stack m={3} gap={2} pb={3}>
         <AreaSelect
           defaultSelected={appreciateData?.data.shade?.en}
           onSelect={(shade) => (shade ? setValue('shadeId', shade.id) : setValue('shadeId', ''))}
@@ -101,7 +105,7 @@ const AppreciatePage = () => {
           </Button>
         </Stack>
       </Stack>
-    </>
+    </Box>
   );
 };
 

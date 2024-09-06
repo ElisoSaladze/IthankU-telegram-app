@@ -52,7 +52,7 @@ export const AppLayout = ({ children }: Props) => {
     <Box overflow="auto" height={1} display="flex" flexDirection="column">
       <GlobalLoadingIndicator />
 
-      <Box height={1}>
+      <Box sx={{ flex: 1, overflow: 'auto' }}>
         <Box height={1}>
           <Suspense fallback={<Loader />}>{children}</Suspense>
         </Box>
@@ -65,10 +65,6 @@ export const AppLayout = ({ children }: Props) => {
             backgroundImage: showAppreciate ? `url(${nav})` : '',
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
             py: 0.8,
             backgroundColor: showAppreciate ? 'transparent' : 'white',
             boxShadow: showAppreciate ? 'none' : '0px 1px 10.4px -2px rgba(0, 0, 0, 0.25)',

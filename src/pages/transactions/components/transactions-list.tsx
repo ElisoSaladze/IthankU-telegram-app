@@ -46,9 +46,20 @@ export const TransactionsList = ({ type }: { type: 'incoming' | 'outgoing' }) =>
         ))
         .with({ isError: true }, () => <Typography>Failed to load transactions.</Typography>)
         .with({ isSuccess: true, data: P.select() }, ({ pages }) =>
-          pages.flatMap((page) =>
-            page.data?.map((transaction) => <TransactionItem key={transaction.id} transaction={transaction} />),
-          ),
+          pages.flatMap((page) => {
+            const transactions = page.data;
+
+            if (transactions.length === 0) {
+              return (
+                <Typography textAlign="center" color="text.secondary" mt={3}>
+                  No transactions found.
+                </Typography>
+              );
+            }
+            return transactions.map((transaction) => {
+              return <TransactionItem key={transaction.id} transaction={transaction} />;
+            });
+          }),
         )
         .otherwise(() => (
           <>

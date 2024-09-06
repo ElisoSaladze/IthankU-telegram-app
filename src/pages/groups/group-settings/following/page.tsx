@@ -81,7 +81,7 @@ export const Following = () => {
                       <Typography fontSize={15} fontWeight={600}>
                         {group.name}
                       </Typography>
-                      <ShadeComponent color={group.shade?.color} name={group.shade?.en} />
+                      {group.shade && <ShadeComponent color={group.shade.color} name={group.shade.en} />}
                       <Stack direction="row">{group.tags?.map((tag, i) => <TagItem key={i} tag={tag} />)}</Stack>
                     </Stack>
                   </Stack>

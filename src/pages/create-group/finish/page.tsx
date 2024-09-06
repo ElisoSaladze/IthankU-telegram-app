@@ -17,6 +17,15 @@ export const FinishNewGroup = () => {
     mutationFn: createGroup,
   });
 
+  const [shade, tags, name, description, image, cover] = watch([
+    'shade',
+    'tags',
+    'name',
+    'description',
+    'image',
+    'cover',
+  ]);
+
   return (
     <Stack mt={10} p={2} gap={2} width={1} alignItems="center">
       <Stack
@@ -40,7 +49,7 @@ export const FinishNewGroup = () => {
           bgcolor="#222222"
           height={120}
           sx={{
-            backgroundImage: watch('cover') ? `url(${URL.createObjectURL(watch('cover')!)})` : 'none',
+            backgroundImage: cover ? `url(${URL.createObjectURL(cover!)})` : 'none',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
@@ -50,14 +59,11 @@ export const FinishNewGroup = () => {
           }}
         />
         <Box bgcolor="white" p={1} zIndex={2} mt={6} borderRadius="50%">
-          <Avatar
-            sx={{ height: 120, width: 120 }}
-            src={watch('picture') ? URL.createObjectURL(watch('picture')!) : ''}
-          />
+          <Avatar sx={{ height: 120, width: 120 }} src={image ? URL.createObjectURL(image!) : ''} />
         </Box>
 
         <Typography fontSize={24} fontWeight={600}>
-          {watch('name')}
+          {name}
         </Typography>
         <Typography
           sx={{
@@ -66,11 +72,12 @@ export const FinishNewGroup = () => {
             wordBreak: 'break-all',
           }}
         >
-          {watch('description')}
+          {description}
         </Typography>
-        <ShadeComponent color={watch('shadeColor')!} name={watch('shade')!} />
+        {shade && <ShadeComponent color={shade.color} name={shade.en} />}
+
         <Box display="flex" gap={1}>
-          {watch('tags').map((tag, index) => (
+          {tags.map((tag, index) => (
             <TagItem key={index} tag={tag.value} />
           ))}
         </Box>
@@ -83,14 +90,18 @@ export const FinishNewGroup = () => {
           disabled={$createGroup.isLoading}
           fullWidth
           onClick={handleSubmit((values) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { currentTag, shadeColor, shade, ...otherValues } = values;
-            $createGroup.mutate(otherValues, {
-              onSuccess: (data) => {
-                const groupId = data.data.id;
-                navigate(generatePath(paths.groupDetails, { groupId }));
+            $createGroup.mutate(
+              {
+                ...values,
+                shadeId: values.shade?.id,
               },
-            });
+              {
+                onSuccess: (data) => {
+                  const groupId = data.data.id;
+                  navigate(generatePath(paths.groupDetails, { groupId }));
+                },
+              },
+            );
           })}
           size="large"
           variant="contained"

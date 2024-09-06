@@ -8,11 +8,13 @@ import { useConst } from '../hooks';
 
 type UseQueryClientInstanceOptions = {
   debug: boolean;
+  development?: boolean;
 };
 
 export const useQueryClientInstance = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   debug: _debug,
+  development,
 }: UseQueryClientInstanceOptions) => {
   const handleError = useCallback((type?: string, message?: string) => {
     toast.error(
@@ -41,16 +43,20 @@ export const useQueryClientInstance = ({
     return new QueryClient({
       queryCache: new QueryCache({
         onError: (error) => {
-          const requestError = error as RequestError;
+          if (development) {
+            const requestError = error as RequestError;
 
-          handleError(requestError.type, requestError.message);
+            handleError(requestError.type, requestError.message);
+          }
         },
       }),
       mutationCache: new MutationCache({
         onError: (error: unknown) => {
-          const requestError = error as RequestError;
+          if (development) {
+            const requestError = error as RequestError;
 
-          handleError(requestError.type, requestError.message);
+            handleError(requestError.type, requestError.message);
+          }
         },
       }),
       defaultOptions: {
