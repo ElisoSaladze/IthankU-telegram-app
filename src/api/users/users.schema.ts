@@ -7,6 +7,7 @@ const TLocation = z.object({
   coordinates: z.tuple([z.number(), z.number()]),
 });
 
+
 const TTopShade = z.object({
   shade: TShade,
   points: z.number(),

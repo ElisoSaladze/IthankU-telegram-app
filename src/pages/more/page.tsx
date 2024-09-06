@@ -96,6 +96,7 @@ export const MorePage = () => {
               onChange={() => {
                 $updateAccountVisibility.mutate({
                   isPrivate: isPrivate!,
+                  id: userDetails.id,
                 });
               }}
               name="private"
@@ -117,6 +118,11 @@ export const MorePage = () => {
               onChange={() => {
                 $updateLocationVisibility.mutate({
                   isPrivate: showOnMap!,
+                  id: userDetails.id,
+                  // location: {
+                  //   latitude: userDetails.location!.coordinates[0],
+                  //   longitude: userDetails.location!.coordinates[1],
+                  // },
                 });
               }}
               name="showOnMap"
