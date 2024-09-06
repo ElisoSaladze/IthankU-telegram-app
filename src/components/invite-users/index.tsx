@@ -52,7 +52,7 @@ const IntivationDialog = ({ isOpen, onClose, groupId }: Props) => {
     .run();
 
   const appreciationUrl = invitationResponse
-    ? `https://web.itu-net.com/appreciate/${invitationResponse.data.inviteCode}`
+    ? `https://web.itu-net.com/appreciate/${invitationResponse.data.qrCode}`
     : '';
 
   const $inviteUser = useMutation({

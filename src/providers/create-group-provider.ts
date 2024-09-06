@@ -9,7 +9,7 @@ export type CreateGroupFormValues = {
   description: string;
   shade?: Shade;
   privacy: Visibility;
-  picture?: File;
+  image?: File;
   cover?: File;
   tags: {
     value: string;
