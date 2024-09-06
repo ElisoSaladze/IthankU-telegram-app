@@ -1,10 +1,11 @@
 import { Button, Stack, Typography } from '@mui/material';
-import BackButtonAppBar from 'src/components/appbar';
 import appreciate from 'src/assets/images/like.png';
 import { ControlledPhoneInput } from 'src/components/form/controlled/controlled-phone-input';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { PhoneNumberUtil } from 'google-libphonenumber';
+import { AppHeader } from '~/components/header';
+import { paths } from '~/app/routes';
 
 const phoneUtil = PhoneNumberUtil.getInstance();
 
@@ -26,8 +27,8 @@ const PhoneNumberAppreciate = () => {
   };
 
   return (
-    <Stack height="100vh" gap={2} py={5} pt={8} justifyContent="space-between" alignItems="center" mx={2}>
-      <BackButtonAppBar pageName="" />
+    <Stack height="100vh" gap={2} pb={5} justifyContent="space-between" alignItems="center" mx={2}>
+      <AppHeader backPath={paths.home} />
       <Stack gap={2} alignItems="center" width="100%">
         <img width={85} src={appreciate} />
         <Typography fontSize={30}>Appreciate</Typography>

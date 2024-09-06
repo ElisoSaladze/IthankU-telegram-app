@@ -14,7 +14,7 @@ export const paths = {
   thankYou: '/thank-you',
   phoneNumberAppreciate: '/phone-number-appreciate',
   scanQRCode: '/scan-qr-code',
-  appreciate: '/appreciate/:appreciateId',
+  appreciate: '/appreciate',
   getAppreciate: '/get-appreciate',
   qrOptions: '/get-appreciate/qr-options',
   transactionDetails: '/list/transactions/:transactionId',

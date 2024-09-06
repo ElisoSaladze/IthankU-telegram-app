@@ -1,8 +1,9 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { Scanner } from '@yudiel/react-qr-scanner';
 import { useNavigate } from 'react-router-dom';
-import BackButtonAppBar from 'src/components/appbar';
 import background from 'src/assets/images/scanner-back.png';
+import { paths } from '~/app/routes';
+import { AppHeader } from '~/components/header';
 
 const ScanQrCodePage = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const ScanQrCodePage = () => {
 
   return (
     <Stack>
-      <BackButtonAppBar pageName="" />
+      <AppHeader backPath={paths.home} />
       <Stack alignItems="center" justifyContent="center" gap={4} mx={2}>
         <Stack
           width="100%"
