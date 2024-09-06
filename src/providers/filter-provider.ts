@@ -14,7 +14,7 @@ const defaultValues = {
     lat: 0,
     lng: 0,
   },
-  distance: 1000,
+  distance: null as null | number,
 };
 
 const useFilterUsers = () => {

@@ -162,7 +162,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main' }: Props) => {
           >
             <Box mx={1}>
               <Slider
-                value={watch('distance') / 1000}
+                value={watch('distance')! / 1000}
                 onChange={handleRadiusChange}
                 min={1}
                 max={25}
@@ -172,7 +172,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main' }: Props) => {
               />
             </Box>
           </CustomAccordion>
-          {watch('distance') && <Typography>{watch('distance') / 1000}</Typography>}
+          {watch('distance') && <Typography>{watch('distance')! / 1000}</Typography>}
           <Divider />
           <Stack gap={1} direction="row">
             <Button

@@ -7,14 +7,14 @@ import { useInView } from 'react-intersection-observer';
 import { match, P } from 'ts-pattern';
 import { getPosts } from '~/api/posts';
 import { qk } from '~/api/query-keys';
-import { useAuthUser } from '~/app/auth';
 import { AppHeader } from '~/components/header';
 import { CreatePostGroupMenu } from '~/components/create-post-group-menu';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { useUserDetails } from '~/lib/hooks';
 
 export const HomePage = () => {
   const [ref, inView] = useInView();
-  const authUser = useAuthUser();
+  const { user: userDetails } = useUserDetails();
 
   const $posts = useInfiniteQuery({
     queryKey: qk.posts.list.toKey(),
@@ -54,11 +54,11 @@ export const HomePage = () => {
         .with({ isLoading: true }, () => <Loader />)
         .with({ isError: true }, () => <Typography color="error">Failed to load posts.</Typography>)
         .with({ isSuccess: true, data: P.select() }, ({ pages }) => (
-          <Stack m={3} gap={2} alignItems="center">
+          <Stack mx={3} gap={2} alignItems="center">
             <Stack justifyContent="space-between" direction="row" alignItems="center">
               <Stack>
                 <Typography fontSize={30} fontWeight={600}>
-                  Hello, {authUser?.user.name}!
+                  Hello, {userDetails?.name}!
                 </Typography>
                 <Typography fontSize={14} color="secondary.dark">
                   Transforming kindness into rewards? Discover how with{' '}
@@ -67,7 +67,7 @@ export const HomePage = () => {
                   </Typography>
                 </Typography>
               </Stack>
-              <Avatar src={authUser?.user.picture} sx={{ width: 65, height: 65 }} />
+              <Avatar src={userDetails!.picture!} sx={{ width: 65, height: 65 }} />
             </Stack>
 
             {$posts.isLoading && !$posts.isFetchingNextPage ? (

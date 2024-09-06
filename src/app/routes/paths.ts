@@ -6,7 +6,6 @@ export const paths = {
   post: '/post/:postId',
   privatePost: '/private-post/:postId',
   invitationQR: '/invitation-qr/:groupId',
-  inviteUser: '/invite-user/:groupId',
   groupDetails: '/groups/details/:groupId',
   createGroup: '/create-group',
   createGroupDetails: '/create-group/details',

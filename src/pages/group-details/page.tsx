@@ -23,6 +23,7 @@ import { GroupUsers } from './components';
 import { match, P } from 'ts-pattern';
 import { useBoolean } from '~/lib/hooks';
 import { CreatePostDialog } from '~/components/create-post';
+import IntivationDialog from '~/components/invite-users';
 
 const IconWrapper = ({ children, onClick }: { children: ReactNode; onClick?: () => void }) => {
   return (
@@ -92,6 +93,8 @@ export const GroupDetailsPage = () => {
       },
     );
   };
+
+  const isInvitationDialogOpen = useBoolean();
 
   return (
     <Stack overflow="auto" height="100vh">
@@ -196,7 +199,7 @@ export const GroupDetailsPage = () => {
                   </Button>
                 )}
                 <Button
-                  onClick={() => navigate(`/invite-user/${groupId}`)}
+                  onClick={() => isInvitationDialogOpen.setTrue()}
                   startIcon={<PersonAddAlt1Icon />}
                   sx={{ borderRadius: 4 }}
                   size="medium"
@@ -262,6 +265,11 @@ export const GroupDetailsPage = () => {
         ))
         .run()}
       <CreatePostDialog isOpen={isPostsDialogOpen.isTrue} onClose={isPostsDialogOpen.setFalse} />
+      <IntivationDialog
+        groupId={groupId!}
+        isOpen={isInvitationDialogOpen.isTrue}
+        onClose={isInvitationDialogOpen.setFalse}
+      />
     </Stack>
   );
 };

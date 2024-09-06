@@ -54,10 +54,9 @@ export const TInvitationCode = z.object({
   inviteCode: z.string(),
 });
 
-const TUserToInvite = z.object({
+export const TUserToInvite = z.object({
   id: z.string(),
   name: z.string(),
-  picture: z.string(),
+  picture: z.string().optional(),
+  status: z.string(),
 });
-
-export const TUserToInvites = z.array(TUserToInvite);

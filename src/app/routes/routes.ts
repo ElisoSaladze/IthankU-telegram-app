@@ -23,11 +23,6 @@ export const authRoutes = [
     title: 'QR Invitatrion',
   }),
   createRoute({
-    path: paths.inviteUser,
-    factory: () => import('src/pages/group-details/invite-users'),
-    title: 'Invite User',
-  }),
-  createRoute({
     path: paths.groupDetails,
     factory: () => import('src/pages/group-details'),
     title: 'Group Details',

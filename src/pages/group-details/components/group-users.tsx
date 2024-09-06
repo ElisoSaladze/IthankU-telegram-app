@@ -9,6 +9,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { paths } from '~/app/routes';
 import { useAuthUser } from '~/app/auth';
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 type Props = {
   groupId: string;
@@ -16,6 +18,7 @@ type Props = {
 };
 
 export const GroupUsers = ({ groupId, owner }: Props) => {
+  const [ref, inView] = useInView();
   const authUser = useAuthUser();
   const isOwner = owner === authUser?.user.id;
 
@@ -44,6 +47,12 @@ export const GroupUsers = ({ groupId, owner }: Props) => {
   } else {
     app.BackButton.hide();
   }
+
+  useEffect(() => {
+    if (inView && $groupUsers.hasNextPage) {
+      $groupUsers.fetchNextPage();
+    }
+  }, [$groupUsers, inView]);
   return match($groupUsers)
     .with({ isLoading: true }, () => <Skeleton variant="circular" width={32} height={32} />)
     .with({ isSuccess: true, data: P.select() }, ({ pages }) => {
@@ -97,6 +106,19 @@ export const GroupUsers = ({ groupId, owner }: Props) => {
                     )}
                   </Box>
                 ))}
+                {$groupUsers.hasNextPage && (
+                  <Button
+                    disabled={!$groupUsers.hasNextPage || $groupUsers.isFetchingNextPage}
+                    ref={ref}
+                    onClick={() => $groupUsers.fetchNextPage()}
+                  >
+                    {$groupUsers.isFetchingNextPage
+                      ? 'Loading more posts'
+                      : $groupUsers.hasNextPage
+                        ? 'Show more'
+                        : 'No more posts'}
+                  </Button>
+                )}
               </Stack>
             </Stack>
           </Dialog>
