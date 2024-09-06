@@ -203,7 +203,7 @@ export const GroupDetailsPage = () => {
                 </Button>
               )}
               <Button
-                onClick={() => navigate(`/invite-user/${groupId}`)}
+                onClick={() => isInvitationDialogOpen.setTrue()}
                 startIcon={<PersonAddAlt1Icon />}
                 sx={{ borderRadius: 4 }}
                 size="medium"
