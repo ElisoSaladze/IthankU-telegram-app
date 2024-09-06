@@ -14,15 +14,14 @@ const AppreciatePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { postAuthorId, phoneNumber } = location.state || {};
+  const { postAuthorId, postId, phoneNumber } = location.state || {};
 
   const { appreciateId } = useParams<Params>(); // TODO! ERROR It is not real appreciateId it is postId!!
-
-  console.log({ postAuthorId });
 
   const { control, setValue, handleSubmit } = useForm<AppreciateUserInput>({
     defaultValues: {
       receiverId: postAuthorId ?? undefined,
+      postId: postId ?? undefined,
       // postId: !phoneNumber && String(postAuthor).length > 0 ? appreciateId : undefined,
       // mobileNumber: phoneNumber ? appreciateId : undefined,
     },
@@ -31,12 +30,11 @@ const AppreciatePage = () => {
   const { data: appreciateData } = useQuery({
     queryKey: qk.appreciate.getUser.toKeyWithArgs({ appreciateId: appreciateId! }),
     queryFn: () => getAppreciateUser({ appreciateId: appreciateId! }),
-    enabled: appreciateId !== undefined && !postAuthorId,
+    enabled: appreciateId !== undefined && !postAuthorId && !postId,
     onSuccess: (data) => {
       if (data?.data.shade) setValue('shadeId', data.data.shade.id);
       if (data?.data.hashtag) setValue('hashtag', data.data.hashtag);
       setValue('requestId', data.data.requestId);
-      // setValue('receiverId')
     },
   });
 

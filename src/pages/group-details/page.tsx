@@ -52,8 +52,6 @@ export const GroupDetailsPage = () => {
 
   const args = { groupId: groupId! };
 
-  console.log({ args });
-
   const { data, isFetching, refetch } = useQuery({
     queryKey: qk.groups.details.toKeyWithArgs(args),
     queryFn: () => getGroupDetails(args),

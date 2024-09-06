@@ -7,8 +7,6 @@ import { Progress } from '~/components/progress';
 export const AuthSwitch = () => {
   const { user } = useAuth();
 
-  console.log({ user });
-
   return match(user)
     .with({ state: 'loading' }, () => <Progress centered />)
     .with({ state: 'authenticated' }, () => <AuthApp />)
