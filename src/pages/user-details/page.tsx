@@ -171,7 +171,18 @@ export const UserDetailsPage = () => {
                   </Stack>
                   {!isCurrent && (
                     <Button
-                      onClick={() => navigate(`/appreciate/${userId}`)}
+                      onClick={() => {
+                        navigate(
+                          generatePath(paths.appreciate, {
+                            appreciateId: '', // we don't need appreciateId
+                          }),
+                          {
+                            state: {
+                              receiverId: userId,
+                            },
+                          },
+                        );
+                      }}
                       color="warning"
                       size="large"
                       variant="contained"
