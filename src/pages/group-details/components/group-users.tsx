@@ -35,6 +35,7 @@ export const GroupUsers = ({ groupId, owner }: Props) => {
 
   const $deleteUser = useMutation({
     mutationFn: (userId: string) => removeUserFromGroup(groupId, userId),
+    onSuccess: $groupUsers.refetch,
   });
 
   const isUsersDialogOpen = useBoolean();
