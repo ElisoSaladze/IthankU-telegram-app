@@ -170,7 +170,7 @@ export const GroupDetailsPage = () => {
               <Stack gap={0.5} direction={'row'} flexWrap={'wrap'}>
                 {data.tags?.map((tag: string, index: number) => <TagItem key={index} tag={tag} />)}
               </Stack>
-              {groupId && <GroupUsers groupId={groupId} />}
+              {groupId && <GroupUsers owner={data.owner.id} groupId={groupId} />}
               <Stack gap={1} direction={'row'}>
                 {data.isUserJoined ? (
                   <Button

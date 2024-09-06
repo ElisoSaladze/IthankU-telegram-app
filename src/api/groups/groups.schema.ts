@@ -38,6 +38,7 @@ export const TGroupDetails = z.object({
   privacy: TVisibility,
   membersCount: z.number(),
   isUserJoined: z.boolean(),
+  owner: TAuthor,
 });
 
 export const TInvitation = z.object({

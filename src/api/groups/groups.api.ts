@@ -12,6 +12,11 @@ export type GroupId = {
   groupId: string;
 };
 
+export type groupUserParams = {
+  groupId: string;
+  page?: number;
+};
+
 export const getGroupDetails = async ({ groupId }: GroupId) => {
   return await request('/api/v1/groups/:groupId').get(
     {
@@ -23,9 +28,16 @@ export const getGroupDetails = async ({ groupId }: GroupId) => {
   );
 };
 
-export const getGroupMembers = async ({ groupId }: GroupId) => {
+export const getGroupMembers = async ({ groupId, page }: groupUserParams) => {
+  const query = new URLSearchParams();
+
+  if (page) {
+    query.set('page', page.toString());
+  }
+
   return await request('/api/v1/groups/:groupId/members').get(
     {
+      query,
       params: {
         groupId,
       },
@@ -151,5 +163,14 @@ export const createGroup = async (input: CreateGroupFormValues) => {
   return await request('/api/v1/groups').post({
     type: 'file',
     body: { ...input, tags: input.tags.map((tag) => tag.value) },
+  });
+};
+
+export const removeUserFromGroup = async (groupId: string, userId: string) => {
+  return await request('/api/v1/groups/:groupId/users/:userId').delete({
+    params: {
+      groupId,
+      userId,
+    },
   });
 };
