@@ -1,16 +1,12 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import CircleIcon from '@mui/icons-material/Circle';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
-
 import SearchIcon from '@mui/icons-material/Search';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import { AppBar, Avatar, Box, Button, Divider, IconButton, ListItemButton, Stack, Typography } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
-
 import notificationsIcon from 'src/assets/icons/white-notif.svg';
 import defaultImageUrl from 'src/assets/images/itu-circle.png';
-
 import { Params, useNavigate, useParams } from 'react-router-dom';
 import { getGroupDetails, getGroupPosts, joinGroup, leaveGroup } from '~/api/groups';
 import Loader from 'src/components/loader';
@@ -24,6 +20,9 @@ import { IconArrow } from '~/assets/icons';
 import { paths } from '~/app/routes';
 import { ReactNode } from 'react';
 import { GroupUsers } from './components';
+import { match, P } from 'ts-pattern';
+import { useBoolean } from '~/lib/hooks';
+import { CreatePostDialog } from '~/components/create-post';
 
 const IconWrapper = ({ children, onClick }: { children: ReactNode; onClick?: () => void }) => {
   return (
@@ -52,7 +51,9 @@ export const GroupDetailsPage = () => {
 
   const args = { groupId: groupId! };
 
-  const { data, isFetching, refetch } = useQuery({
+  const isPostsDialogOpen = useBoolean();
+
+  const $groupDetails = useQuery({
     queryKey: qk.groups.details.toKeyWithArgs(args),
     queryFn: () => getGroupDetails(args),
   });
@@ -71,7 +72,7 @@ export const GroupDetailsPage = () => {
       { groupId: groupId! },
       {
         onSuccess: () => {
-          refetch();
+          $groupDetails.refetch();
         },
       },
     );
@@ -83,19 +84,17 @@ export const GroupDetailsPage = () => {
 
   const handleLeaveGroup = () => {
     $leaveGroup.mutate(
-      {
-        groupId: groupId!,
-      },
+      { groupId: groupId! },
       {
         onSuccess: () => {
-          refetch();
+          $groupDetails.refetch();
         },
       },
     );
   };
 
   return (
-    <Stack height="100vh">
+    <Stack overflow="auto" height="100vh">
       <AppBar
         sx={{
           position: 'fixed',
@@ -110,7 +109,7 @@ export const GroupDetailsPage = () => {
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <IconWrapper>
-              <img src={notificationsIcon} />
+              <img src={notificationsIcon} alt="Notifications" />
             </IconWrapper>
 
             <IconWrapper>
@@ -119,144 +118,150 @@ export const GroupDetailsPage = () => {
           </Box>
         </Box>
       </AppBar>
-      {isFetching ? (
-        <Loader />
-      ) : (
-        <Stack
-          sx={{
-            width: '100%',
-            height: 200,
-            backgroundImage: `url(${data?.data.cover})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'top',
-            backgroundColor: data?.data.cover ? 'transparent' : '#222222',
-          }}
-        >
+      {match($groupDetails)
+        .with({ isLoading: true }, () => <Loader />)
+        .with({ isError: true }, () => <Typography color="error">Failed to load group information</Typography>)
+        .with({ isSuccess: true, data: P.select() }, ({ data }) => (
           <Stack
-            bgcolor="white"
-            m={2}
-            marginTop={10}
-            boxShadow="0px 3px 8.6px -4px #00000040"
-            gap={1}
-            p={2}
-            borderRadius={5}
+            sx={{
+              width: '100%',
+              height: 200,
+              backgroundImage: `url(${data.cover})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'top',
+              backgroundColor: data.cover ? 'transparent' : '#222222',
+            }}
           >
-            <Typography fontWeight={600} fontSize={'large'}>
-              {data?.data.name}
-            </Typography>
-            <Stack alignItems={'center'} gap={1} direction={'row'}>
-              <Avatar
-                sx={{ width: 70, height: 70, borderRadius: 4 }}
-                variant="rounded"
-                src={data?.data.picture || defaultImageUrl}
-              />
-              <Stack>
-                <Stack gap={0.5} alignItems={'center'} direction={'row'}>
-                  <CircleIcon color="primary" />
-                  <Typography fontSize={20} color={'info'}>
-                    {data?.data.shade.en}
+            <Stack
+              bgcolor="white"
+              m={2}
+              marginTop={10}
+              boxShadow="0px 3px 8.6px -4px #00000040"
+              gap={1}
+              p={2}
+              borderRadius={5}
+            >
+              <Typography fontWeight={600} fontSize={'large'}>
+                {data.name}
+              </Typography>
+              <Stack alignItems={'center'} gap={1} direction={'row'}>
+                <Avatar
+                  sx={{ width: 70, height: 70, borderRadius: 4 }}
+                  variant="rounded"
+                  src={data.picture || defaultImageUrl}
+                />
+                <Stack>
+                  <Stack gap={0.5} alignItems={'center'} direction={'row'}>
+                    <CircleIcon
+                      sx={{
+                        color: data.shade.color,
+                      }}
+                    />
+                    <Typography fontSize={20} color={'info'}>
+                      {data.shade.en}
+                    </Typography>
+                  </Stack>
+
+                  <Typography>
+                    {data.privacy === 'PUBLIC' ? 'Public group ' : 'Private Group '}• {data.membersCount} members
                   </Typography>
                 </Stack>
-
-                <Typography>
-                  {data?.data.privacy === 'PUBLIC' ? 'Public group ' : 'Private Group '}• {data?.data.membersCount}{' '}
-                  members
+              </Stack>
+              <Stack gap={0.5} direction={'row'} flexWrap={'wrap'}>
+                {data.tags?.map((tag: string, index: number) => <TagItem key={index} tag={tag} />)}
+              </Stack>
+              {groupId && <GroupUsers groupId={groupId} />}
+              <Stack gap={1} direction={'row'}>
+                {data.isUserJoined ? (
+                  <Button
+                    startIcon={<HowToRegIcon />}
+                    sx={{ borderRadius: 4 }}
+                    size="medium"
+                    fullWidth
+                    variant="contained"
+                    onClick={handleLeaveGroup}
+                  >
+                    Joined
+                  </Button>
+                ) : (
+                  <Button
+                    startIcon={<GroupAddIcon />}
+                    sx={{ borderRadius: 4 }}
+                    size="medium"
+                    fullWidth
+                    variant="contained"
+                    onClick={handleJoinGroup}
+                  >
+                    Join
+                  </Button>
+                )}
+                <Button
+                  onClick={() => navigate(`/invite-user/${groupId}`)}
+                  startIcon={<PersonAddAlt1Icon />}
+                  sx={{ borderRadius: 4 }}
+                  size="medium"
+                  color="success"
+                  fullWidth
+                  variant="contained"
+                >
+                  Share
+                </Button>
+                <IconButton
+                  onClick={() =>
+                    navigate(`/invitation-qr/${groupId}`, {
+                      state: {
+                        groupName: data.name,
+                        image: data.picture,
+                        background: data.cover,
+                      },
+                    })
+                  }
+                >
+                  <img src={qrIcon} alt="QR Code" />
+                </IconButton>
+              </Stack>
+            </Stack>
+            {data.description.trim().length > 0 && (
+              <Stack m={2}>
+                <Typography fontWeight={600} fontSize={'large'}>
+                  About
                 </Typography>
+                <Typography>{data.description}</Typography>
               </Stack>
-            </Stack>
-            <Stack gap={0.5} direction={'row'} flexWrap={'wrap'}>
-              {data?.data.tags?.map((tag: string, index: number) => <TagItem key={index} tag={tag} />)}
-            </Stack>
-            {groupId && <GroupUsers groupId={groupId} />}
-            <Stack gap={1} direction={'row'}>
-              {data?.data.isUserJoined ? (
-                <Button
-                  startIcon={<HowToRegIcon />}
-                  sx={{ borderRadius: 4 }}
-                  size="medium"
-                  fullWidth
-                  variant="contained"
-                  onClick={handleLeaveGroup}
-                >
-                  Joined
-                </Button>
-              ) : (
-                <Button
-                  startIcon={<GroupAddIcon />}
-                  sx={{ borderRadius: 4 }}
-                  size="medium"
-                  fullWidth
-                  variant="contained"
-                  onClick={handleJoinGroup}
-                >
-                  Join
-                </Button>
-              )}
-              <Button
-                onClick={() => navigate(`/invite-user/${groupId}`)}
-                startIcon={<PersonAddAlt1Icon />}
-                sx={{ borderRadius: 4 }}
-                size="medium"
-                color="success"
-                fullWidth
-                variant="contained"
-              >
-                Share
-              </Button>
-              <IconButton
-                onClick={() =>
-                  navigate(`/invitation-qr/${groupId}`, {
-                    state: {
-                      groupName: data?.data.name,
-                      image: data?.data.picture,
-                      background: data?.data.cover,
-                    },
-                  })
-                }
-              >
-                <img src={qrIcon} />
-              </IconButton>
-            </Stack>
-          </Stack>
-          {data?.data.description.trim().length! > 0 && (
-            <Stack m={2}>
-              <Typography fontWeight={600} fontSize={'large'}>
-                About
-              </Typography>
-              <Typography>{data?.data.description}</Typography>
-            </Stack>
-          )}
-          <Divider />
-          <Stack gap={1} m={2}>
-            <Typography fontWeight={600} fontSize={'large'}>
-              Posts
-            </Typography>
-            <ListItemButton
-              sx={{
-                padding: 2,
-                boxShadow: '0px 0px 8.9px -3px #00000040',
-                borderRadius: 3,
-              }}
-              onClick={() => navigate(`/create-post/${groupId}`)}
-            >
-              <Stack width={'100%'} justifyContent={'space-between'} alignItems={'center'} direction={'row'}>
-                <Stack gap={2} alignItems={'center'} direction={'row'}>
-                  <Avatar src={authUser?.user.picture} />
-                  <Typography>Write something...</Typography>
-                </Stack>
-                <Button onClick={() => navigate(`/create-post/${groupId}`)} variant="outlined">
-                  Post
-                </Button>
-              </Stack>
-            </ListItemButton>
-            {posts.isFetching ? (
-              <Loader />
-            ) : (
-              posts.data?.data.map((post: Post) => <PostItem key={post.id} post={post} />)
             )}
+            <Divider />
+            <Stack gap={1} m={2}>
+              <Typography fontWeight={600} fontSize={'large'}>
+                Posts
+              </Typography>
+              <ListItemButton
+                sx={{
+                  padding: 2,
+                  boxShadow: '0px 0px 8.9px -3px #00000040',
+                  borderRadius: 3,
+                }}
+                onClick={() => isPostsDialogOpen.setTrue()}
+              >
+                <Stack width={'100%'} justifyContent={'space-between'} alignItems={'center'} direction={'row'}>
+                  <Stack gap={2} alignItems={'center'} direction={'row'}>
+                    <Avatar src={authUser?.user.picture} />
+                    <Typography>Write something...</Typography>
+                  </Stack>
+                  <Button onClick={() => isPostsDialogOpen.setTrue()} variant="outlined">
+                    Post
+                  </Button>
+                </Stack>
+              </ListItemButton>
+              {posts.isFetching ? (
+                <Loader />
+              ) : (
+                posts.data?.data.map((post: Post) => <PostItem key={post.id} post={post} />)
+              )}
+            </Stack>
           </Stack>
-        </Stack>
-      )}
+        ))
+        .run()}
+      <CreatePostDialog isOpen={isPostsDialogOpen.isTrue} onClose={isPostsDialogOpen.setFalse} />
     </Stack>
   );
 };
