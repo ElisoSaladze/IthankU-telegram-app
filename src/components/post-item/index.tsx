@@ -174,6 +174,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
                 navigate(`/appreciate/${post.id}`, {
                   state: {
                     postAuthorId: post.author?.id,
+                    postId: post.id,
                   },
                 });
               }}

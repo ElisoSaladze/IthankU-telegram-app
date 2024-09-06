@@ -13,8 +13,6 @@ const Onboarding = () => {
   const { authorize } = useAuth();
   const authUser = useAuthUser();
 
-  console.log({ authUser });
-
   const { isLoading, isSuccess } = useQuery({
     queryKey: qk.users.check.toKey(),
     queryFn: checkUser,

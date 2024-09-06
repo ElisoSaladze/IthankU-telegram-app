@@ -14,15 +14,14 @@ const AppreciatePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { postAuthorId, phoneNumber } = location.state || {};
+  const { postAuthorId, postId, phoneNumber } = location.state || {};
 
   const { appreciateId } = useParams<Params>(); // TODO! ERROR It is not real appreciateId it is postId!!
-
-  console.log({ postAuthorId });
 
   const { control, setValue, handleSubmit } = useForm<AppreciateUserInput>({
     defaultValues: {
       receiverId: postAuthorId ?? undefined,
+      postId: postId ?? undefined,
       // postId: !phoneNumber && String(postAuthor).length > 0 ? appreciateId : undefined,
       // mobileNumber: phoneNumber ? appreciateId : undefined,
     },
