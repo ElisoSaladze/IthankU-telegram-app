@@ -1,5 +1,6 @@
 import { request } from '~/lib/request';
-import { GetCurrentUserResponse, LocationQueryParams, TListingApiResponse, TMapingApiResponse } from './users.schema';
+import { LocationQueryParams, TCurrentUser, TMapUsers, TPublicUser, TUser } from './users.schema';
+import { decodeBody, decodeBodyWithPagination } from '../common';
 
 export type GetUsersInput = {
   page?: number;
@@ -7,9 +8,9 @@ export type GetUsersInput = {
   shade?: string;
   hashtag?: string;
   userLocation?: {
-    lat: number,
-    lng: number,
-  } 
+    lat: number;
+    lng: number;
+  };
 };
 
 export const getUsers = async ({ page, radius, shade, hashtag }: GetUsersInput) => {
@@ -27,22 +28,26 @@ export const getUsers = async ({ page, radius, shade, hashtag }: GetUsersInput) 
     query.set('hashtag', hashtag);
   }
 
-  return await request('/users/listing').get({ query }, TListingApiResponse);
+  return await request('/api/v1/users/listing').get({ query }, decodeBodyWithPagination(TUser));
 };
 
 export type GetUserInput = {
   userId: string;
 };
 
-export const getUser = async ({ userId }: GetUserInput) => {
-  return await request('/users/listing/:userId').get(
+export const getUserDetails = async ({ userId }: GetUserInput) => {
+  return await request('/api/v1/users/:userId').get(
     {
       params: {
         userId,
       },
     },
-    GetCurrentUserResponse,
+    decodeBody(TPublicUser),
   );
+};
+
+export const getCurrentUser = async () => {
+  return await request('/api/v1/users/me').get({}, decodeBody(TCurrentUser));
 };
 
 export const getUsersByLocation = async ({ latitude, longitude, radius, area, hashtag }: LocationQueryParams) => {
@@ -60,5 +65,5 @@ export const getUsersByLocation = async ({ latitude, longitude, radius, area, ha
     query.set('hashtag', hashtag);
   }
 
-  return await request('/users/nearby').get({ query }, TMapingApiResponse);
+  return await request('/api/v1/users/nearby').get({ query }, decodeBody(TMapUsers));
 };

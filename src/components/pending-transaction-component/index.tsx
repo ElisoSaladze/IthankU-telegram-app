@@ -2,14 +2,17 @@ import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import ShadeComponent from '../shade-component';
 import { Shade } from '~/api/shades';
-import { acceptTransaction, declineTransaction } from '~/api/transactions';
+import { pendingTransactionAction, TransactionAction } from '~/api/transactions';
+import { useAuthUser } from '~/app/auth';
+import { toast } from 'react-toastify';
+import { ToastContent } from '../toast';
 
 type PendingTransactionItemProps = {
   transaction: {
     id: string;
     user: {
       name: string;
-      avatar?: string;
+      avatar?: string | null;
     };
     area: Shade;
     hashtag: string;
@@ -18,13 +21,36 @@ type PendingTransactionItemProps = {
 };
 
 const PendingTransactionItem = ({ transaction, refetch }: PendingTransactionItemProps) => {
-  const $acceptTransaction = useMutation({
-    mutationFn: acceptTransaction,
+  const authUser = useAuthUser();
+
+  const $pendingTransactionAction = useMutation({
+    mutationFn: pendingTransactionAction,
   });
 
-  const $declineTransaction = useMutation({
-    mutationFn: declineTransaction,
-  });
+  const onTransactionAction = (action: TransactionAction) => {
+    if (authUser) {
+      $pendingTransactionAction.mutate(
+        {
+          action,
+          transactionId: transaction.id,
+          userId: authUser?.user.id,
+        },
+        {
+          onSuccess: () => {
+            refetch();
+          },
+        },
+      );
+
+      return;
+    }
+
+    toast.error(
+      <ToastContent title="Error">
+        <Typography>Failed to change transaction status, user is not defined!</Typography>
+      </ToastContent>,
+    );
+  };
 
   return (
     <Stack
@@ -39,7 +65,7 @@ const PendingTransactionItem = ({ transaction, refetch }: PendingTransactionItem
         backgroundColor: '#fff',
       }}
     >
-      <Avatar sx={{ width: 60, height: 60, borderRadius: '50%' }} src={transaction.user.avatar} />
+      <Avatar sx={{ width: 60, height: 60, borderRadius: '50%' }} src={transaction.user.avatar ?? ''} />
       <Stack gap={0.5} width={1}>
         <Typography variant="h6" fontWeight="bold">
           {transaction.user.name}
@@ -51,16 +77,7 @@ const PendingTransactionItem = ({ transaction, refetch }: PendingTransactionItem
         <Box display="flex" gap={2} mt={1}>
           <Button
             onClick={() => {
-              $acceptTransaction.mutate(
-                {
-                  transactionId: transaction.id,
-                },
-                {
-                  onSuccess: () => {
-                    refetch();
-                  },
-                },
-              );
+              onTransactionAction('accepted');
             }}
             fullWidth
             variant="contained"
@@ -73,16 +90,7 @@ const PendingTransactionItem = ({ transaction, refetch }: PendingTransactionItem
           </Button>
           <Button
             onClick={() => {
-              $declineTransaction.mutate(
-                {
-                  transactionId: transaction.id,
-                },
-                {
-                  onSuccess: () => {
-                    refetch();
-                  },
-                },
-              );
+              onTransactionAction('cancelled');
             }}
             fullWidth
             variant="contained"

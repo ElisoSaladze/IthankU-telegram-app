@@ -12,7 +12,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { FetchItemsProvider } from './providers/hashtag-shade';
 import { GlobalQueryClientProvider } from './lib/query-utils';
 import { ToastContainer } from './components/toast';
-import { NotificationsProvider, UserDetailsProvider } from './lib/hooks';
+import { UserDetailsProvider } from './lib/hooks';
 import { LoadScript } from '@react-google-maps/api';
 import { FilterUsersProvider } from './providers/filter-provider';
 import { CreateGroupProvider } from './providers/create-group-provider';
@@ -38,7 +38,6 @@ type Props = {
 export const Providers = ({ children }: Props) => {
   return (
     <Suspense fallback={null}>
-      {/* <LocalizationProvider dateAdapter={AdapterDateFns}> */}
       <ThemeProvider>
         <CssBaseline />
         <HelmetProvider>
@@ -46,26 +45,25 @@ export const Providers = ({ children }: Props) => {
           {/* // TODO */}
           <ErrorBoundary fallback={null}>
             <GlobalQueryClientProvider>
-              <FetchItemsProvider>
-                <AuthProvider>
-                  <UserDetailsProvider>
-                    <NotificationsProvider>
-                      <FilterUsersProvider>
-                        <CreateGroupProvider>
-                          <LoadScript libraries={['places']} googleMapsApiKey="AIzaSyDsf_MC31bfKI8JwasA5WebPrCl2TDqoHc">
-                            {children}
-                          </LoadScript>
-                        </CreateGroupProvider>
-                      </FilterUsersProvider>
-                    </NotificationsProvider>
-                  </UserDetailsProvider>
-                </AuthProvider>
-              </FetchItemsProvider>
+              <AuthProvider>
+                <FilterUsersProvider>
+                  <FetchItemsProvider>
+                    <UserDetailsProvider>
+                      {/* <NotificationsProvider> */}
+                      <CreateGroupProvider>
+                        <LoadScript libraries={['places']} googleMapsApiKey="AIzaSyDsf_MC31bfKI8JwasA5WebPrCl2TDqoHc">
+                          {children}
+                        </LoadScript>
+                      </CreateGroupProvider>
+                      {/* </NotificationsProvider> */}
+                    </UserDetailsProvider>
+                  </FetchItemsProvider>
+                </FilterUsersProvider>
+              </AuthProvider>
             </GlobalQueryClientProvider>
           </ErrorBoundary>
         </HelmetProvider>
       </ThemeProvider>
-      {/* </LocalizationProvider> */}
     </Suspense>
   );
 };

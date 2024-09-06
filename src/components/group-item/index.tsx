@@ -14,7 +14,7 @@ type Props = {
 
 const GroupItem = ({ group }: Props) => {
   const navigate = useNavigate();
-  const groupId = group._id;
+  const groupId = group.id;
   return (
     <ListItemButton
       sx={{
@@ -36,13 +36,13 @@ const GroupItem = ({ group }: Props) => {
           <Avatar
             sx={{ width: 70, height: 70, borderRadius: 4 }}
             variant="rounded"
-            src={group.groupImage || defaultImageUrl}
+            src={group.picture || defaultImageUrl}
           />
           <Stack gap={0.5}>
             <Typography fontSize={15} fontWeight={600}>
               {group.name}
             </Typography>
-            <ShadeComponent color={group.shadeInfo?.color} name={group.shadeInfo?.en} />
+            <ShadeComponent color={group.shade?.color} name={group.shade?.en} />
             <Stack direction={'row'}>{group.tags?.map((tag, i) => <TagItem key={i} tag={tag} />)}</Stack>
           </Stack>
         </Stack>

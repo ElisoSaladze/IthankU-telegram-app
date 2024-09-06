@@ -2,12 +2,16 @@ import { z } from 'zod';
 import { TAuthor } from '../groups';
 import { TShade } from '../shades';
 
+export const TTransactionAction = z.union([z.literal('accepted'), z.literal('cancelled')]);
+
+export type TransactionAction = z.infer<typeof TTransactionAction>;
+
 export const TTransactionType = z.union([z.literal('incoming'), z.literal('outgoing')]);
 
 export type TransactionType = z.infer<typeof TTransactionType>;
 
 export const TTransaction = z.object({
-  _id: z.string(),
+  id: z.string(),
   amount: z.number(),
   shade: z.string(),
   hashtag: z.string(),
@@ -20,17 +24,3 @@ export const TTransaction = z.object({
 });
 
 export type Transaction = z.infer<typeof TTransaction>;
-
-export const TUserTransactionsResponse = z.object({
-  status: z.string(),
-  page: z.number(),
-  results: z.number(),
-  totalResults: z.number(),
-  totalPages: z.number(),
-  data: z.array(TTransaction).optional(),
-});
-
-export const TTransactionData = z.object({
-  status: z.string(),
-  data: TTransaction,
-});

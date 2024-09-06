@@ -25,7 +25,7 @@ const useAuthContext = () => {
     mutationFn: refreshToken,
     mutationKey: qk.auth.refresh.toKeyWithArgs({ refreshToken: token ?? '' }),
     onSuccess: (user) => {
-      authorize(user);
+      authorize(user.data);
       isRefreshed.setTrue();
     },
     onError: () => {

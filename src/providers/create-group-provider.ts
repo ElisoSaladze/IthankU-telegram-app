@@ -7,7 +7,7 @@ export type CreateGroupFormValues = {
   name: string;
   description: string;
   shade: string;
-  privacy: 'Public' | 'Private';
+  privacy: Visibility;
   image?: File;
   cover?: File;
   currentTag: string;

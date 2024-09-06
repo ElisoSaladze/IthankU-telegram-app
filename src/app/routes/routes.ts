@@ -85,9 +85,9 @@ export const authRoutes = [
     title: 'QR Options',
   }),
   createRoute({
-    path: paths.transactions,
+    path: paths.transactionDetails,
     factory: () => import('src/pages/transaction-details'),
-    title: 'Transactions',
+    title: 'Transaction details',
   }),
   createRoute({
     path: paths.userDetails,
@@ -163,6 +163,11 @@ export const authRoutes = [
 
 export const unauthRoutes = [
   createRoute({
+    path: paths.onboarding,
+    factory: () => import('src/pages/onboarding'),
+    title: 'Onboarding',
+  }),
+  createRoute({
     path: paths.introduceYourself,
     factory: () => import('src/pages/introduce-yourself'),
     title: 'Introduce Yourself',
@@ -171,11 +176,6 @@ export const unauthRoutes = [
     path: paths.interests,
     factory: () => import('src/pages/interests'),
     title: 'Interests',
-  }),
-  createRoute({
-    path: paths.onboarding,
-    factory: () => import('src/pages/onboarding'),
-    title: 'Onboarding',
   }),
 ];
 

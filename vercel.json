@@ -1,24 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://itu-dev-02f448e47ca5.herokuapp.com/api/$1"
-    },
-    {
-      "source": "/auth/(.*)",
-      "destination": "https://itu-dev-02f448e47ca5.herokuapp.com/auth/$1"
-    },
-    {
-      "source": "/users(.*)",
-      "destination": "https://itu-dev-02f448e47ca5.herokuapp.com/users$1"
-    },
-    {
-      "source": "/transactions(.*)",
-      "destination": "https://itu-dev-02f448e47ca5.herokuapp.com/transactions$1"
-    },
-    {
-      "source": "/appreciations/(.*)",
-      "destination": "https://itu-dev-02f448e47ca5.herokuapp.com/appreciations/$1"
+      "source": "/api/v1/(.*)",
+      "destination": "https://ithanku-nest-api.onrender.com/api/v1/$1"
     },
     { "source": "/(.*)", "destination": "/" }
   ]

@@ -13,11 +13,11 @@ export const UnauthApp = () => {
         ...unauthRoutes,
         {
           path: '*',
-          element: <Navigate replace to={paths.introduceYourself} />,
+          element: <Navigate replace to={paths.onboarding} />,
         },
         {
           index: true,
-          element: <Navigate replace to={paths.introduceYourself} />,
+          element: <Navigate replace to={paths.onboarding} />,
         },
       ],
     },

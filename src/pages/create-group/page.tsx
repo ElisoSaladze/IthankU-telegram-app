@@ -1,7 +1,7 @@
-import { AppBar, Box, Button, IconButton, Stack, Typography } from '@mui/material';
+import { AppBar, Box, IconButton, Stack, Typography } from '@mui/material';
 
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useCreateGroupContext, CreateGroupProvider } from 'src/providers/create-group-provider';
+import { CreateGroupProvider } from 'src/providers/create-group-provider';
 import { paths } from '~/app/routes';
 import { IconArrow } from '~/assets/icons';
 
@@ -9,22 +9,12 @@ const CreateGroup = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { handleSubmit } = useCreateGroupContext();
-
   const activePath = location.pathname.split('/')[2];
-
-  const navigateToNextStep = () => {
-    if (activePath === 'details') {
-      navigate(paths.createGroupInterests);
-    } else if (activePath === 'group-interests') {
-      navigate(paths.createGroupFinal);
-    }
-  };
 
   const color = activePath === 'details' ? 'white' : 'black';
 
   return (
-    <Stack position="relative" px={3} pb={3}>
+    <Stack position="relative" px={3} pb={3} height={1}>
       <AppBar
         sx={{
           position: 'fixed',
@@ -58,20 +48,6 @@ const CreateGroup = () => {
       </AppBar>
 
       <Outlet />
-
-      {activePath !== 'final' && (
-        <Button
-          variant="contained"
-          size="large"
-          fullWidth
-          sx={{
-            mt: 8,
-          }}
-          onClick={handleSubmit(navigateToNextStep)}
-        >
-          Next
-        </Button>
-      )}
     </Stack>
   );
 };

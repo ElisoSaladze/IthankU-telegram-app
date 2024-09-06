@@ -110,7 +110,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main' }: Props) => {
                 ? 'Loading...'
                 : shades?.data.map((shade) => (
                     <ShadeComponent
-                      key={shade._id}
+                      key={shade.id}
                       selectable
                       selected={selectedShade?.en === shade.en}
                       onSelect={() => handleSelectShade(shade)}

@@ -1,6 +1,7 @@
 import { request } from 'src/lib/request';
-import { TShadesResponse } from './shades.schema';
+import { TShades } from './shades.schema';
+import { decodeBody } from '../common';
 
 export const getShades = async () => {
-  return await request('/api/shades').get({}, TShadesResponse);
+  return await request('/api/v1/shades').get({}, decodeBody(TShades));
 };

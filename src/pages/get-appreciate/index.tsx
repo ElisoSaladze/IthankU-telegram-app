@@ -17,18 +17,18 @@ function QRCodePage() {
   const authUser = useAuthUser();
   const location = useLocation();
 
-  const { area, hashtag } = location.state || {};
+  const { shadeId, shade, hashtag } = location.state || {};
 
   const {
     data: qrCode,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: qk.appreciate.getQRCode.toKeyWithArgs({ area, hashtag }),
-    queryFn: () => getQRCode({ area, hashtag }),
+    queryKey: qk.appreciate.getQRCode.toKeyWithArgs({ shadeId, hashtag }),
+    queryFn: () => getQRCode({ shadeId, hashtag }),
   });
 
-  const appreciationUrl = qrCode ? `https://web.itu-net.com/appreciate/${qrCode.data}` : '';
+  const appreciationUrl = qrCode ? `https://web.itu-net.com/appreciate/${qrCode.data.requestId}` : '';
 
   const handleCopy = () => {
     const textToCopy = `Thank me by QR: ${appreciationUrl}`;
@@ -60,7 +60,7 @@ function QRCodePage() {
       />
       <Stack gap={1} p={2}>
         <Typography textAlign={'center'} variant="h6">
-          One time Code: <span style={{ color: 'green' }}>{qrCode.data}</span>
+          One time Code: <span style={{ color: 'green' }}>{qrCode.data.requestId}</span>
         </Typography>
         <Stack
           gap={2}
@@ -79,16 +79,18 @@ function QRCodePage() {
           />
         </Stack>
 
-        {area && (
+        {shade && (
           <Typography>
-            Area: <span style={{ color: 'orange' }}>{area}</span>
+            Shade: <span style={{ color: 'orange' }}>{shade}</span>
           </Typography>
         )}
+
         {hashtag && (
           <Typography>
             Hashtags: <span>{hashtag}</span>
           </Typography>
         )}
+
         <Stack direction="row" gap={1}>
           <Button
             size="medium"

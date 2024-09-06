@@ -25,8 +25,8 @@ export const MorePage = () => {
 
   const { control, watch } = useForm({
     defaultValues: {
-      private: userDetails?.user.isPrivate,
-      showOnMap: userDetails?.user.isLocationPublic,
+      private: !userDetails?.isAccountPublic,
+      showOnMap: userDetails?.isLocationPublic,
     },
   });
 
@@ -57,23 +57,23 @@ export const MorePage = () => {
             onClick={() => {
               navigate(
                 generatePath(paths.userDetails, {
-                  userId: userDetails.user._id,
+                  userId: userDetails.id,
                 }),
               );
             }}
           >
             <Stack width={1} justifyContent="space-between" direction="row" alignItems="center" gap={1}>
               <Stack gap={1.5} direction="row" alignItems="center">
-                <Avatar src={userDetails.user.picture} sx={{ width: 65, height: 65 }} />
+                <Avatar src={userDetails.picture ?? ''} sx={{ width: 65, height: 65 }} />
                 <Stack>
-                  <Typography fontSize={20}>{userDetails.user.name}</Typography>
+                  <Typography fontSize={20}>{userDetails.name}</Typography>
                   <Typography fontSize={14} color="secondary.dark">
-                    {userDetails.user.email}
+                    {userDetails.email}
                   </Typography>
                 </Stack>
               </Stack>
               <Avatar sx={{ bgcolor: 'primary.main' }}>
-                <Typography color="white">{userDetails.user.generalRating}</Typography>
+                <Typography color="white">{userDetails.ratingPoints}</Typography>
               </Avatar>
             </Stack>
           </ListItemButton>
@@ -128,7 +128,7 @@ export const MorePage = () => {
           <NavigationItem
             onClick={() => {
               navigate({
-                pathname: paths.transactions,
+                pathname: paths.transactionsList,
                 search: createSearchParams({
                   tab: 'incoming',
                 }).toString(),

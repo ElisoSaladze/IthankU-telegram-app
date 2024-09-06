@@ -13,7 +13,7 @@ export const createRequestBody = (
 
   for (const [key, value] of Object.entries(body)) {
     if (value) {
-      if (Array.isArray(value)) {
+      if (Array.isArray(value) && value.length > 0) {
         for (const file of value) {
           formData.append(key, file);
         }

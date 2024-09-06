@@ -3,20 +3,23 @@ import { Button, IconButton, Skeleton, Stack } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
 import { useNavigate } from 'react-router-dom';
-import { userGroups } from '~/api/groups';
+import { getUserGroups } from '~/api/groups';
 import GroupItem from 'src/components/group-item';
 import settingsIcon from 'src/assets/icons/settings.svg';
 import { qk } from 'src/api/query-keys';
 import { paths } from '~/app/routes';
 import { CreatePostGroupMenu } from '~/components/create-post-group-menu';
 import { AppHeader } from '~/components/header';
+import { useAuthUser } from '~/app/auth';
 
 export const GroupsPage = () => {
+  const authUser = useAuthUser();
   const navigate = useNavigate();
 
   const { data, isLoading } = useQuery({
-    queryKey: qk.groups.userGroups.toKey(),
-    queryFn: userGroups,
+    queryKey: qk.groups.getUserGroups.toKeyWithArgs({ userId: authUser?.user.id ?? '' }),
+    queryFn: () => getUserGroups({ userId: authUser?.user.id ?? '' }),
+    enabled: authUser !== null,
   });
 
   return (

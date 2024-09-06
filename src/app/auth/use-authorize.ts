@@ -4,7 +4,6 @@ import { jwtDecode } from 'jwt-decode';
 import { UserState } from './use-auth';
 import { AccessTokenPayload, TAccessTokenPayload, setGlobalAccessToken } from './access-token';
 import { useLogoutAcrossTabs } from './use-logout-across-tabs';
-import { socket } from 'src/socket';
 
 type Args = {
   setUser: (user: UserState) => void;
@@ -16,12 +15,12 @@ export const useAuthorize = ({ setUser, refetchRefreshToken }: Args) => {
 
   const authorize = useCallback(
     (user: AuthUser) => {
-      const payload: AccessTokenPayload = jwtDecode(user.accessToken);
+      const payload: AccessTokenPayload = jwtDecode(user.tokens.accessToken);
 
       const decodedPayload = TAccessTokenPayload.safeParse(payload);
 
       if (decodedPayload.success) {
-        setGlobalAccessToken(user.accessToken);
+        setGlobalAccessToken(user.tokens.accessToken);
 
         setUser({
           state: 'authenticated',
@@ -30,10 +29,11 @@ export const useAuthorize = ({ setUser, refetchRefreshToken }: Args) => {
 
         const expiresIn = payload.exp * 1000 - Date.now();
 
-        localStorage.setItem('refresh-token', user.refreshToken);
+        localStorage.setItem('refresh-token', user.tokens.refreshToken);
 
-        socket.connect();
-        socket.emit('joinUserRoom', user.user._id);
+        // TODO!
+        // socket.connect();
+        // socket.emit('joinUserRoom', user.user.id);
 
         refreshTimeoutRef.current = window.setTimeout(() => {
           refreshTimeoutRef.current = null;

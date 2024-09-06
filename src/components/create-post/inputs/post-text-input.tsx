@@ -24,7 +24,7 @@ export const PostTextInput = ({ contentLength, control, error: inputError }: Pro
     remove: imgRemove,
   } = useFieldArray({
     control,
-    name: 'images',
+    name: 'media',
   });
 
   const {
@@ -33,7 +33,7 @@ export const PostTextInput = ({ contentLength, control, error: inputError }: Pro
     remove: fileRemove,
   } = useFieldArray({
     control,
-    name: 'files',
+    name: 'attachments',
   });
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, isImage: boolean) => {

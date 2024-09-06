@@ -83,7 +83,7 @@ const TransactionDetailsPage = () => {
                   zIndex: -1,
                 }}
               >
-                <CopyableItem sx={{ padding: 2, borderRadius: 5 }} title="Transaction ID" content={transaction._id} />
+                <CopyableItem sx={{ padding: 2, borderRadius: 5 }} title="Transaction ID" content={transaction.id} />
               </Box>
 
               <Stack justifyContent="center" gap={1} mt={5} mx={2}>
@@ -96,7 +96,7 @@ const TransactionDetailsPage = () => {
 
                 <ListItemButton
                   onClick={() => {
-                    const senderId = transaction.sender!._id;
+                    const senderId = transaction.sender!.id;
                     navigate(generatePath(paths.more, { senderId }));
                   }}
                 >
@@ -112,7 +112,7 @@ const TransactionDetailsPage = () => {
 
                 <ListItemButton
                   onClick={() => {
-                    const receiverId = transaction.receiver!._id;
+                    const receiverId = transaction.receiver!.id;
                     navigate(generatePath(paths.more, { receiverId }));
                   }}
                 >

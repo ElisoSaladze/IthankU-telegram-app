@@ -10,14 +10,14 @@ type Props = {
 };
 
 const TransactionItem = ({ transaction }: Props) => {
-  const transactionId = transaction._id;
+  const transactionId = transaction.id;
 
   const navigate = useNavigate();
   return (
     <ListItemButton
       onClick={() =>
         navigate({
-          pathname: generatePath(paths.transactions, {
+          pathname: generatePath(paths.transactionDetails, {
             transactionId,
           }),
         })
@@ -31,7 +31,7 @@ const TransactionItem = ({ transaction }: Props) => {
     >
       <Stack sx={{ width: 1 }} alignItems="center" justifyContent="space-between" direction="row">
         <Stack gap={1} alignItems="center" direction="row">
-          <Avatar sx={{ height: 66, width: 66 }} src={transaction.sender?.picture} />
+          <Avatar sx={{ height: 66, width: 66 }} src={transaction.sender?.picture ?? ''} />
           <Stack>
             <Typography>{transaction.sender?.name}</Typography>
             <Typography fontSize={14}>

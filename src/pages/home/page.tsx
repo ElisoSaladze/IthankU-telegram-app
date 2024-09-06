@@ -20,7 +20,7 @@ export const HomePage = () => {
     queryKey: qk.posts.list.toKey(),
     queryFn: async ({ pageParam = 1 }) => getPosts({ page: pageParam }),
     getNextPageParam: (lastPage) => {
-      const nextPage = lastPage.meta.currentPage + 1;
+      const nextPage = lastPage.meta.page + 1;
       return nextPage <= lastPage.meta.totalPages ? nextPage : undefined;
     },
   });

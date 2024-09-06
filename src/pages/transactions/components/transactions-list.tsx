@@ -13,11 +13,11 @@ export const TransactionsList = ({ type }: { type: 'incoming' | 'outgoing' }) =>
   const authUser = useAuthUser();
 
   const $transactions = useInfiniteQuery({
-    queryKey: qk.transactions.userTransactions.toKeyWithArgs({ userId: authUser!.user._id, type }), // TODO!
-    queryFn: async ({ pageParam = 1 }) => getUserTransactions({ userId: authUser!.user._id, type, page: pageParam }),
+    queryKey: qk.transactions.userTransactions.toKeyWithArgs({ userId: authUser!.user.id, type }), // TODO!
+    queryFn: async ({ pageParam = 1 }) => getUserTransactions({ userId: authUser!.user.id, type, page: pageParam }),
     getNextPageParam: (result) => {
-      const nextPage = result.page + 1;
-      return nextPage <= result.totalPages ? nextPage : undefined;
+      const nextPage = result.meta.page + 1;
+      return nextPage <= result.meta.totalPages ? nextPage : undefined;
     },
     enabled: authUser !== null,
   });
@@ -47,7 +47,7 @@ export const TransactionsList = ({ type }: { type: 'incoming' | 'outgoing' }) =>
         .with({ isError: true }, () => <Typography>Failed to load transactions.</Typography>)
         .with({ isSuccess: true, data: P.select() }, ({ pages }) =>
           pages.flatMap((page) =>
-            page.data?.map((transaction) => <TransactionItem key={transaction._id} transaction={transaction} />),
+            page.data?.map((transaction) => <TransactionItem key={transaction.id} transaction={transaction} />),
           ),
         )
         .otherwise(() => (

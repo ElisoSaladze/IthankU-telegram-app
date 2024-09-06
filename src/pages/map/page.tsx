@@ -1,16 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
-import { GoogleMap, Marker } from '@react-google-maps/api';
+import { GoogleMap } from '@react-google-maps/api';
 import MapSvg from 'src/assets/icons/map.svg';
 import { AppBar, Box, Chip, Stack, Toolbar, Typography } from '@mui/material';
 import FilterDrawer from 'src/components/filter-drawer';
-import { getUsersByLocation, MapUser } from '~/api/users';
+import { getUsersByLocation } from '~/api/users';
 import { useQuery } from '@tanstack/react-query';
 import { useFilterUsersContext } from '~/providers/filter-provider';
 import { qk } from '~/api/query-keys';
 import Loader from '~/components/loader';
 import CircleIcon from '@mui/icons-material/Circle';
+import { UserMarker } from './components';
 
-const MapPage = () => {
+export const MapPage = () => {
   const { watch, setValue, selectedShade } = useFilterUsersContext();
 
   const initialRadius = watch('distance') || 1000;
@@ -49,7 +50,7 @@ const MapPage = () => {
     [location, radius],
   );
 
-  const $nearbyUsers = useQuery({
+  const { data: nearbyUsers, refetch: refetchNearbyUsers } = useQuery({
     queryKey: qk.map.list.toKeyWithArgs({
       shade: shade,
       radius: initialRadius.toString(),
@@ -80,9 +81,9 @@ const MapPage = () => {
     if (newCenter) {
       setValue('userLocation', { lat: newCenter.lat(), lng: newCenter.lng() });
 
-      $nearbyUsers.refetch();
+      refetchNearbyUsers();
     }
-  }, [$nearbyUsers, map, setValue]);
+  }, [map, refetchNearbyUsers, setValue]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -187,25 +188,8 @@ const MapPage = () => {
           {hashtag && <Chip sx={{ backgroundColor: selectedShade?.color }} label={hashtag} />}
         </Box>
 
-        {$nearbyUsers.data?.users.map((user) => <UserMarker key={user._id} user={user} />)}
+        {nearbyUsers?.data.map((user) => <UserMarker key={user.id} user={user} />)}
       </GoogleMap>
     </Stack>
   );
 };
-
-const UserMarker: React.FC<{ user: MapUser }> = ({ user }) => {
-  return (
-    <Marker
-      position={{
-        lat: user.location?.coordinates?.[1] || 0,
-        lng: user.location?.coordinates?.[0] || 0,
-      }}
-      icon={{
-        url: user.picture ?? '',
-        scaledSize: new google.maps.Size(40, 40),
-      }}
-    />
-  );
-};
-
-export default MapPage;
