@@ -23,7 +23,7 @@ const Listing = () => {
 
   return (
     <Stack p={3} spacing={2}>
-      <Stack alignItems={'center'} direction={'row'} justifyContent={'space-between'}>
+      <Stack alignItems="center" direction="row" justifyContent="space-between">
         <Box width={40}></Box>
         <Typography>Listing</Typography>
         <FilterDrawer />

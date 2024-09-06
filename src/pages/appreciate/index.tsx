@@ -30,12 +30,11 @@ const AppreciatePage = () => {
   const { data: appreciateData } = useQuery({
     queryKey: qk.appreciate.getUser.toKeyWithArgs({ appreciateId: appreciateId! }),
     queryFn: () => getAppreciateUser({ appreciateId: appreciateId! }),
-    enabled: appreciateId !== undefined && !postAuthorId,
+    enabled: appreciateId !== undefined && !postAuthorId && !postId,
     onSuccess: (data) => {
       if (data?.data.shade) setValue('shadeId', data.data.shade.id);
       if (data?.data.hashtag) setValue('hashtag', data.data.hashtag);
       setValue('requestId', data.data.requestId);
-      // setValue('receiverId')
     },
   });
 

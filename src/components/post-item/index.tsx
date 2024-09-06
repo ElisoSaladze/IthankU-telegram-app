@@ -171,12 +171,16 @@ const PostItem = ({ post, isDetails = false }: Props) => {
                     appreciateId: post.id,
                   }),
                 });
-                navigate(`/appreciate/${post.id}`, {
-                  state: {
-                    postAuthorId: post.author?.id,
-                    postId: post.id,
+                navigate(
+                  generatePath(paths.appreciate, {
+                    appreciateId: '', // We don't need appreciateId there
+                  }),
+                  {
+                    state: {
+                      postId: post.id,
+                    },
                   },
-                });
+                );
               }}
             >
               <FavoriteBorderIcon />
