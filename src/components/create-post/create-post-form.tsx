@@ -141,9 +141,9 @@ export const CreatePostForm = ({ onClose, groupId }: Props) => {
 
         <SummaryInput control={control} error={errors.summary} />
 
-        <PostTextInput control={control} contentLength={content.length} error={errors.content} />
-
         {visibility === 'PRIVATE' && <PreviewInput control={control} />}
+
+        <PostTextInput control={control} contentLength={content.length} error={errors.content} />
 
         <TagsInput control={control} />
       </Stack>

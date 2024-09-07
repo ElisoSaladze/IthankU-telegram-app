@@ -1,5 +1,5 @@
-import { Box, Typography, Stack } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+import { Box, Typography, Stack, Button } from '@mui/material';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import InvitationItem from 'src/components/invitation-component';
 import { getInvitations } from '~/api/groups';
 import { qk } from 'src/api/query-keys';
@@ -7,10 +7,12 @@ import { useAuthUser } from '~/app/auth';
 import { Progress } from '~/components/progress';
 import { AppHeader } from '~/components/header';
 import { paths } from '~/app/routes';
+import { useInView } from 'react-intersection-observer';
+import { useEffect } from 'react';
 
 export const Invitation = () => {
   const authUser = useAuthUser();
-
+  const [ref, inView] = useInView();
   const userId = authUser?.user.id || '';
 
   const {
@@ -18,10 +20,23 @@ export const Invitation = () => {
     isLoading,
     isError,
     refetch,
-  } = useQuery({
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: qk.groups.getInvitations.toKeyWithArgs({ userId }),
-    queryFn: () => getInvitations({ userId }),
+    queryFn: async ({ pageParam = 1 }) => getInvitations({ userId, page: pageParam }),
+    getNextPageParam: (lastPage) => {
+      const nextPage = lastPage.meta.page + 1;
+      return nextPage <= lastPage.meta.totalPages ? nextPage : undefined;
+    },
   });
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, inView]);
 
   if (isLoading) {
     return (
@@ -39,21 +54,28 @@ export const Invitation = () => {
     );
   }
 
+  const flattenedInvitations = invitations?.pages.flatMap((page) => page.data) || [];
+
   return (
     <>
       <AppHeader backPath={paths.groupSettings} />
-
       <Stack alignItems={'center'} px={2}>
         <Typography variant="h6" gutterBottom>
-          Invitation
+          Invitations
         </Typography>
 
-        {invitations?.data.length > 0 ? (
-          invitations!.data.map((invitation) => (
-            <InvitationItem id={invitation.id} refetch={refetch} key={invitation.id} group={invitation.group} />
+        {flattenedInvitations.length > 0 ? (
+          flattenedInvitations.map((invitation) => (
+            <InvitationItem key={invitation.id} id={invitation.id} group={invitation.group} refetch={refetch} />
           ))
         ) : (
-          <Typography>You do not have any invitation</Typography>
+          <Typography>You do not have any invitations</Typography>
+        )}
+
+        {hasNextPage && (
+          <Button disabled={!hasNextPage || isFetchingNextPage} ref={ref} onClick={() => fetchNextPage()}>
+            {isFetchingNextPage ? 'Loading more invitations' : hasNextPage ? 'Show more' : 'No more invitations'}
+          </Button>
         )}
       </Stack>
     </>

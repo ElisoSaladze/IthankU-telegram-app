@@ -75,7 +75,7 @@ export const PendingTransactionsList = ({ type }: TransactionsListProps) => {
                           : transaction.receiver?.name || 'Unknown',
                       avatar: type === 'incoming' ? transaction.sender?.picture : transaction.receiver?.picture,
                     },
-                    area: transaction.shadeInfo,
+                    area: transaction.shade,
                     hashtag: transaction.hashtag,
                   }}
                   refetch={$pendingTransactions.refetch}

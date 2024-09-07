@@ -1,5 +1,5 @@
 import { request } from 'src/lib/request';
-import { TAuthor, TGroup, TGroupDetails, TInvitationCode, TInvitations, TUserToInvite } from './groups.schema';
+import { TAuthor, TGroup, TGroupDetails, TInvitation, TInvitationCode, TUserToInvite } from './groups.schema';
 import { TPosts } from '../posts';
 import { CreateGroupFormValues } from '~/providers/create-group-provider';
 import { decodeBodyWithPagination, decodeBody } from '../common';
@@ -90,35 +90,38 @@ export const getUserGroups = async ({ userId }: GetUserGroupsInput) => {
 
 export type GetInvitationsInput = {
   userId: string;
+  page?: number;
 };
 
-export const getInvitations = async ({ userId }: GetInvitationsInput) => {
-  return await request('/api/v1/groups/invitations/:userId').get(
+export const getInvitations = async ({ userId, page }: GetInvitationsInput) => {
+  const query = new URLSearchParams();
+
+  if (page) {
+    query.set('page', page.toString());
+  }
+  return await request('/api/v1/users/:userId/invitations').get(
     {
       params: {
         userId,
       },
+      query,
     },
-    decodeBody(TInvitations),
+    decodeBodyWithPagination(TInvitation),
   );
 };
 
-export type InviteId = {
+export type InviteResponse = {
   inviteId: string;
+  status: string;
 };
 
-export const acceptInvitation = async ({ inviteId }: InviteId) => {
-  return request('/api/v1/groups/invitations/:inviteId/accept').patch({
+export const respondIntivation = async ({ inviteId, status }: InviteResponse) => {
+  return request('/api/v1/groups/invite/:inviteId/respond').post({
     params: {
       inviteId,
     },
-  });
-};
-
-export const declineInvitation = async ({ inviteId }: InviteId) => {
-  return request('/api/v1/groups/invitations/:inviteId/decline').patch({
-    params: {
-      inviteId,
+    body: {
+      status,
     },
   });
 };

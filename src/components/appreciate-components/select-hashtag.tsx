@@ -15,7 +15,7 @@ type Props = {
   control: Control<any>;
 };
 
-const HashtagSelect = ({ onSelect, defaultSelected, control }: Props) => {
+export const HashtagSelect = ({ onSelect, defaultSelected, control }: Props) => {
   const [selectedHashtag, setSelectedHashtag] = useState<Hashtag | null>(null);
 
   const { hashtags, hashtagsLoading, hashtagsError } = useFetchItemsContext();
@@ -120,5 +120,3 @@ const HashtagSelect = ({ onSelect, defaultSelected, control }: Props) => {
     </Accordion>
   );
 };
-
-export default HashtagSelect;

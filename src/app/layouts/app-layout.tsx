@@ -12,9 +12,9 @@ import moreIconSelected from 'src/assets/icons/selectedMore.svg';
 import { ReactNode, Suspense, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from 'src/components/loader';
-import AppreciateComponent from 'src/components/appreciate-components/appreciate-buttons';
 import { paths } from '~/app/routes';
 import { GlobalLoadingIndicator } from '~/components/global-loading-indicator';
+import { AppreciateComponent } from '~/components/appreciate-components';
 
 const useActiveIndex = () => {
   const location = useLocation();
