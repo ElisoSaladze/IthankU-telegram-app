@@ -12,12 +12,12 @@ const tabs: Array<Tab<TabTypes>> = [
   {
     label: 'Incoming',
     value: 'incoming',
-    tabComponent: <TransactionsList type="incoming" />,
+    tabComponent: <TransactionsList type="INCOMING" />,
   },
   {
     label: 'Outgoing',
     value: 'outgoing',
-    tabComponent: <TransactionsList type="outgoing" />,
+    tabComponent: <TransactionsList type="OUTGOING" />,
   },
 ];
 

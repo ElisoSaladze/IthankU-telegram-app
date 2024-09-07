@@ -5,10 +5,9 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { createPost } from 'src/api/posts';
 import VisibilityStatus from 'src/components/visibility-status';
 import { Visibility } from '~/constants/enums';
-import { useAuthUser } from '~/app/auth';
 import { IconClose } from '~/assets/icons';
 import { PostTextInput, PreviewInput, SummaryInput, TagsInput } from './inputs';
-import { useBoolean } from '~/lib/hooks';
+import { useBoolean, useUserDetails } from '~/lib/hooks';
 import { PaidPostDialog } from './paid-post-dialog';
 import { Progress } from '../progress';
 import { paths } from '~/app/routes';
@@ -49,7 +48,7 @@ type Props = {
 
 export const CreatePostForm = ({ onClose, groupId }: Props) => {
   const navigate = useNavigate();
-  const authUser = useAuthUser();
+  const { user } = useUserDetails();
 
   const isPaidPostDialogOpen = useBoolean();
 
@@ -121,11 +120,11 @@ export const CreatePostForm = ({ onClose, groupId }: Props) => {
           Create post
         </Typography>
       </Box>
-      {authUser && (
+      {user && (
         <Box display="flex" gap={1} alignItems="center" mb={3}>
-          <Avatar src={authUser.user.picture} sx={{ width: 65, height: 65 }} />
+          <Avatar src={user.picture!} sx={{ width: 65, height: 65 }} />
           <Typography fontSize={20} fontWeight={600}>
-            {authUser.user.name}
+            {user.name}
           </Typography>
         </Box>
       )}

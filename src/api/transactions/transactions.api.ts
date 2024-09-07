@@ -5,16 +5,20 @@ import { decodeBody, decodeBodyWithPagination } from '../common';
 export type GetUserTransactionsInput = {
   userId: string;
   type: TransactionType;
+  page?: number;
 };
 
 // TODO!
-export const getUserTransactions = async ({ type, page }: GetUserTransactionsInput & { page: number }) => {
+export const getUserTransactions = async ({ type, page, userId }: GetUserTransactionsInput) => {
   const query = new URLSearchParams();
 
   query.set('type', type);
   query.set('page', String(page));
 
-  return await request('/api/v1/users/transactions').get({}, decodeBodyWithPagination(TTransaction));
+  return await request('/api/v1/users/:userId/transactions').get(
+    { params: { userId }, query },
+    decodeBodyWithPagination(TTransaction),
+  );
 };
 
 export type GetTransactionDetailsInput = {

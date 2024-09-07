@@ -8,7 +8,7 @@ import { qk } from '~/api/query-keys';
 import { getUserTransactions } from '~/api/transactions';
 import { useAuthUser } from '~/app/auth';
 
-export const TransactionsList = ({ type }: { type: 'incoming' | 'outgoing' }) => {
+export const TransactionsList = ({ type }: { type: 'INCOMING' | 'OUTGOING' }) => {
   const [ref, inView] = useInView();
   const authUser = useAuthUser();
 
