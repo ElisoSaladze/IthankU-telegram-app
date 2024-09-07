@@ -8,20 +8,13 @@ export type GetUserTransactionsInput = {
 };
 
 // TODO!
-export const getUserTransactions = async ({ userId, type, page }: GetUserTransactionsInput & { page: number }) => {
+export const getUserTransactions = async ({ type, page }: GetUserTransactionsInput & { page: number }) => {
   const query = new URLSearchParams();
 
   query.set('type', type);
   query.set('page', String(page));
 
-  return await request('/api/v1/users/:userId/transactions').get(
-    {
-      params: {
-        userId,
-      },
-    },
-    decodeBodyWithPagination(TTransaction),
-  );
+  return await request('/api/v1/users/transactions').get({}, decodeBodyWithPagination(TTransaction));
 };
 
 export type GetTransactionDetailsInput = {
@@ -61,16 +54,14 @@ export const getPendingTransactions = async ({
 };
 
 type AcceptTransactionInput = {
-  userId: string;
   transactionId: string;
   action: TransactionAction;
 };
 
-export const pendingTransactionAction = async ({ userId, transactionId, action }: AcceptTransactionInput) => {
-  return await request('/api/v1/users/:userId/transactions/pending/:transactionId').post(
+export const pendingTransactionAction = async ({ transactionId, action }: AcceptTransactionInput) => {
+  return await request('/api/v1/transactions/:transactionId').patch(
     {
       params: {
-        userId,
         transactionId,
       },
       body: {

@@ -55,24 +55,9 @@ export const authRoutes = [
     title: 'Thank You',
   }),
   createRoute({
-    path: paths.phoneNumberAppreciate,
-    factory: () => import('src/pages/appreciate/phone-number'),
-    title: 'Appreciate',
-  }),
-  createRoute({
-    path: paths.scanQRCode,
-    factory: () => import('src/pages/appreciate/scanner'),
-    title: 'Scan QR Code',
-  }),
-  createRoute({
     path: paths.appreciate,
     factory: () => import('src/pages/appreciate'),
     title: 'Appreciate',
-  }),
-  createRoute({
-    path: paths.getAppreciate,
-    factory: () => import('src/pages/get-appreciate'),
-    title: 'Get Appreciate',
   }),
   createRoute({
     path: paths.qrOptions,

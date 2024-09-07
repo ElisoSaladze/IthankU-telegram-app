@@ -41,14 +41,21 @@ export const TGroupDetails = z.object({
   owner: TAuthor,
 });
 
-export const TInvitation = z.object({
+export const TInvitationGroup = z.object({
   id: z.string(),
-  group: TGroup,
-  status: z.string(),
-  createdAt: z.string(),
+  name: z.string(),
+  picture: z.string().nullable(),
+  shade: TShade.nullable(),
 });
 
-export const TInvitations = z.array(TInvitation);
+export type InvitationGroup = z.infer<typeof TInvitationGroup>;
+
+export const TInvitation = z.object({
+  id: z.string(),
+  group: TInvitationGroup,
+  status: z.string(),
+  inviter: TAuthor,
+});
 
 export const TInvitationCode = z.object({
   id: z.string(),

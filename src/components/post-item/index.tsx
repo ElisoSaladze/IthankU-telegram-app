@@ -78,6 +78,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
         title={post.group ? post.group.name : post.author?.name}
         subheader={
           <Stack gap={0.5} direction="row" alignItems="center" fontSize="small" color="secondary.dark">
+            {post.group && post.author?.name + ' • '}
             {timeAgo(post.createdAt)} •
             {post.visibility === 'PUBLIC' ? (
               <PublicIcon sx={{ fontSize: '12px' }} />

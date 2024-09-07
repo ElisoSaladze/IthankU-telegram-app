@@ -7,12 +7,17 @@ export const timeAgo = (createdAt: string) => {
   const hours = Math.floor(diff / (1000 * 60 * 60));
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-  if (days > 0) {
-    return `${days} day${days > 1 ? "s" : ""} ago`;
+  if (days > 2) {
+    return createdDate.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    });
+  } else if (days > 0) {
+    return `${days}d`;
   } else if (hours > 0) {
-    return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+    return `${hours}h`;
   } else {
-    return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+    return `${minutes}m`;
   }
 };
 
@@ -24,10 +29,10 @@ export const handleShare = (url: string, title: string, text: string) => {
         text: text,
         url: url,
       })
-      .then(() => console.log("Successfully shared"))
-      .catch((error) => console.error("Error sharing:", error));
+      .then(() => console.log('Successfully shared'))
+      .catch((error) => console.error('Error sharing:', error));
   } else {
-    alert("Web Share API is not supported in your browser.");
+    alert('Web Share API is not supported in your browser.');
   }
 };
 

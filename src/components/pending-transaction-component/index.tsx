@@ -33,7 +33,6 @@ const PendingTransactionItem = ({ transaction, refetch }: PendingTransactionItem
         {
           action,
           transactionId: transaction.id,
-          userId: authUser?.user.id,
         },
         {
           onSuccess: () => {
@@ -77,7 +76,7 @@ const PendingTransactionItem = ({ transaction, refetch }: PendingTransactionItem
         <Box display="flex" gap={2} mt={1}>
           <Button
             onClick={() => {
-              onTransactionAction('accepted');
+              onTransactionAction('ACCEPT');
             }}
             fullWidth
             variant="contained"
@@ -90,7 +89,7 @@ const PendingTransactionItem = ({ transaction, refetch }: PendingTransactionItem
           </Button>
           <Button
             onClick={() => {
-              onTransactionAction('cancelled');
+              onTransactionAction('DECLINE');
             }}
             fullWidth
             variant="contained"

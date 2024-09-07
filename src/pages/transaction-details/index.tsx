@@ -62,12 +62,12 @@ const TransactionDetailsPage = () => {
                 zIndex: -1,
               }}
             >
-              <TransactionBackground fill={transaction.shadeInfo.color} />
+              <TransactionBackground fill={transaction.shade.color} />
             </Box>
 
             <Stack justifyContent="center" gap={1} marginTop={5} marginX={2}>
               <Typography color="white" textAlign="center">
-                {transaction.shade}
+                {transaction.shade.en}
               </Typography>
               <Typography color="white" textAlign="center">
                 {transaction.hashtag}
@@ -88,7 +88,7 @@ const TransactionDetailsPage = () => {
 
               <Stack justifyContent="center" gap={1} mt={5} mx={2}>
                 <Typography color="white" textAlign="center">
-                  {transaction.shade}
+                  {transaction.shade.en}
                 </Typography>
                 <Typography color="white" textAlign="center">
                   {transaction.hashtag}

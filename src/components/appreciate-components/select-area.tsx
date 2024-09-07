@@ -11,7 +11,7 @@ type Props = {
   defaultSelected?: string | null;
 };
 
-const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
+export const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
   const [selectedShade, setSelectedShade] = useState<Shade | null>(null);
 
   const { shades, shadesLoading, shadesError } = useFetchItemsContext();
@@ -96,5 +96,3 @@ const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
     </Accordion>
   );
 };
-
-export default AreaSelect;

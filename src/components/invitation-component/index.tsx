@@ -2,22 +2,17 @@ import React from 'react';
 import { Box, Typography, Avatar, Button, Stack } from '@mui/material';
 import ShadeComponent from '../shade-component';
 import { useMutation } from '@tanstack/react-query';
-import { acceptInvitation, declineInvitation, Group } from '~/api/groups';
+import { InvitationGroup, respondIntivation } from '~/api/groups';
 
 type InvitationItemProps = {
-  group: Group;
+  group: InvitationGroup;
   refetch: () => void;
   id: string;
 };
 
 const InvitationItem: React.FC<InvitationItemProps> = ({ group, refetch, id }) => {
-  const $acceptInvitation = useMutation({
-    mutationFn: acceptInvitation,
-  });
-
-  const $declineInvitation = useMutation({
-    mutationFn: declineInvitation,
-    onSuccess: refetch,
+  const $respond = useMutation({
+    mutationFn: respondIntivation,
   });
 
   return (
@@ -42,9 +37,10 @@ const InvitationItem: React.FC<InvitationItemProps> = ({ group, refetch, id }) =
         <Box display={'flex'} gap={1}>
           <Button
             onClick={() =>
-              $acceptInvitation.mutate(
+              $respond.mutate(
                 {
                   inviteId: id,
+                  status: 'ACCEPTED',
                 },
                 {
                   onSuccess: () => {
@@ -60,12 +56,15 @@ const InvitationItem: React.FC<InvitationItemProps> = ({ group, refetch, id }) =
           </Button>
           <Button
             onClick={() =>
-              $declineInvitation.mutate(
+              $respond.mutate(
                 {
                   inviteId: id,
+                  status: 'DECLINED',
                 },
                 {
-                  onSuccess: () => {},
+                  onSuccess: () => {
+                    refetch();
+                  },
                 },
               )
             }
