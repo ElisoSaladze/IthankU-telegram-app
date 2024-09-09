@@ -15,7 +15,7 @@ export const GroupsList = () => {
   return isFetching ? (
     <Loader />
   ) : (
-    <Stack paddingBottom={10} marginY={1} gap={1}>
+    <Stack paddingBottom={10} my={1} gap={1}>
       {groups?.data.map((group: Group, i: number) => <GroupItem key={i} group={group} />)}
     </Stack>
   );

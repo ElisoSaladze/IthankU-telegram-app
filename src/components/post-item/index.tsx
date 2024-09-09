@@ -38,7 +38,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
     const postId = post.id;
 
     if (!isDetails) {
-      if (post.isRestricted) {
+      if (post?.isRestricted) {
         navigate({
           pathname: generatePath(paths.privatePost, {
             postId,
@@ -161,7 +161,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
         disableSpacing
       >
         <Stack alignItems="center" direction="row">
-          {isDetails && !post.isRestricted && (
+          {isDetails && !post?.isRestricted && (
             <>
               {post.hasLiked ? (
                 <FavoriteIcon sx={{ ml: 1 }} color="primary" />

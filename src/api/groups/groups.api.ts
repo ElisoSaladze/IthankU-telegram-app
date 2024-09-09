@@ -1,6 +1,6 @@
 import { request } from 'src/lib/request';
 import { TAuthor, TGroup, TGroupDetails, TInvitation, TInvitationCode, TUserToInvite } from './groups.schema';
-import { TPosts } from '../posts';
+import { TPost } from '../posts';
 import { CreateGroupFormValues } from '~/providers/create-group-provider';
 import { decodeBodyWithPagination, decodeBody } from '../common';
 
@@ -53,7 +53,7 @@ export const getGroupPosts = async ({ groupId }: GroupId) => {
         groupId,
       },
     },
-    decodeBody(TPosts),
+    decodeBodyWithPagination(TPost),
   );
 };
 
