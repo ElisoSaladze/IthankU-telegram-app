@@ -84,13 +84,13 @@ const ThemeProvider = ({ children }: Props) => {
           },
         },
       },
-      MuiOutlinedInput: {
+      MuiSelect: {
         styleOverrides: {
           root: {
-            borderRadius: '23px',
-          },
-          notchedOutline: {
-            borderRadius: '23px',
+            border: 'none !important',
+            '& fieldset.MuiOutlinedInput-notchedOutline': {
+              borderRadius: '18px',
+            },
           },
         },
       },

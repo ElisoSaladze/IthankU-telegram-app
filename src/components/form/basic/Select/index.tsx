@@ -1,4 +1,4 @@
-import { ArrowDropDown } from "@mui/icons-material";
+import { ArrowDropDown } from '@mui/icons-material';
 import {
   Checkbox,
   ListItemText,
@@ -6,13 +6,10 @@ import {
   Select as MuiSelect,
   SelectProps as MuiSelectProps,
   useTheme,
-} from "@mui/material";
-import {
-  FormControl,
-  FormControlProps,
-} from "src/components/form/form-control";
-import { COLORS } from "src/constants/colors";
-import { Dispatch, SetStateAction } from "react";
+} from '@mui/material';
+import { FormControl, FormControlProps } from 'src/components/form/form-control';
+import { COLORS } from 'src/constants/colors';
+import { Dispatch, SetStateAction } from 'react';
 
 export type SelectOption = {
   label: string;
@@ -20,8 +17,8 @@ export type SelectOption = {
   value: any;
 };
 
-export type SelectProps<T extends string> = Omit<FormControlProps, "children"> &
-  Omit<MuiSelectProps, "value" | "onChange" | "label"> & {
+export type SelectProps<T extends string> = Omit<FormControlProps, 'children'> &
+  Omit<MuiSelectProps, 'value' | 'onChange' | 'label'> & {
     value?: T | Array<T>;
     options: Array<SelectOption>;
     onChange?: Dispatch<SetStateAction<T | Array<T>>>;
@@ -39,6 +36,7 @@ export const Select = <T extends string>({
   multiple,
   disabled,
   fullWidth,
+  ...selectProps
 }: SelectProps<T>) => {
   const theme = useTheme();
 
@@ -56,29 +54,27 @@ export const Select = <T extends string>({
       <MuiSelect
         value={value}
         onChange={(event) => {
-          const value: T | Array<T | "ALL"> | string = event.target.value;
+          const value: T | Array<T | 'ALL'> | string = event.target.value;
           //TODO: Remove type assertion
           type Value = typeof value extends Array<T> ? Array<T> : T;
 
-          if (Array.isArray(value) && value.includes("ALL")) {
-            return isAllSelected
-              ? onChange?.([])
-              : onChange?.(options.map((option) => option.value));
+          if (Array.isArray(value) && value.includes('ALL')) {
+            return isAllSelected ? onChange?.([]) : onChange?.(options.map((option) => option.value));
           }
           onChange?.(event.target.value as Value);
         }}
         multiple={multiple}
         displayEmpty
-        inputProps={{ "aria-label": "Without label" }}
+        inputProps={{ 'aria-label': 'Without label' }}
         error={error}
         IconComponent={(props) => (
           <ArrowDropDown
             {...props}
             sx={{
-              mr: "5px",
-              "&.MuiSelect-icon": {
-                color: "#DBDEE3",
-                "&.Mui-disabled": {
+              mr: '5px',
+              '&.MuiSelect-icon': {
+                color: '#DBDEE3',
+                '&.Mui-disabled': {
                   color: ({ palette }) => palette.text.disabled,
                 },
               },
@@ -86,30 +82,30 @@ export const Select = <T extends string>({
           />
         )}
         sx={{
-          border: " 1px #DBDEE3 solid",
-          height: "38px",
+          border: '1px #DBDEE3 solid',
+          height: '38px',
 
-          borderRadius: "6px",
+          borderRadius: '6px',
           backgroundColor: COLORS.FieldsBg,
-          "& .MuiInputBase-input": {
-            color: value === "" ? "text.secondary" : undefined,
+          '& .MuiInputBase-input': {
+            color: value === '' ? 'text.secondary' : undefined,
           },
+          ...selectProps.sx,
         }}
         renderValue={(selected) => {
-          const renderLabel = (item: T) =>
-            options.find((option) => option.value === item)?.label;
+          const renderLabel = (item: T) => options.find((option) => option.value === item)?.label;
 
-          if (selected === "") {
+          if (selected === '') {
             return placeholder;
           }
 
           if (multiple) {
             if (isAllSelected) {
-              return "All";
+              return 'All';
             }
             return (selected as Array<T>) //TODO: Remove type assertion
               .map(renderLabel)
-              .join(", ");
+              .join(', ');
           }
           return renderLabel(selected as T);
         }}
@@ -129,7 +125,7 @@ export const Select = <T extends string>({
               key={optionValue}
               value={optionValue}
               sx={{
-                "&.Mui-selected": {
+                '&.Mui-selected': {
                   backgroundColor: theme.palette.background.default,
                 },
               }}

@@ -5,7 +5,7 @@ import pluginEslint from '@nabla/vite-plugin-eslint';
 import pluginTsconfigPaths from 'vite-tsconfig-paths';
 
 // const PROXY_BASE_URL = 'https://itu-dev-02f448e47ca5.herokuapp.com/';
-const PROXY_BASE_URL = 'https://ithanku-nest-api.onrender.com/';
+const PROXY_BASE_URL = 'https://itu-21eea052177b.herokuapp.com/';
 
 // https://vitejs.dev/config/
 export default defineConfig({

@@ -3,6 +3,7 @@ import { AppHeader } from '~/components/header';
 import { Tab, Tabs } from '~/components/tabs';
 import { GroupsList, UsersList } from './tabs';
 import FilterDrawer from '~/components/filter-drawer';
+import { paths } from '~/app/routes';
 
 type TabTypes = 'groups' | 'users';
 
@@ -28,6 +29,7 @@ export const ListingPage = () => {
           top: 0,
           zIndex: 10,
         }}
+        backPath={paths.more}
       />
       <Stack p={3} pt={1} spacing={2}>
         <Box
