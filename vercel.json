@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/v1/(.*)",
-      "destination": "https://ithanku-nest-api.onrender.com/api/v1/$1"
+      "destination": "https://itu-21eea052177b.herokuapp.com/api/v1/$1"
     },
     { "source": "/(.*)", "destination": "/" }
   ]

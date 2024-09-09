@@ -7,13 +7,13 @@ import Loader from 'src/components/loader';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getUserGroups } from '~/api/groups';
 import LikesItem from 'src/components/likes';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';
 import { qk } from 'src/api/query-keys';
 import { updateUserBio } from '~/api/auth';
 import { useUserDetails } from '~/lib/hooks';
-import { IconCheck } from '~/assets/icons';
+import { IconArrow, IconCheck } from '~/assets/icons';
 import { AppHeader } from '~/components/header';
+import { paths } from '~/app/routes';
 
 type AccountsFormValues = {
   bio: string;
@@ -35,7 +35,7 @@ export const AccountsPage = () => {
     },
   });
 
-  const { data, isLoading: groupsLoading } = useQuery({
+  const { data: groups, isLoading: groupsLoading } = useQuery({
     queryKey: qk.groups.getUserGroups.toKeyWithArgs({ userId: userDetails?.id ?? '' }),
     queryFn: () => getUserGroups({ userId: userDetails?.id ?? '' }),
     enabled: userDetails !== undefined,
@@ -51,12 +51,14 @@ export const AccountsPage = () => {
 
   return (
     <>
-      <AppHeader />
+      <AppHeader backPath={paths.more} />
 
-      <Stack mb={10} height={1} gap={1} px={2} alignItems="center">
-        <Typography fontSize={24}>Accounts</Typography>
+      <Stack height={1} gap={1} px={2} alignItems="center">
+        <Typography fontSize={24} my={1}>
+          Accounts
+        </Typography>
 
-        <Typography fontSize={12} alignSelf={'flex-start'}>
+        <Typography fontSize={15} fontWeight={500} alignSelf="flex-start">
           About me
         </Typography>
 
@@ -67,6 +69,9 @@ export const AccountsPage = () => {
           multiline
           rows={2}
           InputProps={{
+            sx: {
+              borderRadius: 4,
+            },
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
@@ -97,44 +102,59 @@ export const AccountsPage = () => {
           }}
         />
 
-        <Typography fontSize={12} alignSelf={'flex-start'}>
-          Socials
-        </Typography>
+        {userDetails?.linkedAccounts && userDetails?.linkedAccounts.length > 0 && (
+          <>
+            <Typography fontSize={15} fontWeight={500} alignSelf="flex-start">
+              Socials
+            </Typography>
 
-        <Box width={1} display="flex" flexWrap="wrap" gap={1}>
-          {userDetails?.linkedAccounts.map((social, index) => (
-            <Typography key={social.value + index}>{social.provider}</Typography>
-          ))}
-        </Box>
+            <Box width={1} display="flex" flexWrap="wrap" gap={1}>
+              {userDetails?.linkedAccounts.map((social, index) => (
+                <Typography key={social.value + index}>{social.provider}</Typography>
+              ))}
+            </Box>
+          </>
+        )}
 
-        <Typography fontSize={12} alignSelf="flex-start">
-          Groups
-        </Typography>
+        {groups?.data && (
+          <>
+            <Typography fontSize={15} fontWeight={500} alignSelf="flex-start" mt={2}>
+              Groups
+            </Typography>
 
-        <Box
-          sx={{
-            width: '100%',
-          }}
-          onClick={() => navigate('/groups')}
-        >
-          <Stack alignItems={'center'} width={'100%'} justifyContent={'space-between'} direction={'row'}>
-            {groupsLoading ? (
-              <Typography>...</Typography>
-            ) : (
-              <LikesItem
-                size="medium"
-                likes={data!.data
-                  .map((data) => ({
-                    id: data.id,
-                    picture: data?.picture,
-                    name: data.name,
-                  }))
-                  .slice(0, 5)}
-              />
-            )}
-            <ArrowForwardIosIcon />
-          </Stack>
-        </Box>
+            <Box
+              sx={{
+                width: 1,
+                display: 'flex',
+                gap: 2,
+              }}
+            >
+              <Stack alignItems="center" justifyContent="space-between" direction="row">
+                {groupsLoading ? (
+                  <Typography>...</Typography>
+                ) : (
+                  <LikesItem
+                    size="medium"
+                    likes={groups!.data
+                      .map((data) => ({
+                        id: data.id,
+                        picture: data?.picture,
+                        name: data.name,
+                      }))
+                      .slice(0, 7)}
+                  />
+                )}
+                <IconButton
+                  onClick={() => {
+                    navigate(paths.groups);
+                  }}
+                >
+                  <IconArrow direction="right" />
+                </IconButton>
+              </Stack>
+            </Box>
+          </>
+        )}
       </Stack>
     </>
   );

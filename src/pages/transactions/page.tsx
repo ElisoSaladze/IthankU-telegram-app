@@ -35,6 +35,7 @@ export const TransactionsPage = () => {
           top: 0,
           zIndex: 10,
         }}
+        backPath={paths.more}
       />
       <Stack px={3} justifyContent="center" spacing={2}>
         <Typography textAlign="center" fontSize={24}>

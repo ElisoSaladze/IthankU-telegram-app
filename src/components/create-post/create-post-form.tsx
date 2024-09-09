@@ -11,6 +11,7 @@ import { useBoolean, useUserDetails } from '~/lib/hooks';
 import { PaidPostDialog } from './paid-post-dialog';
 import { Progress } from '../progress';
 import { paths } from '~/app/routes';
+import { UserGroupsSelect } from './user-groups-select';
 
 export type CreatePostFormValues = {
   content: string;
@@ -46,7 +47,7 @@ type Props = {
   fromGroupPage?: boolean; // TODO
 };
 
-export const CreatePostForm = ({ onClose, groupId }: Props) => {
+export const CreatePostForm = ({ onClose, groupId, fromGroupPage }: Props) => {
   const navigate = useNavigate();
   const { user } = useUserDetails();
 
@@ -136,7 +137,7 @@ export const CreatePostForm = ({ onClose, groupId }: Props) => {
           labels={['Fully visible to everyone.', 'Preview only. 1 coin to unlock']}
         />
 
-        {/* {fromGroupPage && <UserGroupsSelect control={control} />} */}
+        {fromGroupPage && <UserGroupsSelect control={control} error={errors.groupId} />}
 
         <SummaryInput control={control} error={errors.summary} />
 

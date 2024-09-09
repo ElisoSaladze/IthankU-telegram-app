@@ -8,7 +8,6 @@ export type GetUserTransactionsInput = {
   page?: number;
 };
 
-// TODO!
 export const getUserTransactions = async ({ type, page, userId }: GetUserTransactionsInput) => {
   const query = new URLSearchParams();
 

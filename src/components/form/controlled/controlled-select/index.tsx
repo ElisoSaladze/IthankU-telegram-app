@@ -6,7 +6,10 @@ export type ControlledTextFieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
   T extends string = string,
-> = SelectProps<T> & UseControllerProps<TFieldValues, TName>;
+> = SelectProps<T> &
+  UseControllerProps<TFieldValues, TName> & {
+    disableError?: boolean;
+  };
 
 /**
  * Type definition for the props accepted by the ControlledSelect component.
@@ -48,6 +51,8 @@ export const ControlledSelect = <
   fullWidth,
   helperText,
   options,
+  disableError,
+  ...props
 }: ControlledTextFieldProps<TFieldValues, TName, T>) => {
   const { field, fieldState } = useController({
     name,
@@ -60,17 +65,19 @@ export const ControlledSelect = <
 
   return (
     <Select
-      sx={{ borderRadius: '100px', border: 'none' }}
       ref={field.ref}
       value={field.value}
       onChange={field.onChange}
-      error={Boolean(fieldState.error)}
-      helperText={fieldState.error?.message || helperText}
       label={label}
+      {...(!disableError && {
+        error: Boolean(fieldState.error),
+        helperText: fieldState.error?.message || helperText,
+      })}
       fullWidth={fullWidth}
       disabled={disabled}
       required={required}
       options={options}
+      sx={props.sx}
     />
   );
 };
