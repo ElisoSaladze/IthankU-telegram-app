@@ -70,10 +70,10 @@ export const PendingTransactionsList = ({ type }: TransactionsListProps) => {
                     id: transaction.id,
                     user: {
                       name:
-                        type === 'incoming'
+                        type === 'INCOMING'
                           ? transaction.sender?.name || 'Unknown'
                           : transaction.receiver?.name || 'Unknown',
-                      avatar: type === 'incoming' ? transaction.sender?.picture : transaction.receiver?.picture,
+                      avatar: type === 'INCOMING' ? transaction.sender?.picture : transaction.receiver?.picture,
                     },
                     area: transaction.shade,
                     hashtag: transaction.hashtag,

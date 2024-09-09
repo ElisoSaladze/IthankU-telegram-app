@@ -38,7 +38,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
     const postId = post.id;
 
     if (!isDetails) {
-      if (post.visibility === 'PRIVATE') {
+      if (post.isRestricted) {
         navigate({
           pathname: generatePath(paths.privatePost, {
             postId,
@@ -136,7 +136,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
 
       {post.media?.map((media, i) => (
         <Box m={2} key={i}>
-          {!imageLoaded[i] && <Skeleton variant="rectangular" width={1} height={194} sx={{ borderRadius: 1 }} />}
+          {!imageLoaded[i] && <Skeleton variant="rectangular" width="100%" height={194} sx={{ borderRadius: 1 }} />}
           <img
             height="194"
             width="100%"
@@ -160,33 +160,38 @@ const PostItem = ({ post, isDetails = false }: Props) => {
         }}
         disableSpacing
       >
-        <Stack ml={1} alignItems="center" direction="row">
-          {post.hasLiked ? (
-            <FavoriteIcon color="primary" />
-          ) : (
-            <IconButton
-              onClick={(event) => {
-                event.stopPropagation();
-                navigate({
-                  pathname: generatePath(paths.appreciate, {
-                    appreciateId: post.id,
-                  }),
-                });
-                navigate(
-                  generatePath(paths.appreciate, {
-                    appreciateId: '', // We don't need appreciateId there
-                  }),
-                  {
-                    state: {
-                      postId: post.id,
-                    },
-                  },
-                );
-              }}
-            >
-              <FavoriteBorderIcon />
-            </IconButton>
+        <Stack alignItems="center" direction="row">
+          {isDetails && !post.isRestricted && (
+            <>
+              {post.hasLiked ? (
+                <FavoriteIcon sx={{ ml: 1 }} color="primary" />
+              ) : (
+                <IconButton
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    navigate({
+                      pathname: generatePath(paths.appreciate, {
+                        appreciateId: post.id,
+                      }),
+                    });
+                    navigate(
+                      generatePath(paths.appreciate, {
+                        appreciateId: '', // We don't need appreciateId there
+                      }),
+                      {
+                        state: {
+                          postId: post.id,
+                        },
+                      },
+                    );
+                  }}
+                >
+                  <FavoriteBorderIcon />
+                </IconButton>
+              )}
+            </>
           )}
+
           <LikesItem likes={post.likes ?? []} />
           <Typography fontSize={13} fontWeight={600}>
             {post.likesCount} likes

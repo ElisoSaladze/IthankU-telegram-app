@@ -56,7 +56,7 @@ export const NewGroupInterests = () => {
             <ShadeComponent
               key={shade.id}
               selectable
-              selected={selectedShade === shade.en}
+              selected={selectedShade === shade.id}
               onSelect={() => handleSelectShade(shade)}
               color={shade.color}
               name={shade.en}

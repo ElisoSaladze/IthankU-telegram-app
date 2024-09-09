@@ -12,12 +12,12 @@ const tabs: Array<Tab<TabTypes>> = [
   {
     label: 'Incoming',
     value: 'incoming',
-    tabComponent: <PendingTransactionsList type="incoming" />,
+    tabComponent: <PendingTransactionsList type="INCOMING" />,
   },
   {
     label: 'Outgoing',
     value: 'outgoing',
-    tabComponent: <PendingTransactionsList type="outgoing" />,
+    tabComponent: <PendingTransactionsList type="OUTGOING" />,
   },
 ];
 

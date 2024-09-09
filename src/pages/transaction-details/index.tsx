@@ -2,17 +2,14 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  AppBar,
   Box,
   Divider,
   ListItemButton,
   Stack,
-  Toolbar,
   Typography,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate, generatePath } from 'react-router-dom';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { match, P } from 'ts-pattern';
@@ -31,6 +28,12 @@ const TransactionDetailsPage = () => {
     queryKey: qk.transactions.details.toKeyWithArgs({ transactionId: transactionId! }),
     queryFn: () => getTransactionDetails({ transactionId: transactionId! }),
   });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const app = (window as any).Telegram!.WebApp;
+  app.BackButton.show();
+  app.BackButton.onClick(() => {
+    navigate(paths.transactionsList);
+  });
 
   return (
     <>
@@ -38,21 +41,7 @@ const TransactionDetailsPage = () => {
         .with({ isLoading: true }, () => <Loader />)
         .with({ isError: true }, () => <Typography>Failed to get transaction details</Typography>)
         .with({ isSuccess: true, data: P.select() }, ({ data: transaction }) => (
-          <Stack height="100vh">
-            <AppBar
-              sx={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                backgroundColor: 'transparent',
-              }}
-            >
-              <Toolbar>
-                <ArrowBackIosIcon onClick={() => navigate(-1)} sx={{ color: 'white', cursor: 'pointer' }} />
-              </Toolbar>
-            </AppBar>
-
+          <Stack>
             <Box
               sx={{
                 position: 'fixed',
@@ -65,35 +54,36 @@ const TransactionDetailsPage = () => {
               <TransactionBackground fill={transaction.shade.color} />
             </Box>
 
-            <Stack justifyContent="center" gap={1} marginTop={5} marginX={2}>
-              <Typography color="white" textAlign="center">
+            <Stack justifyContent="center" gap={1} mt={2} mx={2}>
+              <Typography fontWeight={600} fontSize={32} color="white" textAlign="center">
                 {transaction.shade.en}
               </Typography>
               <Typography color="white" textAlign="center">
-                {transaction.hashtag}
+                #{transaction.hashtag}
               </Typography>
 
-              <Box
-                sx={{
-                  width: '100%',
-                  position: 'fixed',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  zIndex: -1,
-                }}
-              >
-                <CopyableItem sx={{ padding: 2, borderRadius: 5 }} title="Transaction ID" content={transaction.id} />
+              <Box mt={2} borderRadius={4} bgcolor="white">
+                <CopyableItem
+                  titleSx={{
+                    fontWeight: 600,
+                    fontSize: 30,
+                  }}
+                  sx={{ padding: 2, borderRadius: 5 }}
+                  title="Transaction ID"
+                  content={transaction.id}
+                />
               </Box>
 
-              <Stack justifyContent="center" gap={1} mt={5} mx={2}>
-                <Typography color="white" textAlign="center">
-                  {transaction.shade.en}
-                </Typography>
-                <Typography color="white" textAlign="center">
-                  {transaction.hashtag}
-                </Typography>
-
+              <Stack
+                boxShadow="0px 1px 7.8px -4px #00000040"
+                borderRadius={5}
+                p={2}
+                bgcolor="white"
+                justifyContent="center"
+                gap={1}
+              >
+                <CopyableItem title="Date" content={new Date(transaction.createdAt).toDateString()} />
+                <Divider />
                 <ListItemButton
                   onClick={() => {
                     const senderId = transaction.sender!.id;
@@ -126,21 +116,20 @@ const TransactionDetailsPage = () => {
                 </ListItemButton>
                 <Divider />
 
-                {transaction.itu && (
-                  <CopyableItem contentColor="primary" title="ITU" content={transaction.itu.toString()} />
-                )}
-                <Divider />
+                <CopyableItem contentColor="primary" title="ITU" content={transaction.amount.toString()} />
 
-                <CopyableItem contentColor="primary" title="USD" content={transaction.amount!.toString()} />
+                {/* <Divider />
+
+                <CopyableItem contentColor="primary" title="USD" content={transaction.amount!.toString()} /> */}
               </Stack>
 
-              {transaction.comment.length > 0 && (
+              {transaction.comment!.length > 0 && (
                 <Accordion sx={{ width: '100%' }}>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1-content" id="panel1-header">
-                    <Typography>Comment</Typography>
+                    <Typography fontWeight={600}>Comment</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <CopyableItem title="" content={transaction.comment} />
+                    <CopyableItem title="" content={transaction.comment!} />
                   </AccordionDetails>
                 </Accordion>
               )}
