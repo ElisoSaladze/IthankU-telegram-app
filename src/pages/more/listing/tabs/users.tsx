@@ -14,18 +14,16 @@ import { useFilterUsersContext } from '~/providers/filter-provider';
 import { paths } from '~/app/routes';
 
 export const UsersList = () => {
-  const { watch } = useFilterUsersContext();
+  const { getValues, refetchListing, setRefetchListing } = useFilterUsersContext();
   const [ref, inView] = useInView();
   const navigate = useNavigate();
 
-  const radius = watch('distance') || undefined;
-  const shade = watch('area') || undefined;
-  const hashtag = watch('hashtag') || undefined;
-
   const $users = useInfiniteQuery({
-    queryKey: qk.users.list.toKeyWithArgs({ shade: shade, radius: radius?.toString(), hashtag: hashtag }),
-    queryFn: async ({ pageParam = 1 }) =>
-      getUsers({ page: pageParam, radius: radius?.toString(), shade: shade, hashtag: hashtag }),
+    queryKey: qk.users.list.toKey(),
+    queryFn: async ({ pageParam = 1 }) => {
+      const { distance, area, hashtag } = getValues();
+      return getUsers({ page: pageParam, radius: distance?.toString(), shade: area, hashtag: hashtag });
+    },
     getNextPageParam: (result) => {
       const nextPage = result.meta.page + 1;
       return nextPage <= result.meta.totalPages ? nextPage : undefined;
@@ -37,6 +35,12 @@ export const UsersList = () => {
       $users.fetchNextPage();
     }
   }, [$users, inView]);
+  useEffect(() => {
+    if (refetchListing) {
+      $users.refetch();
+      setRefetchListing(false);
+    }
+  }, [$users, refetchListing, setRefetchListing]);
 
   return match($users)
     .with({ isLoading: true }, () => <Loader />)

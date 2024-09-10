@@ -10,20 +10,23 @@ import { Shade } from '~/api/shades/shades.schema';
 import TagItem from '../tag';
 import CustomSearch from './autocomplete';
 import { useFilterUsersContext } from '~/providers/filter-provider';
+
 import { paths } from '~/app/routes';
 import { IconFilter } from '~/assets/icons';
 
 type Props = {
   buttonColor?: string;
+  refetchMap?: () => void;
 };
 
-const FilterDrawer = ({ buttonColor = 'primary.main' }: Props) => {
+const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<string | false>(false);
 
-  const { control, watch, setValue, selectedShade, setSelectedShade, clear } = useFilterUsersContext();
+  const { control, watch, setValue, selectedShade, setSelectedShade, clear, setRefetchListing } =
+    useFilterUsersContext();
 
   const toggleDrawer = useCallback(
     (newOpen: boolean) => () => {
@@ -34,10 +37,14 @@ const FilterDrawer = ({ buttonColor = 'primary.main' }: Props) => {
 
   const handleSelectShade = useCallback(
     (shade: Shade) => {
-      setSelectedShade((prev) => (prev?.en === shade.en ? null : shade));
+      setSelectedShade((prev) => {
+        const newShade = prev?.en === shade.en ? null : shade;
+        setValue('area', newShade?.en || ''); // Update the 'area' field in the form
+        return newShade;
+      });
       setExpandedAccordion(false);
     },
-    [setSelectedShade],
+    [setSelectedShade, setValue, setExpandedAccordion],
   );
 
   const handleAccordionChange = useCallback(
@@ -50,7 +57,9 @@ const FilterDrawer = ({ buttonColor = 'primary.main' }: Props) => {
   const { shades, shadesLoading } = useFetchItemsContext();
 
   const handleShowInListing = () => {
+    setRefetchListing(true);
     setIsOpen(false);
+    console.log('listing');
     navigate({
       pathname: paths.listing,
       search: createSearchParams({
@@ -62,6 +71,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main' }: Props) => {
   const handleShowInMap = () => {
     setIsOpen(false);
     navigate(paths.map);
+    refetchMap!();
   };
 
   const handleRadiusChange = (_event: Event, newValue: number | number[]) => {

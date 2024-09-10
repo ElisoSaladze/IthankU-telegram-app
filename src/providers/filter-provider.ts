@@ -1,5 +1,5 @@
 import constate from 'constate';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-use';
 
@@ -19,6 +19,7 @@ const defaultValues = {
 
 const useFilterUsers = () => {
   const [selectedShade, setSelectedShade] = useState<Shade | null>(null);
+  const [refetchListing, setRefetchListing] = useState(false);
 
   const { control, getValues, watch, setValue, reset } = useForm({
     defaultValues: defaultValues,
@@ -28,16 +29,36 @@ const useFilterUsers = () => {
     reset(defaultValues);
     setSelectedShade(null);
   }, [reset]);
-
   const location = useLocation();
+  const prevPathname = useRef(location.pathname);
 
   useEffect(() => {
-    if (location.pathname !== `${paths.listing}&tab=users` && location.pathname !== paths.map) {
+    const isOnListingOrMap = location.pathname === `${paths.listing}&tab=users` || location.pathname === paths.map;
+    console.log(location.pathname);
+    // Check if the user is navigating away from listing or map
+    const wasOnListingOrMap =
+      prevPathname.current === paths.listing || prevPathname.current === paths.map;
+    console.log(prevPathname.current);
+    // Reset filters only when navigating away from both listing and map
+    if (!isOnListingOrMap && wasOnListingOrMap) {
       clear();
     }
+
+    // Update previous pathname
+    prevPathname.current = location.pathname;
   }, [location.pathname, clear]);
 
-  return { setValue, control, watch, getValues, selectedShade, setSelectedShade, clear } as const;
+  return {
+    setValue,
+    control,
+    watch,
+    getValues,
+    selectedShade,
+    setSelectedShade,
+    clear,
+    refetchListing,
+    setRefetchListing,
+  } as const;
 };
 
 export const [FilterUsersProvider, useFilterUsersContext] = constate(useFilterUsers);
