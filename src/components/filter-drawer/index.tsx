@@ -39,7 +39,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
     (shade: Shade) => {
       setSelectedShade((prev) => {
         const newShade = prev?.en === shade.en ? null : shade;
-        setValue('area', newShade?.en || ''); // Update the 'area' field in the form
+        setValue('shadeId', newShade?.id || ''); // Update the 'area' field in the form
         return newShade;
       });
       setExpandedAccordion(false);

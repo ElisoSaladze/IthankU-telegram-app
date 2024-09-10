@@ -21,8 +21,8 @@ export const UsersList = () => {
   const $users = useInfiniteQuery({
     queryKey: qk.users.list.toKey(),
     queryFn: async ({ pageParam = 1 }) => {
-      const { distance, area, hashtag } = getValues();
-      return getUsers({ page: pageParam, radius: distance?.toString(), shade: area, hashtag: hashtag });
+      const { distance, shadeId, hashtag } = getValues();
+      return getUsers({ page: pageParam, radius: distance?.toString(), shadeId, hashtag });
     },
     getNextPageParam: (result) => {
       const nextPage = result.meta.page + 1;

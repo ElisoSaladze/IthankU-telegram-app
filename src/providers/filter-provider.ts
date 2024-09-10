@@ -1,5 +1,5 @@
 import constate from 'constate';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-use';
 
@@ -7,7 +7,7 @@ import { Shade } from '~/api/shades';
 import { paths } from '~/app/routes';
 
 const defaultValues = {
-  area: '',
+  shadeId: '',
   hashtag: '',
   location: '',
   userLocation: {
@@ -30,22 +30,12 @@ const useFilterUsers = () => {
     setSelectedShade(null);
   }, [reset]);
   const location = useLocation();
-  const prevPathname = useRef(location.pathname);
 
   useEffect(() => {
-    const isOnListingOrMap = location.pathname === `${paths.listing}&tab=users` || location.pathname === paths.map;
-    console.log(location.pathname);
-    // Check if the user is navigating away from listing or map
-    const wasOnListingOrMap =
-      prevPathname.current === paths.listing || prevPathname.current === paths.map;
-    console.log(prevPathname.current);
-    // Reset filters only when navigating away from both listing and map
-    if (!isOnListingOrMap && wasOnListingOrMap) {
+    const isOnListingOrMap = location.pathname === `${paths.listing}` || location.pathname === paths.map;
+    if (!isOnListingOrMap) {
       clear();
     }
-
-    // Update previous pathname
-    prevPathname.current = location.pathname;
   }, [location.pathname, clear]);
 
   return {

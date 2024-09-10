@@ -54,12 +54,12 @@ export const MapPageContent = () => {
       userLocation: location,
     }),
     queryFn: () => {
-      const { distance, area, hashtag } = getValues();
+      const { distance, shadeId, hashtag } = getValues();
       return getUsersByLocation({
         latitude: location.lat,
         longitude: location.lng,
         radius: distance! / 1000,
-        area: area,
+        shadeId: shadeId,
         hashtag: hashtag,
       });
     },

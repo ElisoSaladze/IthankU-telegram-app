@@ -86,7 +86,7 @@ export const TLocationQueryParams = z.object({
   latitude: z.number(),
   longitude: z.number(),
   radius: z.number(),
-  area: z.string().optional(),
+  shadeId: z.string().optional(),
   hashtag: z.string().optional(),
 });
 
