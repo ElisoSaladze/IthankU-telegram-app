@@ -5,7 +5,7 @@ import { decodeBody, decodeBodyWithPagination } from '../common';
 export type GetUsersInput = {
   page?: number;
   radius?: string;
-  shade?: string;
+  shadeId?: string;
   hashtag?: string;
   userLocation?: {
     lat: number;
@@ -13,7 +13,7 @@ export type GetUsersInput = {
   };
 };
 
-export const getUsers = async ({ page, radius, shade, hashtag }: GetUsersInput) => {
+export const getUsers = async ({ page, radius, shadeId, hashtag }: GetUsersInput) => {
   const query = new URLSearchParams();
 
   query.set('page', String(page));
@@ -21,8 +21,8 @@ export const getUsers = async ({ page, radius, shade, hashtag }: GetUsersInput) 
   if (radius) {
     query.set('radius', radius);
   }
-  if (shade) {
-    query.set('shade', shade);
+  if (shadeId) {
+    query.set('shadeId', shadeId);
   }
   if (hashtag) {
     query.set('hashtag', hashtag);
@@ -50,15 +50,15 @@ export const getCurrentUser = async () => {
   return await request('/api/v1/users/me').get({}, decodeBody(TCurrentUser));
 };
 
-export const getUsersByLocation = async ({ latitude, longitude, radius, area, hashtag }: LocationQueryParams) => {
+export const getUsersByLocation = async ({ latitude, longitude, radius, shadeId, hashtag }: LocationQueryParams) => {
   const query = new URLSearchParams();
 
   query.set('latitude', String(latitude));
   query.set('longitude', String(longitude));
   query.set('radius', String(radius));
 
-  if (area) {
-    query.set('area', area);
+  if (shadeId) {
+    query.set('shadeId', shadeId);
   }
 
   if (hashtag) {

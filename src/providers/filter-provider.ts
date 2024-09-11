@@ -7,7 +7,7 @@ import { Shade } from '~/api/shades';
 import { paths } from '~/app/routes';
 
 const defaultValues = {
-  area: '',
+  shadeId: '',
   hashtag: '',
   location: '',
   userLocation: {
@@ -19,6 +19,7 @@ const defaultValues = {
 
 const useFilterUsers = () => {
   const [selectedShade, setSelectedShade] = useState<Shade | null>(null);
+  const [refetchListing, setRefetchListing] = useState(false);
 
   const { control, getValues, watch, setValue, reset } = useForm({
     defaultValues: defaultValues,
@@ -28,16 +29,26 @@ const useFilterUsers = () => {
     reset(defaultValues);
     setSelectedShade(null);
   }, [reset]);
-
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname !== `${paths.listing}&tab=users` && location.pathname !== paths.map) {
+    const isOnListingOrMap = location.pathname === `${paths.listing}` || location.pathname === paths.map;
+    if (!isOnListingOrMap) {
       clear();
     }
   }, [location.pathname, clear]);
 
-  return { setValue, control, watch, getValues, selectedShade, setSelectedShade, clear } as const;
+  return {
+    setValue,
+    control,
+    watch,
+    getValues,
+    selectedShade,
+    setSelectedShade,
+    clear,
+    refetchListing,
+    setRefetchListing,
+  } as const;
 };
 
 export const [FilterUsersProvider, useFilterUsersContext] = constate(useFilterUsers);

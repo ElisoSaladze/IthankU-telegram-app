@@ -12,10 +12,9 @@ import CircleIcon from '@mui/icons-material/Circle';
 import { UserMarker } from './user-marker';
 
 export const MapPageContent = () => {
-  const { watch, setValue, selectedShade } = useFilterUsersContext();
+  const { watch, setValue, selectedShade, getValues } = useFilterUsersContext();
 
   const initialRadius = watch('distance') || 1000;
-  const shade = watch('area') || undefined;
   const hashtag = watch('hashtag') || undefined;
   const location = watch('userLocation');
 
@@ -52,19 +51,18 @@ export const MapPageContent = () => {
 
   const { data: nearbyUsers, refetch: refetchNearbyUsers } = useQuery({
     queryKey: qk.map.list.toKeyWithArgs({
-      shade: shade,
-      radius: initialRadius.toString(),
-      hashtag: hashtag,
       userLocation: location,
     }),
-    queryFn: () =>
-      getUsersByLocation({
+    queryFn: () => {
+      const { distance, shadeId, hashtag } = getValues();
+      return getUsersByLocation({
         latitude: location.lat,
         longitude: location.lng,
-        radius: radius / 1000,
-        area: shade,
+        radius: distance! / 1000,
+        shadeId: shadeId,
         hashtag: hashtag,
-      }),
+      });
+    },
     enabled: locationLoaded,
   });
 
@@ -138,7 +136,7 @@ export const MapPageContent = () => {
               People nearby
             </Typography>
           </Box>
-          <FilterDrawer buttonColor="info.main" />
+          <FilterDrawer refetchMap={refetchNearbyUsers} buttonColor="info.main" />
         </Toolbar>
       </AppBar>
 
@@ -166,7 +164,7 @@ export const MapPageContent = () => {
             gap: 1,
             position: 'absolute',
             left: '50%',
-            top: '80%',
+            top: '90%',
             transform: 'translate(-50%, 0)',
           }}
         >
