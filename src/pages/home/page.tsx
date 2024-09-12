@@ -12,10 +12,30 @@ import { CreatePostGroupMenu } from '~/components/create-post-group-menu';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useUserDetails } from '~/lib/hooks';
 import PullToRefresh from 'react-simple-pull-to-refresh';
+import { generatePath, useNavigate } from 'react-router-dom';
+import { paths } from '~/app/routes';
 
 export const HomePage = () => {
+  const navigate = useNavigate();
+
   const [ref, inView] = useInView();
   const { user: userDetails } = useUserDetails();
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const app = (window as any).Telegram!.WebApp;
+    const groupId = app.initDataUnsafe.start_param;
+
+    console.log({ app, groupId });
+
+    if (groupId) {
+      navigate(
+        generatePath(paths.groupDetails, {
+          groupId,
+        }),
+      );
+    }
+  }, [navigate]);
 
   const $posts = useInfiniteQuery({
     queryKey: qk.posts.list.toKey(),
