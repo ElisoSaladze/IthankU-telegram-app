@@ -1,5 +1,7 @@
 import { z } from 'zod';
-import { TAuthor, TVisibility } from '../groups';
+import { TAuthor } from '../groups';
+
+export const TPostTypes = z.union([z.literal('FREE'), z.literal('PAID')]);
 
 const TMedia = z.object({
   id: z.string(),
@@ -24,7 +26,7 @@ export const TPost = z.object({
   author: TAuthor.nullable().optional(),
   group: TPostGroup.nullable(),
   preview: z.string().nullable(),
-  visibility: TVisibility,
+  visibility: TPostTypes,
   tags: z.array(z.string()),
   media: z.array(TMedia).optional(),
   attachments: z.array(TAttachment).optional(),

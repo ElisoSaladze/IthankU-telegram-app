@@ -5,15 +5,16 @@ import { Box, Stack, Typography } from '@mui/material';
 
 import { Control } from 'react-hook-form';
 import { ControlledRadioGroup } from 'src/components/form/controlled/controlled-radio-group';
-import { Visibility } from '~/constants/enums';
+import { PostType, Visibility } from '~/constants/enums';
 
 type Props = {
   control: Control<any, any>;
   name: string;
   labels: [string, string];
+  isGroupVisibility?: boolean;
 };
 
-const VisibilityStatus = ({ control, name, labels }: Props) => {
+const VisibilityStatus = ({ control, name, labels, isGroupVisibility }: Props) => {
   return (
     <Box width={1}>
       <ControlledRadioGroup
@@ -38,12 +39,12 @@ const VisibilityStatus = ({ control, name, labels }: Props) => {
                   <PublicIcon />
                 </Box>
                 <Stack>
-                  <Typography fontWeight={600}>Public</Typography>
-                  <Typography fontSize={'small'}>{labels[0]}</Typography>
+                  <Typography fontWeight={600}>{isGroupVisibility ? 'Public' : 'Free'}</Typography>
+                  <Typography fontSize="small">{labels[0]}</Typography>
                 </Stack>
               </Box>
             ),
-            value: Visibility.Public,
+            value: isGroupVisibility ? Visibility.Public : PostType.Free,
           },
           {
             label: (
@@ -62,12 +63,12 @@ const VisibilityStatus = ({ control, name, labels }: Props) => {
                   <LockIcon />
                 </Box>
                 <Stack>
-                  <Typography fontWeight={600}>Paid</Typography>
-                  <Typography fontSize={'small'}>{labels[1]}</Typography>
+                  <Typography fontWeight={600}>{isGroupVisibility ? 'Private' : 'Paid'}</Typography>
+                  <Typography fontSize="small">{labels[1]}</Typography>
                 </Stack>
               </Box>
             ),
-            value: Visibility.Private,
+            value: isGroupVisibility ? Visibility.Private : PostType.Paid,
           },
         ]}
       />

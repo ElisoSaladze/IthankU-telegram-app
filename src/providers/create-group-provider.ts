@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import { Shade } from '~/api/shades';
 import { Visibility } from '~/constants/enums';
 
-// TODO!
 export type CreateGroupFormValues = {
   name: string;
   description: string;

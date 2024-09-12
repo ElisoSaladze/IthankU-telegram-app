@@ -82,6 +82,7 @@ export const NewGroupDetails = () => {
           name="privacy"
           control={control}
           labels={['Anyone can join this group', 'Only visible to those you share with']}
+          isGroupVisibility
         />
       </Stack>
 

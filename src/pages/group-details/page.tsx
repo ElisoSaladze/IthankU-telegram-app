@@ -166,7 +166,7 @@ export const GroupDetailsPage = () => {
                 )}
 
                 <Typography>
-                  {data?.data.privacy === 'PUBLIC' ? 'Public group ' : 'Private Group '}• {data?.data.membersCount}{' '}
+                  {data?.data.privacy === 'PUBLIC' ? 'Public group' : 'Private Group'}• {data?.data.membersCount}{' '}
                   members
                 </Typography>
               </Stack>
