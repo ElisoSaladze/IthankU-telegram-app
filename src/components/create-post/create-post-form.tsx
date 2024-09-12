@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { createPost } from 'src/api/posts';
 import VisibilityStatus from 'src/components/visibility-status';
-import { Visibility } from '~/constants/enums';
+import { PostType } from '~/constants/enums';
 import { IconClose } from '~/assets/icons';
 import { PostTextInput, PreviewInput, SummaryInput, TagsInput } from './inputs';
 import { useBoolean, useUserDetails } from '~/lib/hooks';
@@ -18,7 +18,7 @@ export type CreatePostFormValues = {
   groupId: string | null;
   summary: string;
   preview?: string;
-  visibility: Visibility;
+  visibility: PostType;
   tags: Array<{
     value: string;
   }>;
@@ -35,7 +35,7 @@ const defaultPostValue: CreatePostFormValues = {
   groupId: null,
   summary: '',
   preview: '',
-  visibility: Visibility.Public, //TODO!
+  visibility: PostType.Free,
   tags: [],
   media: [],
   attachments: [],
@@ -80,7 +80,7 @@ export const CreatePostForm = ({ onClose, groupId, fromGroupPage }: Props) => {
   });
 
   const onSubmit = handleSubmit((data) => {
-    if (data.visibility === 'PUBLIC') {
+    if (data.visibility === 'FREE') {
       $createPost.mutate({
         ...data,
         tags: data.tags.map((tag) => tag.value),
@@ -141,7 +141,7 @@ export const CreatePostForm = ({ onClose, groupId, fromGroupPage }: Props) => {
 
         <SummaryInput control={control} error={errors.summary} />
 
-        {visibility === 'PRIVATE' && <PreviewInput control={control} />}
+        {visibility === 'PAID' && <PreviewInput control={control} />}
 
         <PostTextInput control={control} contentLength={content.length} error={errors.content} />
 

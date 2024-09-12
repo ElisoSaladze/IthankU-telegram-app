@@ -80,7 +80,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
           <Stack gap={0.5} direction="row" alignItems="center" fontSize="small" color="secondary.dark">
             {post.group && post.author?.name + ' • '}
             {timeAgo(post.createdAt)} •
-            {post.visibility === 'PUBLIC' ? (
+            {post.visibility === 'FREE' ? (
               <PublicIcon sx={{ fontSize: '12px' }} />
             ) : (
               <LockIcon sx={{ fontSize: '12px' }} />
@@ -96,10 +96,10 @@ const PostItem = ({ post, isDetails = false }: Props) => {
       >
         <Box gap={1} display="flex">
           <Typography fontWeight={600}>{post.summary}</Typography>
-          {post.visibility === 'PRIVATE' && <IconPrivatePost />}
+          {post.visibility === 'PAID' && <IconPrivatePost />}
         </Box>
         <Box mt={1}>
-          {post.visibility === 'PUBLIC' && post.preview && post.preview.length > 0 && (
+          {post.visibility === 'FREE' && post.preview && post.preview.length > 0 && (
             <>
               <Typography color="#A0A0A0" fontSize={12}>
                 Preview
@@ -107,7 +107,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
               <Typography>{post.preview}</Typography>
             </>
           )}
-          {post.visibility === 'PUBLIC' && post.content && (
+          {post.visibility === 'FREE' && post.content && (
             <Typography>
               {renderContent(post.content)}{' '}
               {!isDetails && post.content.length >= 100 && (

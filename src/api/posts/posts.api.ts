@@ -1,7 +1,7 @@
 import { request } from '~/lib/request';
 import { TCreatePostResponse, TPost } from './posts.schema';
 import { decodeBody, decodeBodyWithPagination } from '../common';
-import { Visibility } from '~/constants/enums';
+import { PostType } from '~/constants/enums';
 
 export type GetPostsInput = {
   page: number;
@@ -43,7 +43,7 @@ type CreatePostInput = {
   groupId: string | null;
   summary: string;
   preview?: string;
-  visibility: Visibility;
+  visibility: PostType;
   tags: Array<string>;
   media: Array<File>;
   attachments: Array<File>;
