@@ -26,14 +26,14 @@ export const HomePage = () => {
     const app = (window as any).Telegram!.WebApp;
     const groupId = app.initDataUnsafe.start_param;
 
-    console.log({ app, groupId });
-
     if (groupId) {
       navigate(
         generatePath(paths.groupDetails, {
           groupId,
         }),
       );
+
+      app.initDataUnsafe.start_param = undefined; // Clear param to avoid redirecting on every time when navigate to home page
     }
   }, [navigate]);
 
