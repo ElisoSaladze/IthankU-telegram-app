@@ -12,10 +12,11 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { FetchItemsProvider } from './providers/hashtag-shade';
 import { GlobalQueryClientProvider } from './lib/query-utils';
 import { ToastContainer } from './components/toast';
-import { UserDetailsProvider } from './lib/hooks';
+import { NotificationsProvider, UserDetailsProvider } from './lib/hooks';
 import { LoadScript } from '@react-google-maps/api';
 import { FilterUsersProvider } from './providers/filter-provider';
 import { CreateGroupProvider } from './providers/create-group-provider';
+import { Progress } from './components/progress';
 
 export const RoutesWrapper = () => {
   return (
@@ -37,33 +38,32 @@ type Props = {
 
 export const Providers = ({ children }: Props) => {
   return (
-    <Suspense fallback={null}>
-      <ThemeProvider>
-        <CssBaseline />
-        <HelmetProvider>
-          <Helmet defaultTitle="Quiz app" titleTemplate="%s · Quiz app" />
-          {/* // TODO */}
-          <ErrorBoundary fallback={null}>
+    <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <Suspense fallback={<Progress centered />}>
+        <ThemeProvider>
+          <CssBaseline />
+          <HelmetProvider>
+            <Helmet defaultTitle="Quiz app" titleTemplate="%s · Quiz app" />
             <GlobalQueryClientProvider>
               <AuthProvider>
                 <FilterUsersProvider>
                   <FetchItemsProvider>
                     <UserDetailsProvider>
-                      {/* <NotificationsProvider> */}
-                      <CreateGroupProvider>
-                        <LoadScript libraries={['places']} googleMapsApiKey="AIzaSyDsf_MC31bfKI8JwasA5WebPrCl2TDqoHc">
-                          {children}
-                        </LoadScript>
-                      </CreateGroupProvider>
-                      {/* </NotificationsProvider> */}
+                      <NotificationsProvider>
+                        <CreateGroupProvider>
+                          <LoadScript libraries={['places']} googleMapsApiKey="AIzaSyDsf_MC31bfKI8JwasA5WebPrCl2TDqoHc">
+                            {children}
+                          </LoadScript>
+                        </CreateGroupProvider>
+                      </NotificationsProvider>
                     </UserDetailsProvider>
                   </FetchItemsProvider>
                 </FilterUsersProvider>
               </AuthProvider>
             </GlobalQueryClientProvider>
-          </ErrorBoundary>
-        </HelmetProvider>
-      </ThemeProvider>
-    </Suspense>
+          </HelmetProvider>
+        </ThemeProvider>
+      </Suspense>
+    </ErrorBoundary>
   );
 };

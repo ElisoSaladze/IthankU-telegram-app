@@ -24,6 +24,7 @@ import LikesItem from '../likes';
 import { Post } from '~/api/posts';
 import { IconPrivatePost, IconShare } from '~/assets/icons';
 import { paths } from '~/app/routes';
+import { useAuthUser } from '~/app/auth';
 
 type Props = {
   post: Post;
@@ -32,6 +33,8 @@ type Props = {
 
 const PostItem = ({ post, isDetails = false }: Props) => {
   const navigate = useNavigate();
+  const authUser = useAuthUser();
+
   const [imageLoaded, setImageLoaded] = useState<boolean[]>(Array(post.media?.length).fill(false)); // TODO!!
 
   const navigateToDetails = () => {
@@ -99,7 +102,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
           {post.visibility === 'PAID' && <IconPrivatePost />}
         </Box>
         <Box mt={1}>
-          {post.visibility === 'FREE' && post.preview && post.preview.length > 0 && (
+          {post.visibility === 'PAID' && post.preview && post.preview.length > 0 && (
             <>
               <Typography color="#A0A0A0" fontSize={12}>
                 Preview
@@ -108,7 +111,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
             </>
           )}
           {post.visibility === 'FREE' && post.content && (
-            <Typography>
+            <Typography sx={{ wordBreak: 'break-all' }}>
               {renderContent(post.content)}{' '}
               {!isDetails && post.content.length >= 100 && (
                 <Button
@@ -128,9 +131,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
           )}
         </Box>
         <Stack mt={1.5} spacing={0.5} direction="row">
-          {post.tags!.map((tag, index) => (
-            <TagItem key={index} tag={tag} />
-          ))}
+          {post.tags.map((tag, index) => (tag ? <TagItem key={index} tag={tag} /> : null))}
         </Stack>
       </CardContent>
 
@@ -138,7 +139,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
         <Box m={2} key={i}>
           {!imageLoaded[i] && <Skeleton variant="rectangular" width="100%" height={194} sx={{ borderRadius: 1 }} />}
           <img
-            height="194"
+            height="194px"
             width="100%"
             src={media.originalUrl}
             alt={media.originalUrl}
@@ -161,7 +162,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
         disableSpacing
       >
         <Stack alignItems="center" direction="row">
-          {isDetails && !post?.isRestricted && (
+          {isDetails && !post?.isRestricted && post.author?.id !== authUser?.user.id && (
             <>
               {post.hasLiked ? (
                 <FavoriteIcon sx={{ ml: 1 }} color="primary" />
@@ -198,8 +199,8 @@ const PostItem = ({ post, isDetails = false }: Props) => {
           </Typography>
         </Stack>
 
-        <Button color="secondary" variant="text" sx={{ fontSize: 13, fontWeight: 600 }}>
-          <IconShare sx={{ color: 'black', fontSize: 20, mr: 0.5, fontWeight: 600 }} />
+        <Button color="secondary" variant="text" sx={{ fontSize: 13, fontWeight: 600 }} disabled>
+          <IconShare sx={{ color: 'disabled', fontSize: 20, mr: 0.5, fontWeight: 600 }} />
           Share
         </Button>
       </CardActions>

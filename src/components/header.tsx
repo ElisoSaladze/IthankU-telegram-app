@@ -4,7 +4,7 @@ import { useNavigate, To } from 'react-router-dom';
 import { paths } from '~/app/routes';
 import { IconNotification } from '~/assets/icons';
 import ituIcon from 'src/assets/images/itu.svg';
-// import { useNotifications } from '~/lib/hooks';
+import { useNotifications } from '~/lib/hooks';
 
 type Props = {
   backPath?: To;
@@ -16,7 +16,7 @@ type Props = {
 export const AppHeader = ({ backPath, pageName, additionalContent, headerSx }: Props) => {
   const navigate = useNavigate();
 
-  // const notifications = useNotifications();
+  const notifications = useNotifications();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const app = (window as any).Telegram!.WebApp;
@@ -78,7 +78,7 @@ export const AppHeader = ({ backPath, pageName, additionalContent, headerSx }: P
         <IconButton onClick={() => navigate(paths.pendingTransactions)}>
           <Badge
             color="error"
-            // badgeContent={notifications?.pendingTransactions}
+            badgeContent={notifications?.pendingTransactions}
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'left',

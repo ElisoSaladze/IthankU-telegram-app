@@ -59,7 +59,6 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
   const handleShowInListing = () => {
     setRefetchListing(true);
     setIsOpen(false);
-    console.log('listing');
     navigate({
       pathname: paths.listing,
       search: createSearchParams({
