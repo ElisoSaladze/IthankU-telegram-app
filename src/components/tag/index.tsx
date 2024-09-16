@@ -16,7 +16,7 @@ const TagItem = ({ tag, clickable, onClick }: Props) => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      border="1px solid #000000"
+      border={1}
       borderRadius="15px"
       width="fit-content"
       paddingX={0.5}
