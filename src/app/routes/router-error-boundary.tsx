@@ -6,8 +6,6 @@ const ENV = import.meta.env['VITE_APP_ENV'];
 export const RouterErrorBoundary = () => {
   const error = useRouteError() as { message?: string };
 
-  console.log({ error });
-
   if (error.message && ENV === 'development') {
     return <ErrorView message={error.message} />;
   }

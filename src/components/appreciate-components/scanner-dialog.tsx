@@ -1,7 +1,8 @@
 import { Box, Dialog, Stack, Typography } from '@mui/material';
 import { Scanner } from '@yudiel/react-qr-scanner';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import background from 'src/assets/images/scanner-back.png';
+import { paths } from '~/app/routes';
 
 type Props = {
   isOpen: boolean;
@@ -10,13 +11,18 @@ type Props = {
 
 export const ScanQrCodeDialog = ({ isOpen, onClose }: Props) => {
   const navigate = useNavigate();
+
   const handleScan = (result: string | null) => {
     if (result) {
       const url = new URL(result);
       if (url.hostname === 'web.itu-net.com' && url.pathname.startsWith('/appreciate/')) {
         const appreciateId = url.pathname.split('/').pop();
         if (appreciateId) {
-          navigate(`/appreciate/${appreciateId}`);
+          navigate(
+            generatePath(paths.appreciate, {
+              appreciateId,
+            }),
+          );
           onClose();
         } else {
           console.error('Invalid QR code');
