@@ -7,6 +7,7 @@ import { useFetchItemsContext } from 'src/providers/hashtag-shade';
 import { Hashtag } from '~/api/hashtag';
 import { ControlledTextField } from '~/components/form/controlled/controlled-text-field';
 import { Control } from 'react-hook-form';
+import { ErrorView } from '../error-view';
 
 type Props = {
   onSelect?: (hashtag: Hashtag | null) => void;
@@ -41,8 +42,9 @@ export const HashtagSelect = ({ onSelect, defaultSelected, control }: Props) => 
     }
   };
 
-  if (hashtagsLoading) return <Skeleton width={'100%'} height={60} />;
-  if (hashtagsError) return <Typography>Failed to load shades</Typography>;
+  if (hashtagsLoading) return <Skeleton width={1} height={60} />;
+
+  if (hashtagsError) return <ErrorView message="Failed to load shades" />;
 
   return (
     <Accordion>

@@ -1,10 +1,13 @@
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { RoutesWrapper } from 'src/providers';
 import { AppLayout } from '../layouts';
+import { wrapCreateBrowserRouter } from '@sentry/react';
 import { authRoutes, paths } from '../routes';
 
+const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
+
 export const AuthApp = () => {
-  const router = createBrowserRouter([
+  const router = sentryCreateBrowserRouter([
     {
       path: '/',
       Component() {

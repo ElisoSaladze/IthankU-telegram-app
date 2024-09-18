@@ -19,6 +19,7 @@ import { TransactionBackground } from 'src/assets/images/transaction-backround';
 import { getTransactionDetails } from '~/api/transactions';
 import { qk } from '~/api/query-keys';
 import { paths } from '~/app/routes';
+import { ErrorView } from '~/components/error-view';
 
 const TransactionDetailsPage = () => {
   const { transactionId } = useParams<{ transactionId: string }>();
@@ -39,7 +40,7 @@ const TransactionDetailsPage = () => {
     <>
       {match($transaction)
         .with({ isLoading: true }, () => <Loader />)
-        .with({ isError: true }, () => <Typography>Failed to get transaction details</Typography>)
+        .with({ isError: true }, () => <ErrorView message="Failed to get transaction details" />)
         .with({ isSuccess: true, data: P.select() }, ({ data: transaction }) => (
           <Stack>
             <Box
@@ -51,12 +52,12 @@ const TransactionDetailsPage = () => {
                 zIndex: -1,
               }}
             >
-              <TransactionBackground fill={transaction.shade.color} />
+              <TransactionBackground fill={transaction.shade?.color} />
             </Box>
 
             <Stack justifyContent="center" gap={1} mt={2} mx={2}>
               <Typography fontWeight={600} fontSize={32} color="white" textAlign="center">
-                {transaction.shade.en}
+                {transaction.shade?.en}
               </Typography>
               <Typography color="white" textAlign="center">
                 #{transaction.hashtag}

@@ -2,6 +2,7 @@ import loadable, { LoadableComponent } from '@loadable/component';
 import promiseRetry from 'promise-retry';
 import { Helmet } from 'react-helmet-async';
 import { IndexRouteObject, NonIndexRouteObject } from 'react-router-dom';
+import { RouterErrorBoundary } from './router-error-boundary';
 
 type Route = IndexRouteObject | NonIndexRouteObject;
 
@@ -36,5 +37,6 @@ export const createRoute = ({ path, factory, title, children }: CreateRouteInput
       </>
     ),
     children,
+    ErrorBoundary: RouterErrorBoundary,
   };
 };

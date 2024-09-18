@@ -9,6 +9,7 @@ import { handleShare } from 'src/helpers';
 import { qk } from '~/api/query-keys';
 import { getQRCode } from '~/api/appreciate';
 import { useAuthUser } from '~/app/auth';
+import { ErrorView } from '../error-view';
 
 type Props = {
   isOpen: boolean;
@@ -46,7 +47,7 @@ export const QRCodeViewer = ({ shade, shadeId, hashtag, isOpen, onClose, backBut
   }
 
   if (isError || !qrCode) {
-    return <Typography>Error generating QR code.</Typography>;
+    return <ErrorView message="Error generating QR code." />;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

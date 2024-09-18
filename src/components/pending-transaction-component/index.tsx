@@ -14,7 +14,7 @@ type PendingTransactionItemProps = {
       name: string;
       avatar?: string | null;
     };
-    area: Shade;
+    area: Shade | null;
     hashtag: string;
   };
   refetch: () => void;
@@ -69,7 +69,7 @@ const PendingTransactionItem = ({ transaction, refetch }: PendingTransactionItem
         <Typography variant="h6" fontWeight="bold">
           {transaction.user.name}
         </Typography>
-        <ShadeComponent color={transaction.area.color} name={transaction.area.en} />
+        {transaction.area && <ShadeComponent color={transaction.area.color} name={transaction.area.en} />}
         <Typography variant="body2">
           Hashtag: <b>#{transaction.hashtag}</b>
         </Typography>

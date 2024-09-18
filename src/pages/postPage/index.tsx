@@ -8,6 +8,7 @@ import Loader from 'src/components/loader';
 import { qk } from '~/api/query-keys';
 import { AppHeader } from '~/components/header';
 import { paths } from '~/app/routes';
+import { ErrorView } from '~/components/error-view';
 
 const PostPage = () => {
   const { postId } = useParams<Params>();
@@ -23,7 +24,7 @@ const PostPage = () => {
       <Stack px={3}>
         {match($post)
           .with({ isLoading: true, isFetching: true }, () => <Loader />)
-          .with({ isError: true }, () => <Box>Could not load</Box>)
+          .with({ isError: true }, () => <ErrorView message="Could not load posts" />)
           .with({ isSuccess: true, data: P.select() }, ({ data }) => <PostItem isDetails={true} post={data} />)
           .otherwise(() => (
             <Box>Could not load</Box>

@@ -8,6 +8,7 @@ import { match, P } from 'ts-pattern';
 import { qk } from '~/api/query-keys';
 import { paths } from '~/app/routes';
 import { AppHeader } from '~/components/header';
+import { ErrorView } from '~/components/error-view';
 
 const PrivatePostPage = () => {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ const PrivatePostPage = () => {
 
           {match($post)
             .with({ isLoading: true, isFetching: true }, () => <Loader />)
-            .with({ isError: true }, () => <Box>Could not load</Box>)
+            .with({ isError: true }, () => <ErrorView message="Could not load posts" />)
             .with({ isSuccess: true, data: P.select() }, ({ data }) => <PostItem isDetails={true} post={data} />)
             .otherwise(() => (
               <Box>Could not load</Box>

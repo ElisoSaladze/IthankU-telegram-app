@@ -26,7 +26,7 @@ export const NewGroupInterests = () => {
 
   const [selectedShade, setSelectedShade] = useState('');
 
-  const shades = useQuery({
+  const $shades = useQuery({
     queryKey: qk.shades.toKey(),
     queryFn: getShades,
   });
@@ -46,13 +46,13 @@ export const NewGroupInterests = () => {
       <Typography fontSize={16} color="text.secondary" fontWeight={500} mb={0.5}>
         Shade
       </Typography>
-      {shades.isFetching ? (
+      {$shades.isFetching ? (
         <Box position="relative" width={1} height={100}>
           <Loader />
         </Box>
       ) : (
         <Stack gap={0.5} direction="row" flexWrap="wrap">
-          {shades.data?.data.map((shade: any) => (
+          {$shades.data?.data.map((shade: any) => (
             <ShadeComponent
               key={shade.id}
               selectable

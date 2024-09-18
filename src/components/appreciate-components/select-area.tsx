@@ -5,6 +5,7 @@ import ShadeComponent from 'src/components/shade-component';
 import { useEffect, useState } from 'react';
 import { useFetchItemsContext } from 'src/providers/hashtag-shade';
 import { Shade } from '~/api/shades';
+import { ErrorView } from '../error-view';
 
 type Props = {
   onSelect?: (shade: Shade | null) => void;
@@ -36,7 +37,8 @@ export const AreaSelect = ({ onSelect, defaultSelected }: Props) => {
   }, [defaultSelected, shades?.data]);
 
   if (shadesLoading) return <Skeleton width={'100%'} height={60} />;
-  if (shadesError) return <Typography>Failed to load shades</Typography>;
+
+  if (shadesError) return <ErrorView message="Failed to load shades" />;
 
   return (
     <Accordion>
