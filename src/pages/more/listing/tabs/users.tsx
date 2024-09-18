@@ -12,6 +12,7 @@ import { qk } from '~/api/query-keys';
 import TagItem from '~/components/tag';
 import { useFilterUsersContext } from '~/providers/filter-provider';
 import { paths } from '~/app/routes';
+import { ErrorView } from '~/components/error-view';
 
 export const UsersList = () => {
   const { getValues, refetchListing, setRefetchListing } = useFilterUsersContext();
@@ -35,6 +36,7 @@ export const UsersList = () => {
       $users.fetchNextPage();
     }
   }, [$users, inView]);
+
   useEffect(() => {
     if (refetchListing) {
       $users.refetch();
@@ -44,7 +46,7 @@ export const UsersList = () => {
 
   return match($users)
     .with({ isLoading: true }, () => <Loader />)
-    .with({ isError: true }, () => <Typography color="error">Failed to load users.</Typography>)
+    .with({ isError: true }, () => <ErrorView message="Failed to load users." />)
     .with({ isSuccess: true, data: P.select() }, ({ pages }) => (
       <Stack paddingBottom={10} marginY={1} gap={1}>
         {pages
@@ -56,7 +58,7 @@ export const UsersList = () => {
               }}
               key={user.id! + index}
               sx={{
-                width: '100%',
+                width: 1,
                 borderRadius: 5,
                 boxShadow: '0px 0px 8.2px -1px #00000026',
               }}

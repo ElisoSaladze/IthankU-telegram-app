@@ -4,11 +4,12 @@ import InvitationItem from 'src/components/invitation-component';
 import { getInvitations } from '~/api/groups';
 import { qk } from 'src/api/query-keys';
 import { useAuthUser } from '~/app/auth';
-import { Progress } from '~/components/progress';
 import { AppHeader } from '~/components/header';
 import { paths } from '~/app/routes';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
+import { ErrorView } from '~/components/error-view';
+import { Progress } from '~/components/progress';
 
 export const Invitation = () => {
   const authUser = useAuthUser();
@@ -41,7 +42,7 @@ export const Invitation = () => {
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-        <Progress />
+        <Progress centered />
       </Box>
     );
   }
@@ -49,7 +50,7 @@ export const Invitation = () => {
   if (isError) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-        <Typography color="error">Error: {'Failed to fetch invitations'}</Typography>
+        <ErrorView message="Failed to fetch invitations" />
       </Box>
     );
   }

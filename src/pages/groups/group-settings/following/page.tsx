@@ -11,6 +11,7 @@ import { qk } from '~/api/query-keys';
 import { AppHeader } from '~/components/header';
 import { paths } from '~/app/routes';
 import { useAuthUser } from '~/app/auth';
+import { ErrorView } from '~/components/error-view';
 
 export const Following = () => {
   const authUser = useAuthUser();
@@ -42,7 +43,7 @@ export const Following = () => {
               <Skeleton variant="rectangular" height={80} width="100%" />
             </>
           ))
-          .with({ isError: true }, () => <Typography>Error loading groups.</Typography>)
+          .with({ isError: true }, () => <ErrorView message="Error loading groups." />)
           .with({ isSuccess: true, data: P.select() }, (groups) =>
             groups.data.map((group) => (
               <ListItemButton

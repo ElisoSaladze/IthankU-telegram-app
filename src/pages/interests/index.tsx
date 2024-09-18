@@ -29,7 +29,7 @@ const InterestsPage = () => {
 
   const [selectedShades, setSelectedShades] = useState<string[]>([]);
 
-  const shades = useQuery({
+  const $shades = useQuery({
     queryKey: qk.shades.toKey(),
     queryFn: getShades,
   });
@@ -61,11 +61,11 @@ const InterestsPage = () => {
           Choose your interest
         </Typography>
         <Typography textAlign={'center'}>Choose the area that excites you the most.</Typography>
-        {shades.isFetching ? (
+        {$shades.isFetching ? (
           <Loader />
         ) : (
           <Stack gap={0.5} direction={'row'} flexWrap={'wrap'}>
-            {shades.data?.data.map((shade) => (
+            {$shades.data?.data.map((shade) => (
               <ShadeComponent
                 key={shade.id}
                 selectable

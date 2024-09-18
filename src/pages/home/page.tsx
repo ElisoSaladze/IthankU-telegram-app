@@ -14,6 +14,7 @@ import { useUserDetails } from '~/lib/hooks';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { paths } from '~/app/routes';
+import { ErrorView } from '~/components/error-view';
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ export const HomePage = () => {
         />
         {match($posts)
           .with({ isLoading: true }, () => <Loader />)
-          .with({ isError: true }, () => <Typography color="error">Failed to load posts.</Typography>)
+          .with({ isError: true }, () => <ErrorView message="Failed to load posts." />)
           .with({ isSuccess: true, data: P.select() }, ({ pages }) => (
             <Stack mx={3} gap={2} alignItems="center">
               <Stack justifyContent="space-between" direction="row" alignItems="center">

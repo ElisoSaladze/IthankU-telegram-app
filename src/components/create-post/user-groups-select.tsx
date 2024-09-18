@@ -7,6 +7,7 @@ import { qk } from '~/api/query-keys';
 import { useAuthUser } from '~/app/auth';
 import { match, P } from 'ts-pattern';
 import { Box, FormHelperText, Skeleton, Typography } from '@mui/material';
+import { ErrorView } from '../error-view';
 
 type Props = {
   control: Control<CreatePostFormValues>;
@@ -27,7 +28,7 @@ export const UserGroupsSelect = ({ control, error }: Props) => {
       <Box sx={{ width: 1, position: 'relative' }}>
         {match($userGroups)
           .with({ isLoading: true }, () => <Skeleton variant="rounded" sx={{ width: 1, height: 40 }} />)
-          .with({ error: true }, () => <Typography color="text.secondary">Failed to get user groups</Typography>)
+          .with({ error: true }, () => <ErrorView message="Failed to get user groups" />)
           .with({ isSuccess: true, data: P.select() }, ({ data: groups }) => {
             return (
               <Box

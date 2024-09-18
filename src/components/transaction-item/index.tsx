@@ -40,7 +40,7 @@ const TransactionItem = ({ transaction }: Props) => {
                 sx={{ padding: 0, height: 'auto' }}
                 label={
                   <Stack gap={0.5} alignItems="center" direction="row">
-                    <CircleIcon sx={{ color: transaction.shade.color, fontSize: 16 }} /> {transaction.shade.en}
+                    <CircleIcon sx={{ color: transaction.shade?.color, fontSize: 16 }} /> {transaction.shade?.en}
                   </Stack>
                 }
                 variant="outlined"

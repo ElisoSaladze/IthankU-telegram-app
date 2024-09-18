@@ -20,6 +20,7 @@ import { useAuthUser } from '~/app/auth';
 import { useUserDetails } from '~/lib/hooks';
 import { paths } from '~/app/routes';
 import { AppHeader } from '~/components/header';
+import { ErrorView } from '~/components/error-view';
 
 export const UserDetailsPage = () => {
   const navigate = useNavigate();
@@ -77,7 +78,7 @@ export const UserDetailsPage = () => {
           return <Loader />;
         })
         .with({ isError: true }, () => {
-          return <Typography>Failed to get user details</Typography>;
+          return <ErrorView message="Failed to get user details" />;
         })
         .with({ isSuccess: true, data: P.select() }, ({ data: user }) => {
           return (

@@ -19,7 +19,7 @@ export const TTransaction = z.object({
   comment: z.string().nullable(),
   sender: TAuthor.optional(),
   receiver: TAuthor.optional(),
-  shade: TShade,
+  shade: TShade.nullable(),
 });
 
 export type Transaction = z.infer<typeof TTransaction>;

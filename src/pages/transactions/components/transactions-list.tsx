@@ -7,6 +7,7 @@ import { match, P } from 'ts-pattern';
 import { qk } from '~/api/query-keys';
 import { getUserTransactions } from '~/api/transactions';
 import { useAuthUser } from '~/app/auth';
+import { ErrorView } from '~/components/error-view';
 
 export const TransactionsList = ({ type }: { type: 'INCOMING' | 'OUTGOING' }) => {
   const [ref, inView] = useInView();
@@ -44,7 +45,7 @@ export const TransactionsList = ({ type }: { type: 'INCOMING' | 'OUTGOING' }) =>
             <Skeleton variant="rectangular" height={80} />
           </>
         ))
-        .with({ isError: true }, () => <Typography>Failed to load transactions.</Typography>)
+        .with({ isError: true }, () => <ErrorView message="Failed to load transactions." />)
         .with({ isSuccess: true, data: P.select() }, ({ pages }) =>
           pages.flatMap((page) => {
             const transactions = page.data;

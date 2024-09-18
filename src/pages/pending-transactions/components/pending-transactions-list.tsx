@@ -7,6 +7,7 @@ import { useInView } from 'react-intersection-observer';
 import { getPendingTransactions, TransactionType } from '~/api/transactions';
 import { qk } from '~/api/query-keys';
 import { useAuthUser } from '~/app/auth';
+import { ErrorView } from '~/components/error-view';
 
 type TransactionsListProps = {
   type: TransactionType;
@@ -49,7 +50,7 @@ export const PendingTransactionsList = ({ type }: TransactionsListProps) => {
             <Skeleton variant="rectangular" height={80} />
           </>
         ))
-        .with({ isError: true }, () => <Typography>Failed to load transactions.</Typography>)
+        .with({ isError: true }, () => <ErrorView message="Failed to load transactions." />)
         .with({ isSuccess: true, data: P.select() }, ({ pages }) => {
           const transactions = pages.flatMap((page) => page.data);
 
@@ -75,7 +76,7 @@ export const PendingTransactionsList = ({ type }: TransactionsListProps) => {
                           : transaction.receiver?.name || 'Unknown',
                       avatar: type === 'INCOMING' ? transaction.sender?.picture : transaction.receiver?.picture,
                     },
-                    area: transaction.shade,
+                    area: transaction?.shade,
                     hashtag: transaction.hashtag,
                   }}
                   refetch={$pendingTransactions.refetch}
