@@ -12,7 +12,7 @@ export const paths = {
   createGroupInterests: '/create-group/group-interests',
   createGroupFinal: '/create-group/final',
   thankYou: '/thank-you',
-  appreciate: '/appreciate',
+  appreciate: '/appreciate/:appreciateId',
   qrOptions: '/get-appreciate/qr-options',
   transactionDetails: '/list/transactions/:transactionId',
   userDetails: '/more/:userId',
