@@ -170,14 +170,10 @@ const PostItem = ({ post, isDetails = false }: Props) => {
                 <IconButton
                   onClick={(event) => {
                     event.stopPropagation();
-                    navigate({
-                      pathname: generatePath(paths.appreciate, {
-                        appreciateId: post.id,
-                      }),
-                    });
+
                     navigate(
                       generatePath(paths.appreciate, {
-                        appreciateId: '', // We don't need appreciateId there
+                        appreciateId: post.id, // We don't need appreciateId there, we just set postId to not fail redirection
                       }),
                       {
                         state: {

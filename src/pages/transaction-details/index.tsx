@@ -124,7 +124,7 @@ const TransactionDetailsPage = () => {
                 <CopyableItem contentColor="primary" title="USD" content={transaction.amount!.toString()} /> */}
               </Stack>
 
-              {transaction.comment!.length > 0 && (
+              {transaction.comment && transaction.comment.length > 0 && (
                 <Accordion sx={{ width: '100%' }}>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1-content" id="panel1-header">
                     <Typography fontWeight={600}>Comment</Typography>

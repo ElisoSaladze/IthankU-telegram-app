@@ -2,8 +2,9 @@ import { Button, Dialog, Stack, Typography } from '@mui/material';
 import appreciate from 'src/assets/images/like.png';
 import { ControlledPhoneInput } from 'src/components/form/controlled/controlled-phone-input';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { PhoneNumberUtil } from 'google-libphonenumber';
+import { paths } from '~/app/routes';
 
 const phoneUtil = PhoneNumberUtil.getInstance();
 
@@ -55,13 +56,18 @@ export const PhoneNumberAppreciate = ({ isOpen, onClose }: Props) => {
           />
         </Stack>
         <Button
-          onClick={handleSubmit((data) =>
-            navigate(`/appreciate/${data.phoneNumber}`, {
-              state: {
-                phoneNumber: true,
+          onClick={handleSubmit((data) => {
+            navigate(
+              generatePath(paths.appreciate, {
+                appreciateId: data.phoneNumber,
+              }),
+              {
+                state: {
+                  phoneNumber: true,
+                },
               },
-            }),
-          )}
+            );
+          })}
           size="large"
           fullWidth
           variant="contained"
