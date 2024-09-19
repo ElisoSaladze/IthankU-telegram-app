@@ -58,7 +58,7 @@ type Props = {
 
 export const Providers = ({ children }: Props) => {
   return (
-    <Sentry.ErrorBoundary {...(ENV === 'development' ? { fallback: errorFallback } : { showDialog: true })}>
+    <Sentry.ErrorBoundary fallback={errorFallback} showDialog={true}>
       <Suspense fallback={<Progress centered />}>
         <ThemeProvider>
           <CssBaseline />
