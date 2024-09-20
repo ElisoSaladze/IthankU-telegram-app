@@ -79,6 +79,7 @@ export const PendingTransactionsList = ({ type }: TransactionsListProps) => {
                     area: transaction?.shade,
                     hashtag: transaction.hashtag,
                   }}
+                  transactionType={type}
                   refetch={$pendingTransactions.refetch}
                 />
               ))}

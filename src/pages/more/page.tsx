@@ -22,16 +22,19 @@ export const MorePage = () => {
   const navigate = useNavigate();
 
   const { user: userDetails, isLoading } = useUserDetails();
+  console.log({ userDetails });
 
   const { control, watch } = useForm({
     defaultValues: {
       private: !userDetails?.isAccountPublic,
-      showOnMap: userDetails?.isLocationPublic,
+      showOnMap: !userDetails?.isLocationPublic,
     },
   });
 
   const showOnMap = watch('showOnMap');
   const isPrivate = watch('private');
+
+  console.log({ showOnMap });
 
   const $updateAccountVisibility = useMutation({
     mutationFn: updateAccountVisibility,
@@ -96,7 +99,7 @@ export const MorePage = () => {
               onChange={() => {
                 $updateAccountVisibility.mutate({
                   isPrivate: isPrivate!,
-                  id: userDetails.id,
+                  userId: userDetails.id,
                 });
               }}
               name="private"
@@ -118,7 +121,7 @@ export const MorePage = () => {
               onChange={() => {
                 $updateLocationVisibility.mutate({
                   isPrivate: showOnMap!,
-                  id: userDetails.id,
+                  userId: userDetails.id,
                   // location: {
                   //   latitude: userDetails.location!.coordinates[0],
                   //   longitude: userDetails.location!.coordinates[1],

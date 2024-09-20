@@ -88,10 +88,10 @@ const TransactionDetailsPage = () => {
                 <ListItemButton
                   onClick={() => {
                     const senderId = transaction.sender!.id;
-                    navigate(generatePath(paths.more, { senderId }));
+                    navigate(generatePath(paths.userDetails, { userId: senderId }));
                   }}
                 >
-                  <Stack width="100%" direction="row" justifyContent="space-between">
+                  <Stack width={1} direction="row" justifyContent="space-between">
                     <Typography fontSize={14}>Sender</Typography>
                     <Stack direction="row" alignItems="center">
                       <Typography fontSize={14}>{transaction.sender!.name}</Typography>
@@ -104,14 +104,14 @@ const TransactionDetailsPage = () => {
                 <ListItemButton
                   onClick={() => {
                     const receiverId = transaction.receiver!.id;
-                    navigate(generatePath(paths.more, { receiverId }));
+                    navigate(generatePath(paths.userDetails, { userId: receiverId }));
                   }}
                 >
                   <Stack width="100%" direction="row" justifyContent="space-between">
                     <Typography fontSize={14}>Receiver</Typography>
                     <Stack direction="row" alignItems="center">
                       <Typography fontSize={14}>{transaction.receiver!.name}</Typography>
-                      <ArrowForwardIosIcon sx={{ height: '10px' }} />
+                      <ArrowForwardIosIcon sx={{ height: 10 }} />
                     </Stack>
                   </Stack>
                 </ListItemButton>

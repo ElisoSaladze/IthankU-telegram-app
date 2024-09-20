@@ -2,7 +2,7 @@ import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import ShadeComponent from '../shade-component';
 import { Shade } from '~/api/shades';
-import { pendingTransactionAction, TransactionAction } from '~/api/transactions';
+import { pendingTransactionAction, TransactionAction, TransactionType } from '~/api/transactions';
 import { useAuthUser } from '~/app/auth';
 import { toast } from 'react-toastify';
 import { ToastContent } from '../toast';
@@ -17,10 +17,11 @@ type PendingTransactionItemProps = {
     area: Shade | null;
     hashtag: string;
   };
+  transactionType: TransactionType;
   refetch: () => void;
 };
 
-const PendingTransactionItem = ({ transaction, refetch }: PendingTransactionItemProps) => {
+const PendingTransactionItem = ({ transaction, transactionType, refetch }: PendingTransactionItemProps) => {
   const authUser = useAuthUser();
 
   const $pendingTransactionAction = useMutation({
@@ -73,35 +74,37 @@ const PendingTransactionItem = ({ transaction, refetch }: PendingTransactionItem
         <Typography variant="body2">
           Hashtag: <b>#{transaction.hashtag}</b>
         </Typography>
-        <Box display="flex" gap={2} mt={1}>
-          <Button
-            onClick={() => {
-              onTransactionAction('ACCEPT');
-            }}
-            fullWidth
-            variant="contained"
-            sx={{
-              backgroundColor: '#4caf50',
-              '&:hover': { backgroundColor: '#45a049' },
-            }}
-          >
-            Accept
-          </Button>
-          <Button
-            onClick={() => {
-              onTransactionAction('DECLINE');
-            }}
-            fullWidth
-            variant="contained"
-            sx={{
-              backgroundColor: '#e0e0e0',
-              color: '#757575',
-              '&:hover': { backgroundColor: '#d5d5d5' },
-            }}
-          >
-            Decline
-          </Button>
-        </Box>
+        {transactionType === 'INCOMING' && (
+          <Box display="flex" gap={2} mt={1}>
+            <Button
+              onClick={() => {
+                onTransactionAction('ACCEPT');
+              }}
+              fullWidth
+              variant="contained"
+              sx={{
+                backgroundColor: '#4caf50',
+                '&:hover': { backgroundColor: '#45a049' },
+              }}
+            >
+              Accept
+            </Button>
+            <Button
+              onClick={() => {
+                onTransactionAction('DECLINE');
+              }}
+              fullWidth
+              variant="contained"
+              sx={{
+                backgroundColor: '#e0e0e0',
+                color: '#757575',
+                '&:hover': { backgroundColor: '#d5d5d5' },
+              }}
+            >
+              Decline
+            </Button>
+          </Box>
+        )}
       </Stack>
     </Stack>
   );

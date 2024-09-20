@@ -67,3 +67,19 @@ export const getUsersByLocation = async ({ latitude, longitude, radius, shadeId,
 
   return await request('/api/v1/users/nearby').get({ query }, decodeBody(TMapUsers));
 };
+
+type AddUserInterestsInput = {
+  userId: string;
+  interests: Array<string>;
+};
+
+export const addUserInterests = async ({ userId, interests }: AddUserInterestsInput) => {
+  return await request('/api/v1/users/:userId/interests').patch({
+    params: {
+      userId,
+    },
+    body: {
+      interests,
+    },
+  });
+};
