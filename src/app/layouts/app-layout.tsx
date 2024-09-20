@@ -48,6 +48,8 @@ export const AppLayout = ({ children }: Props) => {
 
   const [showAppreciate, setShowAppreciate] = useState(false);
 
+  const isAppreciateDisabled = location.pathname.includes('appreciate');
+
   return (
     <Box overflow="auto" height={1} display="flex" flexDirection="column">
       <GlobalLoadingIndicator />
@@ -95,8 +97,9 @@ export const AppLayout = ({ children }: Props) => {
               sx={{
                 visibility: showAppreciate ? 'hidden' : 'visible',
               }}
+              disabled={isAppreciateDisabled}
             >
-              <img src={qrCodeIcon} />
+              <Box component="img" src={qrCodeIcon} sx={{ opacity: isAppreciateDisabled ? 0.5 : 1 }} />
             </IconButton>
             <BottomNavigationAction
               onClick={() => navigate(paths.map)}

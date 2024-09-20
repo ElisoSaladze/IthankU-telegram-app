@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Button, Divider, Stack, Typography } from '@mui/material';
+import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
 import { useNavigate } from 'react-router-dom';
@@ -21,22 +21,26 @@ const JoinGroupPage = () => {
   });
 
   return (
-    <Stack spacing={2} height="100vh" alignItems="center" justifyContent="space-between" padding={2}>
+    <Stack spacing={2} height={1} alignItems="center" justifyContent="space-between" p={2}>
       {match($groups)
         .with({ isLoading: true }, () => <Loader />)
         .with({ isError: true }, () => <ErrorView message="Failed to get groups" />)
         .with({ isSuccess: true, data: P.select() }, (data) => {
           return (
-            <>
+            <Box sx={{ width: 1 }}>
               <Stack alignItems="center">
                 <Button onClick={() => navigate(paths.home)} sx={{ alignSelf: 'end' }} color="secondary">
                   skip
                 </Button>
-                <Typography fontSize={24} fontWeight={600}>
+                <Typography fontSize={32} fontWeight={600}>
                   Join group
                 </Typography>
-                <Typography textAlign="center">Connect with others and explore shared interests.</Typography>
-                <Stack height={`calc(100vh - 220px)`} gap={1} flexGrow={1} width={1} overflow="auto">
+
+                <Typography fontSize={16} color="secondary.dark" textAlign="center" my={2} mb={3}>
+                  Connect with others and explore shared interests.
+                </Typography>
+
+                <Stack gap={1} flexGrow={1} width={1} overflow="auto">
                   {data?.data.map((group) => (
                     <>
                       <GroupItem group={group} />
@@ -46,16 +50,17 @@ const JoinGroupPage = () => {
                 </Stack>
               </Stack>
               <Button
-                onClick={() => navigate(paths.createGroup)}
+                onClick={() => navigate(paths.createGroupDetails)}
                 size="large"
                 endIcon={<AddIcon fontSize="large" />}
                 variant="contained"
                 color="primary"
                 fullWidth
+                sx={{ my: 3 }}
               >
                 Create
               </Button>
-            </>
+            </Box>
           );
         })
         .run()}

@@ -139,6 +139,11 @@ export const authRoutes = [
     factory: () => import('src/pages/pending-transactions'),
     title: 'Pending Transactions',
   }),
+  createRoute({
+    path: paths.interests,
+    factory: () => import('src/pages/interests'),
+    title: 'Interests',
+  }),
 ];
 
 export const unauthRoutes = [
@@ -151,11 +156,6 @@ export const unauthRoutes = [
     path: paths.introduceYourself,
     factory: () => import('src/pages/introduce-yourself'),
     title: 'Introduce Yourself',
-  }),
-  createRoute({
-    path: paths.interests,
-    factory: () => import('src/pages/interests'),
-    title: 'Interests',
   }),
 ];
 

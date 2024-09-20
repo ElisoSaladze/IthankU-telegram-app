@@ -62,15 +62,12 @@ type AcceptTransactionInput = {
 };
 
 export const pendingTransactionAction = async ({ transactionId, action }: AcceptTransactionInput) => {
-  return await request('/api/v1/transactions/:transactionId').patch(
-    {
-      params: {
-        transactionId,
-      },
-      body: {
-        status: action,
-      },
+  return await request('/api/v1/transactions/:transactionId').patch({
+    params: {
+      transactionId,
     },
-    decodeBody(TTransaction),
-  );
+    body: {
+      status: action,
+    },
+  });
 };

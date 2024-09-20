@@ -1,9 +1,8 @@
-import { Avatar, Box, Button, Dialog, Snackbar, Stack, Typography } from '@mui/material';
+import { Avatar, Button, Dialog, Snackbar, Stack, Typography } from '@mui/material';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import ShareIcon from '@mui/icons-material/Share';
 import { useQuery } from '@tanstack/react-query';
 import Loader from 'src/components/loader';
-import back from 'src/assets/images/itu.png';
 import { useState } from 'react';
 import { handleShare } from 'src/helpers';
 import { qk } from '~/api/query-keys';
@@ -60,15 +59,6 @@ export const QRCodeViewer = ({ shade, shadeId, hashtag, isOpen, onClose, backBut
   return (
     <Dialog fullScreen open={isOpen} onClose={onClose}>
       <Stack justifyContent="space-between" height="100vh" p={3}>
-        <Box
-          sx={{
-            minHeight: 175,
-            backgroundImage: `url(${back})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}
-        />
         <Stack gap={1}>
           <Typography textAlign={'center'} variant="h6">
             One time Code: <span style={{ color: 'green' }}>{qrCode.data.requestId}</span>

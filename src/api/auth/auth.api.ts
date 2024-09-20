@@ -63,7 +63,7 @@ export const updateUserBio = async ({ bio, id }: UpdateUserBioInput) => {
 };
 
 type UpdateVisibilityInput = {
-  id: string;
+  userId: string;
   isPrivate: boolean;
   location?: {
     latitude: number;
@@ -71,10 +71,10 @@ type UpdateVisibilityInput = {
   };
 };
 
-export const updateLocationVisibility = async ({ id, isPrivate, location }: UpdateVisibilityInput) => {
-  return await request('/api/v1/users/:id/location').patch({
+export const updateLocationVisibility = async ({ userId, isPrivate, location }: UpdateVisibilityInput) => {
+  return await request('/api/v1/users/:userId/location').patch({
     params: {
-      id,
+      userId,
     },
     body: {
       isLocationPublic: isPrivate,
@@ -83,10 +83,10 @@ export const updateLocationVisibility = async ({ id, isPrivate, location }: Upda
   });
 };
 
-export const updateAccountVisibility = async ({ id, isPrivate }: UpdateVisibilityInput) => {
-  return await request('/api/v1/users/:id/privacy').patch({
+export const updateAccountVisibility = async ({ userId, isPrivate }: UpdateVisibilityInput) => {
+  return await request('/api/v1/users/:userId/privacy').patch({
     params: {
-      id,
+      userId,
     },
     body: {
       isPrivate,

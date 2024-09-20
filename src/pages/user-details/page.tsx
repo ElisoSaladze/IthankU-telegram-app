@@ -177,7 +177,7 @@ export const UserDetailsPage = () => {
                       onClick={() => {
                         navigate(
                           generatePath(paths.appreciate, {
-                            appreciateId: userId ?? 'id', // we don't need appreciateId, we just set userId to avoid navigate error
+                            appreciateId: 'nan', // we don't need appreciateId, we just set userId to avoid navigate error
                           }),
                           {
                             state: {

@@ -173,7 +173,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
 
                     navigate(
                       generatePath(paths.appreciate, {
-                        appreciateId: post.id, // We don't need appreciateId there, we just set postId to not fail redirection
+                        appreciateId: 'nan', // We don't need appreciateId there, we just set postId to not fail redirection
                       }),
                       {
                         state: {

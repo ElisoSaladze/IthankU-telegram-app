@@ -9,10 +9,13 @@ import { qk } from '~/api/query-keys';
 import { paths } from '~/app/routes';
 import { AreaSelect, HashtagSelect } from '~/components/appreciate-components';
 import { AppHeader } from '~/components/header';
+import { useBoolean } from '~/lib/hooks';
 
 const AppreciatePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const isFocused = useBoolean();
 
   const { postAuthorId, postId, phoneNumber, receiverId } = location.state || {};
 
@@ -30,7 +33,7 @@ const AppreciatePage = () => {
   const { data: appreciateData } = useQuery({
     queryKey: qk.appreciate.getUser.toKeyWithArgs({ appreciateId: appreciateId! }),
     queryFn: () => getAppreciateUser({ appreciateId: appreciateId! }),
-    enabled: appreciateId !== undefined && !postAuthorId && !postId,
+    enabled: appreciateId !== undefined && appreciateId !== 'nan' && !postAuthorId && !postId,
     onSuccess: (data) => {
       if (data?.data.shade) setValue('shadeId', data.data.shade.id);
       if (data?.data.hashtag) setValue('hashtag', data.data.hashtag);
@@ -47,7 +50,11 @@ const AppreciatePage = () => {
   });
 
   return (
-    <Box>
+    <Box
+      sx={{
+        height: `calc(100% + ${isFocused.isTrue ? 150 : 0}px)`,
+      }}
+    >
       <AppHeader backPath={paths.home} />
       <Stack m={3} gap={2} pb={3}>
         <AreaSelect
@@ -66,12 +73,17 @@ const AppreciatePage = () => {
               optional
             </Typography>
           </Stack>
-          <ControlledTextArea fullWidth rows={6} multiline control={control} name="comment" />
+          <ControlledTextArea
+            fullWidth
+            rows={6}
+            multiline
+            control={control}
+            name="comment"
+            onFocus={isFocused.setTrue}
+            onBlur={isFocused.setFalse}
+          />
         </Box>
         <Stack gap={2} direction="row">
-          <Button size="large" fullWidth variant="contained" color="secondary">
-            Skip
-          </Button>
           <Button
             onClick={handleSubmit((data) => {
               if (phoneNumber) {
