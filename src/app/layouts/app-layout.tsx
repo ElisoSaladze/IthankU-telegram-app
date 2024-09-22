@@ -9,12 +9,13 @@ import groupsIconSelected from 'src/assets/icons/selectedGroups.svg';
 import homeIconSelected from 'src/assets/icons/selectedHome.svg';
 import mapIconSelected from 'src/assets/icons/selectedMap.svg';
 import moreIconSelected from 'src/assets/icons/selectedMore.svg';
-import { ReactNode, Suspense, useState } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from 'src/components/loader';
 import { paths } from '~/app/routes';
 import { GlobalLoadingIndicator } from '~/components/global-loading-indicator';
 import { AppreciateComponent } from '~/components/appreciate-components';
+import { useBoolean } from '~/lib/hooks';
 
 const useActiveIndex = () => {
   const location = useLocation();
@@ -46,7 +47,7 @@ export const AppLayout = ({ children }: Props) => {
   const theme = useTheme();
   const activeIndex = useActiveIndex();
 
-  const [showAppreciate, setShowAppreciate] = useState(false);
+  const showAppreciate = useBoolean();
 
   const isAppreciateDisabled = location.pathname.includes('appreciate');
 
@@ -58,20 +59,22 @@ export const AppLayout = ({ children }: Props) => {
         <Box height={1}>
           <Suspense fallback={<Loader />}>{children}</Suspense>
         </Box>
-        <AppreciateComponent show={showAppreciate} setShow={setShowAppreciate} />
+        <AppreciateComponent show={showAppreciate.isTrue} onHide={showAppreciate.setFalse} />
       </Box>
 
       {!location.pathname.includes('create-group') && (
         <Paper
           sx={{
-            backgroundImage: showAppreciate ? `url(${nav})` : '',
+            backgroundImage: showAppreciate.isTrue ? `url(${nav})` : '',
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
-            py: 0.8,
-            backgroundColor: showAppreciate ? 'transparent' : 'white',
-            boxShadow: showAppreciate ? 'none' : '0px 1px 10.4px -2px rgba(0, 0, 0, 0.25)',
+            py: 1.5,
+            height: 80,
+            backgroundColor: showAppreciate.isTrue ? 'transparent' : 'white',
+            boxShadow: showAppreciate.isTrue ? 'none' : '0px 1px 10.4px -2px rgba(0, 0, 0, 0.25)',
             zIndex: theme.zIndex.drawer,
           }}
+          className="nav-background"
           elevation={3}
         >
           <StyledBottomNavigation
@@ -93,9 +96,9 @@ export const AppLayout = ({ children }: Props) => {
               label="Groups"
             />
             <IconButton
-              onClick={() => setShowAppreciate(true)}
+              onClick={showAppreciate.setTrue}
               sx={{
-                visibility: showAppreciate ? 'hidden' : 'visible',
+                visibility: showAppreciate.isTrue ? 'hidden' : 'visible',
               }}
               disabled={isAppreciateDisabled}
             >

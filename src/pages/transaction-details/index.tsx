@@ -88,7 +88,9 @@ const TransactionDetailsPage = () => {
                 <ListItemButton
                   onClick={() => {
                     const senderId = transaction.sender!.id;
-                    navigate(generatePath(paths.userDetails, { userId: senderId }));
+                    navigate(generatePath(paths.userDetails, { userId: senderId }), {
+                      state: { backPath: location.pathname },
+                    });
                   }}
                 >
                   <Stack width={1} direction="row" justifyContent="space-between">
@@ -104,7 +106,9 @@ const TransactionDetailsPage = () => {
                 <ListItemButton
                   onClick={() => {
                     const receiverId = transaction.receiver!.id;
-                    navigate(generatePath(paths.userDetails, { userId: receiverId }));
+                    navigate(generatePath(paths.userDetails, { userId: receiverId }), {
+                      state: { backPath: location.pathname },
+                    });
                   }}
                 >
                   <Stack width="100%" direction="row" justifyContent="space-between">

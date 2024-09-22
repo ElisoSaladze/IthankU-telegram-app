@@ -22,7 +22,6 @@ export const MorePage = () => {
   const navigate = useNavigate();
 
   const { user: userDetails, isLoading } = useUserDetails();
-  console.log({ userDetails });
 
   const { control, watch } = useForm({
     defaultValues: {
@@ -33,8 +32,6 @@ export const MorePage = () => {
 
   const showOnMap = watch('showOnMap');
   const isPrivate = watch('private');
-
-  console.log({ showOnMap });
 
   const $updateAccountVisibility = useMutation({
     mutationFn: updateAccountVisibility,
@@ -62,6 +59,9 @@ export const MorePage = () => {
                 generatePath(paths.userDetails, {
                   userId: userDetails.id,
                 }),
+                {
+                  state: { backPath: location.pathname },
+                },
               );
             }}
           >

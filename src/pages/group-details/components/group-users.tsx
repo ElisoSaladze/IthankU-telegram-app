@@ -54,11 +54,13 @@ export const GroupUsers = ({ groupId, owner }: Props) => {
       $groupUsers.fetchNextPage();
     }
   }, [$groupUsers, inView]);
+
   return match($groupUsers)
     .with({ isLoading: true }, () => <Skeleton variant="circular" width={32} height={32} />)
     .with({ isSuccess: true, data: P.select() }, ({ pages }) => {
       const users = pages.flatMap((page) => page.data);
       const firstPageUsers = pages[0]?.data || [];
+
       return (
         <>
           <Box
@@ -93,7 +95,9 @@ export const GroupUsers = ({ groupId, owner }: Props) => {
                   >
                     <Box
                       onClick={() => {
-                        navigate(generatePath(paths.userDetails, { userId: user.id ?? '' }));
+                        navigate(generatePath(paths.userDetails, { userId: user.id ?? '' }), {
+                          state: { backPath: location.pathname },
+                        });
                       }}
                       sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >

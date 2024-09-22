@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { createSearchParams, generatePath, Params, useNavigate, useParams } from 'react-router-dom';
+import { createSearchParams, generatePath, Params, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { changeName, changePfp } from '~/api/auth/auth.api';
 import { IconLocation } from 'src/assets/icons';
 
@@ -24,12 +24,16 @@ import { ErrorView } from '~/components/error-view';
 
 export const UserDetailsPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const authUser = useAuthUser();
 
   const { refetch } = useUserDetails();
   const { userId } = useParams<Params>();
 
   const [isEditable, setIsEditable] = useState(false);
+
+  const { backPath } = location.state as { backPath?: string };
 
   const isCurrent = authUser?.user.id === userId;
 
@@ -83,7 +87,7 @@ export const UserDetailsPage = () => {
         .with({ isSuccess: true, data: P.select() }, ({ data: user }) => {
           return (
             <>
-              <AppHeader backPath={paths.more} />
+              <AppHeader backPath={backPath ?? paths.home} />
               <Stack height={1} overflow="auto" gap={1} mx={3}>
                 <Stack borderRadius={5} bgcolor="info.main" p={2} gap={1} position="relative">
                   {user.location && (

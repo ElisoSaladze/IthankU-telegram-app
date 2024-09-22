@@ -54,7 +54,9 @@ export const UsersList = () => {
           .map((user, index) => (
             <ListItemButton
               onClick={() => {
-                navigate(generatePath(paths.userDetails, { userId: user.id ?? '' }));
+                navigate(generatePath(paths.userDetails, { userId: user.id ?? '' }), {
+                  state: { backPath: location.pathname + '?tab=users' },
+                });
               }}
               key={user.id! + index}
               sx={{
