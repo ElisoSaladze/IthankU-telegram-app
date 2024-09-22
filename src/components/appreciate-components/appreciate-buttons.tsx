@@ -1,6 +1,6 @@
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { Box, Button, Fab, Stack } from '@mui/material';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { paths } from '~/app/routes';
 import { useBoolean } from '~/lib/hooks';
@@ -8,10 +8,10 @@ import { QRCodeViewer, ScanQrCodeDialog } from '.';
 
 type Props = {
   show: boolean;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  onHide: () => void;
 };
 
-export const AppreciateComponent = ({ show, setShow }: Props) => {
+export const AppreciateComponent = ({ show, onHide }: Props) => {
   const navigate = useNavigate();
 
   const scannerDialog = useBoolean();
@@ -28,72 +28,76 @@ export const AppreciateComponent = ({ show, setShow }: Props) => {
     }
   }, [scannerDialog.isTrue, scannerDialog.setFalse]);
 
-  return show ? (
-    <>
-      <Stack
-        p={2}
-        width={1}
-        position="fixed"
-        justifyContent="space-between"
-        alignItems="center"
-        direction="row"
-        sx={{
-          zIndex: 100,
-          bottom: 30,
-          height: 80,
-        }}
-      >
-        <Button
+  return (
+    <Box>
+      {show && (
+        <Stack
+          p={2}
+          width={1}
+          position="fixed"
+          justifyContent="space-between"
+          alignItems="center"
+          direction="row"
           sx={{
-            alignSelf: 'flex-start',
-            fontSize: 12,
-            minWidth: 130,
-          }}
-          variant="contained"
-          onClick={scannerDialog.setTrue}
-        >
-          Appreciate
-        </Button>
-
-        <Box
-          sx={{
-            position: 'relative',
-            padding: 1.2,
-            zIndex: 100,
-            borderRadius: '50%',
+            zIndex: 9999,
+            bottom: 55,
+            height: 80,
           }}
         >
-          <Fab
+          <Button
+            sx={{
+              alignSelf: 'flex-start',
+              fontWeight: 600,
+              fontSize: 12,
+              width: 1,
+              mr: 3,
+            }}
+            size="large"
+            variant="contained"
             onClick={() => {
-              setShow(false);
+              scannerDialog.setTrue();
+              onHide();
             }}
           >
-            <CloseOutlinedIcon />
-          </Fab>
-        </Box>
+            Appreciate
+          </Button>
 
-        <Button
-          sx={{
-            alignSelf: 'flex-start',
-            fontSize: 12,
-            minWidth: 130,
-          }}
-          variant="contained"
-          onClick={() => {
-            navigate(paths.qrOptions, {
-              state: { isAdvanced: true },
-            });
-            setShow(false);
-          }}
-        >
-          Get Appreciation
-        </Button>
-      </Stack>
+          <Box
+            sx={{
+              position: 'relative',
+              zIndex: 100,
+              borderRadius: '50%',
+            }}
+          >
+            <Fab onClick={onHide}>
+              <CloseOutlinedIcon />
+            </Fab>
+          </Box>
+
+          <Button
+            sx={{
+              alignSelf: 'flex-start',
+              fontSize: 12,
+              fontWeight: 600,
+              width: 1,
+              ml: 3,
+            }}
+            variant="contained"
+            size="large"
+            onClick={() => {
+              navigate(paths.qrOptions, {
+                state: { isAdvanced: true },
+              });
+              onHide();
+            }}
+          >
+            Get Appreciation
+          </Button>
+        </Stack>
+      )}
 
       <ScanQrCodeDialog isOpen={scannerDialog.isTrue} onClose={scannerDialog.setFalse} />
       <QRCodeViewer backButton isOpen={viewQr.isTrue} onClose={viewQr.setFalse} />
-    </>
-  ) : (
-    <></>
+    </Box>
   );
 };

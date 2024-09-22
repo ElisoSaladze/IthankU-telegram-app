@@ -21,8 +21,6 @@ export const HashtagSelect = ({ onSelect, defaultSelected, control }: Props) => 
 
   const { hashtags, hashtagsLoading, hashtagsError } = useFetchItemsContext();
 
-  console.log(hashtags);
-
   useEffect(() => {
     if (defaultSelected && hashtags?.data) {
       const initialHashtag = hashtags.data.find((hashtag) => hashtag.hashtag === defaultSelected);
