@@ -110,7 +110,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
               <Typography>{post.preview}</Typography>
             </>
           )}
-          {post.visibility === 'FREE' && post.content && (
+          {(post.visibility === 'FREE' || (!post.isRestricted && isDetails)) && post.content && (
             <Typography sx={{ wordBreak: 'break-all' }}>
               {renderContent(post.content)}{' '}
               {!isDetails && post.content.length >= 100 && (
