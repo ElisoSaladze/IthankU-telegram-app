@@ -11,7 +11,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import notificationsIcon from 'src/assets/icons/white-notif.svg';
 import defaultImageUrl from 'src/assets/images/itu-circle.png';
 
-import { generatePath, Params, To, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { generatePath, Params, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getGroupDetails, getGroupPosts, joinGroup, leaveGroup } from '~/api/groups';
 import Loader from 'src/components/loader';
 import PostItem from 'src/components/post-item';
@@ -49,7 +49,7 @@ export const GroupDetailsPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { groupId } = useParams<Params>();
-  const { backPath } = location.state as { backPath?: To };
+  const { backPath } = location.state || {};
 
   const args = { groupId: groupId! };
 
@@ -98,6 +98,8 @@ export const GroupDetailsPage = () => {
   const isInvitationDialogOpen = useBoolean();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const app = (window as any).Telegram!.WebApp;
+
+  console.log({ backPath });
 
   app.BackButton.show();
   app.BackButton.onClick(() => navigate(backPath ?? paths.groups));
