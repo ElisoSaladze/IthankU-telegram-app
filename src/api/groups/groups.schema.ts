@@ -50,10 +50,14 @@ export const TInvitationGroup = z.object({
 
 export type InvitationGroup = z.infer<typeof TInvitationGroup>;
 
+const TInvitationStatus = z.union([z.literal('PENDING'), z.literal('ACCEPTED'), z.literal('DECLINED')]);
+
+export type InvitationStatus = z.infer<typeof TInvitationStatus>;
+
 export const TInvitation = z.object({
   id: z.string(),
   group: TInvitationGroup,
-  status: z.string(),
+  status: TInvitationStatus,
   inviter: TAuthor,
 });
 

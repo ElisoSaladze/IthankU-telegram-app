@@ -10,6 +10,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Divider,
   IconButton,
   Skeleton,
   Stack,
@@ -140,6 +141,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
                 Preview
               </Typography>
               <Typography sx={{ whiteSpace: 'normal' }}>{post.preview}</Typography>
+              <Divider sx={{ my: 1 }} />
             </>
           )}
           {(post.visibility === 'FREE' || (!post.isRestricted && isDetails)) && post.content && (

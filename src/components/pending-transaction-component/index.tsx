@@ -67,12 +67,25 @@ const PendingTransactionItem = ({ transaction, transactionType, refetch }: Pendi
     >
       <Avatar sx={{ width: 60, height: 60, borderRadius: '50%' }} src={transaction.user.avatar ?? ''} />
       <Stack gap={0.5} width={1}>
-        <Typography variant="h6" fontWeight="bold">
+        <Typography fontSize={16} fontWeight={500}>
           {transaction.user.name}
         </Typography>
-        {transaction.area && <ShadeComponent color={transaction.area.color} name={transaction.area.en} />}
-        <Typography variant="body2">
-          Hashtag: <b>#{transaction.hashtag}</b>
+        {transaction.area && (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+            }}
+          >
+            <Typography fontSize={14} color="primary.light">
+              Area:
+            </Typography>
+            <ShadeComponent color={transaction.area.color} name={transaction.area.en} />
+          </Box>
+        )}
+        <Typography fontSize={14} color="primary.light">
+          Hashtag: #{transaction.hashtag}
         </Typography>
         {transactionType === 'INCOMING' && (
           <Box display="flex" gap={2} mt={1}>

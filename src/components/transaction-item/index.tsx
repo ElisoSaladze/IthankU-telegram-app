@@ -7,12 +7,15 @@ import { paths } from '~/app/routes';
 
 type Props = {
   transaction: Transaction;
+  transactionType: 'INCOMING' | 'OUTGOING';
 };
 
-const TransactionItem = ({ transaction }: Props) => {
-  const transactionId = transaction.id;
-
+const TransactionItem = ({ transaction, transactionType }: Props) => {
   const navigate = useNavigate();
+
+  const transactionId = transaction.id;
+  const transactionUser = transactionType === 'INCOMING' ? transaction.sender : transaction.receiver;
+
   return (
     <ListItemButton
       onClick={() =>
@@ -31,10 +34,10 @@ const TransactionItem = ({ transaction }: Props) => {
     >
       <Stack sx={{ width: 1 }} alignItems="center" justifyContent="space-between" direction="row">
         <Stack gap={1} alignItems="center" direction="row">
-          <Avatar sx={{ height: 66, width: 66 }} src={transaction.sender?.picture ?? ''} />
+          <Avatar sx={{ height: 66, width: 66 }} src={transactionUser?.picture ?? ''} />
           <Stack>
-            <Typography>{transaction.sender?.name}</Typography>
-            <Typography fontSize={14}>
+            <Typography>{transactionUser?.name}</Typography>
+            <Typography fontSize={14} color="primary.light">
               Area:{' '}
               <Chip
                 sx={{ padding: 0, height: 'auto' }}
@@ -46,8 +49,8 @@ const TransactionItem = ({ transaction }: Props) => {
                 variant="outlined"
               />
             </Typography>
-            <Typography fontSize={14}>
-              hashtag: <Chip sx={{ padding: 0, height: 'auto' }} label={transaction.hashtag} variant="outlined" />
+            <Typography fontSize={14} color="primary.light">
+              Hashtag: {transaction.hashtag}
             </Typography>
           </Stack>
         </Stack>

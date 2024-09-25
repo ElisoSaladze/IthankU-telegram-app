@@ -1,16 +1,17 @@
 import React from 'react';
-import { Box, Typography, Avatar, Button, Stack } from '@mui/material';
+import { Box, Typography, Avatar, Button, Stack, Chip } from '@mui/material';
 import ShadeComponent from '../shade-component';
 import { useMutation } from '@tanstack/react-query';
-import { InvitationGroup, respondIntivation } from '~/api/groups';
+import { InvitationGroup, InvitationStatus, respondIntivation } from '~/api/groups';
 
 type InvitationItemProps = {
   group: InvitationGroup;
   refetch: () => void;
-  id: string;
+  invitationId: string;
+  invitationStatus: InvitationStatus;
 };
 
-const InvitationItem: React.FC<InvitationItemProps> = ({ group, refetch, id }) => {
+const InvitationItem: React.FC<InvitationItemProps> = ({ group, refetch, invitationId, invitationStatus }) => {
   const $respond = useMutation({
     mutationFn: respondIntivation,
   });
@@ -18,8 +19,8 @@ const InvitationItem: React.FC<InvitationItemProps> = ({ group, refetch, id }) =
   return (
     <Stack
       gap={1}
-      alignItems={'center'}
-      direction={'row'}
+      alignItems="center"
+      direction="row"
       sx={{
         width: 1,
         borderRadius: 5,
@@ -34,47 +35,51 @@ const InvitationItem: React.FC<InvitationItemProps> = ({ group, refetch, id }) =
         <Typography>{group.name}</Typography>
 
         {group.shade && <ShadeComponent color={group.shade.color} name={group.shade.en} />}
-        <Box display={'flex'} gap={1}>
-          <Button
-            onClick={() =>
-              $respond.mutate(
-                {
-                  inviteId: id,
-                  status: 'ACCEPTED',
-                },
-                {
-                  onSuccess: () => {
-                    refetch();
+        {invitationStatus === 'PENDING' ? (
+          <Box display={'flex'} gap={1}>
+            <Button
+              onClick={() =>
+                $respond.mutate(
+                  {
+                    inviteId: invitationId,
+                    status: 'ACCEPTED',
                   },
-                },
-              )
-            }
-            fullWidth
-            variant="contained"
-          >
-            Accept
-          </Button>
-          <Button
-            onClick={() =>
-              $respond.mutate(
-                {
-                  inviteId: id,
-                  status: 'DECLINED',
-                },
-                {
-                  onSuccess: () => {
-                    refetch();
+                  {
+                    onSuccess: () => {
+                      refetch();
+                    },
                   },
-                },
-              )
-            }
-            fullWidth
-            variant="contained"
-            color="secondary"
-          >
-            Decline
-          </Button>
-        </Box>
+                )
+              }
+              fullWidth
+              variant="contained"
+            >
+              Accept
+            </Button>
+            <Button
+              onClick={() =>
+                $respond.mutate(
+                  {
+                    inviteId: invitationId,
+                    status: 'DECLINED',
+                  },
+                  {
+                    onSuccess: () => {
+                      refetch();
+                    },
+                  },
+                )
+              }
+              fullWidth
+              variant="contained"
+              color="secondary"
+            >
+              Decline
+            </Button>
+          </Box>
+        ) : (
+          <Chip label="Declined" color="error" sx={{ width: 100 }} />
+        )}
       </Stack>
     </Stack>
   );

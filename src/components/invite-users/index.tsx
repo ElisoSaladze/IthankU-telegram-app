@@ -18,8 +18,9 @@ type Props = {
   groupId: string;
 };
 
-const IntivationDialog = ({ isOpen, onClose, groupId }: Props) => {
+export const InvitationDialog = ({ isOpen, onClose, groupId }: Props) => {
   const navigate = useNavigate();
+
   const [ref, inView] = useInView();
   const { control, watch } = useForm({
     defaultValues: {
@@ -75,13 +76,13 @@ const IntivationDialog = ({ isOpen, onClose, groupId }: Props) => {
 
   return (
     <Dialog fullScreen open={isOpen} onClose={onClose}>
-      <Stack overflow={'hidden'} justifyContent={'space-between'} height={'100vh'}>
-        <Stack paddingBottom={2} gap={1} bgcolor={'#21A54D'} color={'white'} textAlign={'center'}>
+      <Stack overflow="hidden" justifyContent="space-between" height="100vh">
+        <Stack paddingBottom={2} gap={1} bgcolor="#21A54D" color="white" textAlign="center">
           <AppBar sx={{ backgroundColor: 'transparent' }}>
             <Toolbar>
               <Box sx={{ flexGrow: 1 }}>
                 <Typography
-                  marginX={2}
+                  mx={2}
                   fontWeight={500}
                   variant="h6"
                   component="div"
@@ -127,7 +128,7 @@ const IntivationDialog = ({ isOpen, onClose, groupId }: Props) => {
             </IconButton>
           </Stack>
         </Stack>
-        <Stack marginTop={1} paddingX={2} gap={1} paddingBottom={10} overflow={'auto'} height={'100%'}>
+        <Stack p={2} gap={1} overflow="auto" height="100%">
           {filteredUsers?.map((user) => (
             <Box key={user.id}>
               <Stack
@@ -179,5 +180,3 @@ const IntivationDialog = ({ isOpen, onClose, groupId }: Props) => {
     </Dialog>
   );
 };
-
-export default IntivationDialog;

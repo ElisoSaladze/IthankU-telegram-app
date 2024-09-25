@@ -13,6 +13,7 @@ import { useFilterUsersContext } from '~/providers/filter-provider';
 
 import { paths } from '~/app/routes';
 import { IconFilter } from '~/assets/icons';
+import { useBoolean } from '~/lib/hooks';
 
 type Props = {
   buttonColor?: string;
@@ -22,17 +23,22 @@ type Props = {
 const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
   const navigate = useNavigate();
 
-  const [isOpen, setIsOpen] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<string | false>(false);
+
+  const isOpen = useBoolean();
+
+  const isFocused = useBoolean();
 
   const { control, watch, setValue, selectedShade, setSelectedShade, clear, setRefetchListing } =
     useFilterUsersContext();
 
+  const [hashtag, location, distance] = watch(['hashtag', 'location', 'distance']);
+
   const toggleDrawer = useCallback(
     (newOpen: boolean) => () => {
-      setIsOpen(newOpen);
+      isOpen.setValue(newOpen);
     },
-    [],
+    [isOpen],
   );
 
   const handleSelectShade = useCallback(
@@ -58,7 +64,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
 
   const handleShowInListing = () => {
     setRefetchListing(true);
-    setIsOpen(false);
+    isOpen.setFalse();
     navigate({
       pathname: paths.listing,
       search: createSearchParams({
@@ -68,7 +74,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
   };
 
   const handleShowInMap = () => {
-    setIsOpen(false);
+    isOpen.setFalse();
     navigate(paths.map);
     refetchMap!();
   };
@@ -76,6 +82,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
   const handleRadiusChange = (_event: Event, newValue: number | number[]) => {
     setValue('distance', (newValue as number) * 1000);
   };
+
   return (
     <Stack sx={{ position: 'absolute', right: 0 }}>
       <Box
@@ -99,8 +106,14 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
         <IconFilter sx={{ color: 'white', fontSize: 17 }} />
       </Box>
 
-      <Drawer anchor="bottom" open={isOpen} onClose={toggleDrawer(false)}>
-        <Stack px={1} spacing={0.5}>
+      <Drawer anchor="bottom" open={isOpen.isTrue} onClose={toggleDrawer(false)}>
+        <Stack
+          spacing={0.5}
+          sx={{
+            px: 1,
+            pb: isFocused.isTrue ? 18 : 0,
+          }}
+        >
           <Stack direction="row" justifyContent="space-between">
             <Typography fontSize="large" fontWeight={600}>
               Filter
@@ -131,12 +144,15 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
           </CustomAccordion>
           {selectedShade && <ShadeComponent color={selectedShade.color} name={selectedShade.en} />}
           <Divider />
+
           <CustomAccordion
             title="Hashtags"
             expanded={expandedAccordion === 'hashtags'}
             onChange={handleAccordionChange('hashtags')}
           >
             <ControlledTextField
+              control={control}
+              name="hashtag"
               placeholder="Enter the hashtag"
               InputProps={{
                 sx: {
@@ -147,13 +163,11 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
                 },
               }}
               fullWidth
-              control={control}
-              name="hashtag"
+              onFocus={isFocused.setTrue}
+              onBlur={isFocused.setFalse}
             />
           </CustomAccordion>
-          {watch('hashtag').length > 0 && (
-            <TagItem tag={watch('hashtag')} clickable onClick={() => setValue('hashtag', '')} />
-          )}
+          {hashtag.length > 0 && <TagItem tag={hashtag} clickable onClick={() => setValue('hashtag', '')} />}
           <Divider />
           <CustomAccordion
             title="Location"
@@ -162,7 +176,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
           >
             <CustomSearch onSelect={() => setExpandedAccordion(false)} />
           </CustomAccordion>
-          {watch('location').length > 0 && <Typography>{watch('location')}</Typography>}
+          {location.length > 0 && <Typography>{location}</Typography>}
           <Divider />
           <CustomAccordion
             title="Distance"
@@ -171,7 +185,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
           >
             <Box mx={1}>
               <Slider
-                value={watch('distance')! / 1000}
+                value={distance! / 1000}
                 onChange={handleRadiusChange}
                 min={1}
                 max={25}
@@ -181,7 +195,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
               />
             </Box>
           </CustomAccordion>
-          {watch('distance') && <Typography>{watch('distance')! / 1000}</Typography>}
+          {distance && <Typography>{distance! / 1000}</Typography>}
           <Divider />
           <Stack gap={1} direction="row">
             <Button

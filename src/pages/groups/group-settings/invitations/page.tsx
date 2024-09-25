@@ -65,13 +65,21 @@ export const Invitation = () => {
           Invitations
         </Typography>
 
-        {flattenedInvitations.length > 0 ? (
-          flattenedInvitations.map((invitation) => (
-            <InvitationItem key={invitation.id} id={invitation.id} group={invitation.group} refetch={refetch} />
-          ))
-        ) : (
-          <Typography>You do not have any invitations</Typography>
-        )}
+        <Stack spacing={1} width={1}>
+          {flattenedInvitations.length > 0 ? (
+            flattenedInvitations.map((invitation) => (
+              <InvitationItem
+                key={invitation.id}
+                invitationId={invitation.id}
+                invitationStatus={invitation.status}
+                group={invitation.group}
+                refetch={refetch}
+              />
+            ))
+          ) : (
+            <Typography>You do not have any invitations</Typography>
+          )}
+        </Stack>
 
         {hasNextPage && (
           <Button disabled={!hasNextPage || isFetchingNextPage} ref={ref} onClick={() => fetchNextPage()}>

@@ -51,6 +51,10 @@ export const AppLayout = ({ children }: Props) => {
 
   const isAppreciateDisabled = location.pathname.includes('appreciate');
 
+  const hideNavigationPaths = [paths.joinGroup, paths.interests, paths.createGroup];
+
+  const hideNavigation = hideNavigationPaths.some((item) => location.pathname.includes(item));
+
   return (
     <Box overflow="auto" height={1} display="flex" flexDirection="column">
       <GlobalLoadingIndicator />
@@ -59,10 +63,11 @@ export const AppLayout = ({ children }: Props) => {
         <Box height={1}>
           <Suspense fallback={<Loader />}>{children}</Suspense>
         </Box>
+
         <AppreciateComponent show={showAppreciate.isTrue} onHide={showAppreciate.setFalse} />
       </Box>
 
-      {!location.pathname.includes('create-group') && (
+      {!hideNavigation && (
         <Paper
           sx={{
             backgroundImage: showAppreciate.isTrue ? `url(${nav})` : '',

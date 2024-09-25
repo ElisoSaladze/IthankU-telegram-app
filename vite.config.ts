@@ -4,7 +4,6 @@ import checker from 'vite-plugin-checker';
 import pluginEslint from '@nabla/vite-plugin-eslint';
 import pluginTsconfigPaths from 'vite-tsconfig-paths';
 
-// const PROXY_BASE_URL = 'https://itu-dev-02f448e47ca5.herokuapp.com/';
 // const PROXY_BASE_URL = 'https://itu-21eea052177b.herokuapp.com/';
 const PROXY_BASE_URL = 'https://itu-nest-dev-5e96dcea2b77.herokuapp.com/';
 
