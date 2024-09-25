@@ -100,16 +100,42 @@ const PostItem = ({ post, isDetails = false }: Props) => {
       <CardHeader
         avatar={
           post.group ? (
-            <Avatar onClick={toGroup} src={post.group.groupImage} />
+            <Avatar
+              onClick={(event) => {
+                event.stopPropagation();
+                toGroup();
+              }}
+              src={post.group.groupImage}
+            />
           ) : (
-            <Avatar onClick={toUserPage} src={post.author!.picture!} />
+            <Avatar
+              onClick={(event) => {
+                event.stopPropagation();
+                toUserPage();
+              }}
+              src={post.author!.picture!}
+            />
           )
         }
         title={
           post.group ? (
-            <Typography onClick={toGroup}>{post.group.name}</Typography>
+            <Typography
+              onClick={(event) => {
+                event.stopPropagation();
+                toGroup();
+              }}
+            >
+              {post.group.name}
+            </Typography>
           ) : (
-            <Typography onClick={toUserPage}>{post.author?.name}</Typography>
+            <Typography
+              onClick={(event) => {
+                event.stopPropagation();
+                toUserPage();
+              }}
+            >
+              {post.author?.name}
+            </Typography>
           )
         }
         subheader={
