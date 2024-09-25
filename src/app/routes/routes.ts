@@ -144,6 +144,11 @@ export const authRoutes = [
     factory: () => import('src/pages/interests'),
     title: 'Interests',
   }),
+  createRoute({
+    path: paths.notifications,
+    factory: () => import('src/pages/notifications'),
+    title: 'Notifications',
+  }),
 ];
 
 export const unauthRoutes = [

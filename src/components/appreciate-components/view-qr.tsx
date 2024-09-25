@@ -11,7 +11,6 @@ import { useAuthUser } from '~/app/auth';
 import { ErrorView } from '../error-view';
 
 type Props = {
-  isOpen: boolean;
   onClose: () => void;
   shadeId?: string;
   shade?: string;
@@ -19,7 +18,7 @@ type Props = {
   backButton?: boolean;
 };
 
-export const QRCodeViewer = ({ shade, shadeId, hashtag, isOpen, onClose, backButton }: Props) => {
+export const QRCodeViewer = ({ shade, shadeId, hashtag, onClose, backButton }: Props) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const authUser = useAuthUser();
 
@@ -51,13 +50,13 @@ export const QRCodeViewer = ({ shade, shadeId, hashtag, isOpen, onClose, backBut
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const app = (window as any).Telegram!.WebApp;
-  if (isOpen && backButton) {
+  if (backButton) {
     app.BackButton.show();
     app.BackButton.onClick(onClose);
   }
 
   return (
-    <Dialog fullScreen open={isOpen} onClose={onClose}>
+    <Dialog fullScreen open onClose={onClose}>
       <Stack justifyContent="space-between" height="100vh" p={3}>
         <Stack gap={1}>
           <Typography textAlign={'center'} variant="h6">

@@ -97,7 +97,7 @@ export const AppreciateComponent = ({ show, onHide }: Props) => {
       )}
 
       <ScanQrCodeDialog isOpen={scannerDialog.isTrue} onClose={scannerDialog.setFalse} />
-      <QRCodeViewer backButton isOpen={viewQr.isTrue} onClose={viewQr.setFalse} />
+      {viewQr.isTrue && <QRCodeViewer backButton onClose={viewQr.setFalse} />}
     </Box>
   );
 };

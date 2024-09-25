@@ -27,6 +27,7 @@
     "@yudiel/react-qr-scanner": "^2.0.4",
     "constate": "^3.3.2",
     "copy-text-to-clipboard": "^3.2.0",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.12",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "google-libphonenumber": "^3.2.38",

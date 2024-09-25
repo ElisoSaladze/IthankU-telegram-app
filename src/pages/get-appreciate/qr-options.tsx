@@ -41,13 +41,9 @@ const AdvancedSelectionPage = () => {
         </Stack>
       </Stack>
 
-      <QRCodeViewer
-        hashtag={hashtag}
-        shadeId={shadeId}
-        shade={shade}
-        isOpen={viewQr.isTrue}
-        onClose={viewQr.setFalse}
-      />
+      {viewQr.isTrue && (
+        <QRCodeViewer hashtag={hashtag} shadeId={shadeId} shade={shade} onClose={viewQr.setFalse} backButton />
+      )}
     </>
   );
 };

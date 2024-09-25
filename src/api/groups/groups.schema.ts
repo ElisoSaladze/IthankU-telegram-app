@@ -9,6 +9,10 @@ export const TAuthor = z.object({
 
 export type Author = z.infer<typeof TAuthor>;
 
+export const TInvitationRespondStatus = z.union([z.literal('ACCEPTED'), z.literal('DECLINED')]);
+
+export type InvitationRespondStatus = z.infer<typeof TInvitationRespondStatus>;
+
 export const TVisibility = z.union([z.literal('PUBLIC'), z.literal('PRIVATE')]);
 
 export type Visibility = z.infer<typeof TVisibility>;

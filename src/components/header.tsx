@@ -11,9 +11,10 @@ type Props = {
   pageName?: string;
   additionalContent?: ReactNode;
   headerSx?: SxProps<Theme>;
+  hideNotifications?: boolean;
 };
 
-export const AppHeader = ({ backPath, pageName, additionalContent, headerSx }: Props) => {
+export const AppHeader = ({ backPath, pageName, additionalContent, headerSx, hideNotifications }: Props) => {
   const navigate = useNavigate();
 
   const notifications = useNotifications();
@@ -28,6 +29,7 @@ export const AppHeader = ({ backPath, pageName, additionalContent, headerSx }: P
   } else {
     app.BackButton.hide();
   }
+
   return (
     <Box
       sx={{
@@ -75,18 +77,20 @@ export const AppHeader = ({ backPath, pageName, additionalContent, headerSx }: P
         }}
       >
         {additionalContent}
-        <IconButton onClick={() => navigate(paths.pendingTransactions)}>
-          <Badge
-            color="error"
-            badgeContent={notifications?.pendingTransactions}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-          >
-            <IconNotification sx={{ color: 'info.main' }} />
-          </Badge>
-        </IconButton>
+        {!hideNotifications && (
+          <IconButton onClick={() => navigate(paths.notifications)}>
+            <Badge
+              color="error"
+              badgeContent={notifications?.count}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            >
+              <IconNotification sx={{ color: 'info.main' }} />
+            </Badge>
+          </IconButton>
+        )}
       </Box>
     </Box>
   );

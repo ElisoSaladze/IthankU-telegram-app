@@ -1,16 +1,17 @@
 import { io, Socket } from 'socket.io-client';
+import { globalAccessToken } from './app/auth/access-token';
 
 const URL = import.meta.env['VITE_APP_API_URL'];
 
 export type Notifications = {
-  pendingTransactions: number;
-  physicalPoints: number;
+  count: number;
 };
 
 type NamespaceSpecificServerToClientEvents = {
-  joinUserRoom: (userId: string, response?: (notifications: Notifications) => void) => void;
-  newPendingTransaction: (notifications: Notifications) => void;
+  newNotification: (notifications: Notifications) => void;
 };
+
+console.log({ globalAccessToken });
 
 export const socket: Socket<NamespaceSpecificServerToClientEvents> = io(URL, {
   autoConnect: false,

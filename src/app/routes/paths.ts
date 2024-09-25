@@ -29,6 +29,7 @@ export const paths = {
   transactionsList: '/more/transactions',
   language: '/more/language',
   pendingTransactions: '/more/pending-transactions',
+  notifications: '/notifications',
 } as const;
 
 export type PathKey = keyof typeof paths;

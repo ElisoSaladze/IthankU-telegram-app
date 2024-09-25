@@ -1,5 +1,13 @@
 import { request } from 'src/lib/request';
-import { TAuthor, TGroup, TGroupDetails, TInvitation, TInvitationCode, TUserToInvite } from './groups.schema';
+import {
+  InvitationRespondStatus,
+  TAuthor,
+  TGroup,
+  TGroupDetails,
+  TInvitation,
+  TInvitationCode,
+  TUserToInvite,
+} from './groups.schema';
 import { TPost } from '../posts';
 import { CreateGroupFormValues } from '~/providers/create-group-provider';
 import { decodeBodyWithPagination, decodeBody } from '../common';
@@ -112,10 +120,10 @@ export const getInvitations = async ({ userId, page }: GetInvitationsInput) => {
 
 export type InviteResponse = {
   inviteId: string;
-  status: string;
+  status: InvitationRespondStatus;
 };
 
-export const respondIntivation = async ({ inviteId, status }: InviteResponse) => {
+export const respondInvitation = async ({ inviteId, status }: InviteResponse) => {
   return request('/api/v1/groups/invite/:inviteId/respond').post({
     params: {
       inviteId,

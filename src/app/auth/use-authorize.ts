@@ -41,7 +41,9 @@ export const useAuthorize = ({ setUser, refetchRefreshToken }: Args) => {
         localStorage.setItem('refresh-token', user.tokens.refreshToken);
 
         socket.connect();
-        socket.emit('joinUserRoom', user.user.id);
+        socket.auth = {
+          Authorization: `Bearer ${user.tokens.accessToken}`,
+        };
 
         refreshTimeoutRef.current = window.setTimeout(() => {
           refreshTimeoutRef.current = null;

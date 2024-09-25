@@ -32,12 +32,15 @@ export const ErrorView = ({ message, description }: Props) => {
           p: 2,
         }}
       >
-        <Typography variant="body1" textAlign="center" fontWeight={600}>
+        <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 600, mt: 1, overflowWrap: 'break-word' }}>
           {message}
         </Typography>
 
         {description && (
-          <Typography variant="body1" textAlign="center" color="text.secondary" sx={{ mt: 1 }}>
+          <Typography
+            variant="body1"
+            sx={{ textAlign: 'center', color: 'text.secondary', mt: 1, overflowWrap: 'break-word' }}
+          >
             {description}
           </Typography>
         )}

@@ -57,4 +57,7 @@ export const qk = buildModuleCacheKey({
   map: {
     list: (input: GetUsersInput) => [input],
   },
+  notifications: {
+    list: null,
+  },
 });

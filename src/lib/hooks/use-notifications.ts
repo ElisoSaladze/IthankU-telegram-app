@@ -6,14 +6,12 @@ const useNotificationsContext = () => {
   const [notifications, setNotifications] = useState<Notifications | null>(null);
 
   useEffect(() => {
-    socket.connect();
-
-    socket.on('newPendingTransaction', (notifications) => {
+    socket.on('newNotification', (notifications) => {
       setNotifications(notifications);
     });
 
     return () => {
-      socket.off('newPendingTransaction');
+      socket.off('newNotification');
     };
   }, []);
 

@@ -14,6 +14,7 @@ const ThemeProvider = ({ children }: Props) => {
       primary: {
         main: '#21A54D',
         light: '#A0A0A0',
+        '50': '#21954D1A',
       },
       secondary: {
         main: '#E7E7E7',
