@@ -1,6 +1,6 @@
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { Box, Button, Fab, Stack } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { paths } from '~/app/routes';
 import { useBoolean } from '~/lib/hooks';
@@ -16,6 +16,7 @@ export const AppreciateComponent = ({ show, onHide }: Props) => {
 
   const scannerDialog = useBoolean();
   const viewQr = useBoolean();
+  const componentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,8 +29,20 @@ export const AppreciateComponent = ({ show, onHide }: Props) => {
     }
   }, [scannerDialog.isTrue, scannerDialog.setFalse]);
 
+  useEffect(() => {
+    // Close AppreciateComponent when interacting outside
+    const handleInteractionOutside = (event: Event) => {
+      if (componentRef.current && !componentRef.current.contains(event.target as Node)) {
+        onHide();
+      }
+    };
+
+    const events = ['mousedown', 'touchstart', 'keydown', 'scroll', 'touchcancel', 'touchmove'];
+    events.forEach((event) => document.addEventListener(event, handleInteractionOutside));
+  }, [onHide]);
+
   return (
-    <Box>
+    <Box ref={componentRef}>
       {show && (
         <Stack
           p={2}
