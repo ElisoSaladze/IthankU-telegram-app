@@ -19,7 +19,6 @@ import TagItem from 'src/components/tag';
 import qrIcon from 'src/assets/icons/qr.png';
 import { qk } from 'src/api/query-keys';
 import { Post } from 'src/api/posts';
-import { IconArrow } from '~/assets/icons';
 import { paths } from '~/app/routes';
 import { ReactNode } from 'react';
 import { GroupUsers, WritePost } from './components';
@@ -95,7 +94,11 @@ export const GroupDetailsPage = () => {
   };
 
   const isInvitationDialogOpen = useBoolean();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const app = (window as any).Telegram!.WebApp;
 
+  app.BackButton.show();
+  app.BackButton.onClick(() => navigate(paths.groups));
   return (
     <Stack height="100vh">
       <AppBar
@@ -105,11 +108,7 @@ export const GroupDetailsPage = () => {
           p: 3,
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <IconWrapper onClick={() => navigate(paths.groups)}>
-            <IconArrow direction="left" sx={{ color: 'white', fontSize: 18 }} />
-          </IconWrapper>
-
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <IconWrapper>
               <img src={notificationsIcon} />
