@@ -107,11 +107,11 @@ const PostItem = ({ post, isDetails = false }: Props) => {
               <Typography color="#A0A0A0" fontSize={12}>
                 Preview
               </Typography>
-              <Typography>{post.preview}</Typography>
+              <Typography sx={{ whiteSpace: 'normal' }}>{post.preview}</Typography>
             </>
           )}
           {(post.visibility === 'FREE' || (!post.isRestricted && isDetails)) && post.content && (
-            <Typography sx={{ wordBreak: 'break-all' }}>
+            <Typography sx={{ whiteSpace: 'normal' }}>
               {renderContent(post.content)}{' '}
               {!isDetails && post.content.length >= 100 && (
                 <Button
