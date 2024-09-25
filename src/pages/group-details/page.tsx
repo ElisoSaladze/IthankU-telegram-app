@@ -11,7 +11,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import notificationsIcon from 'src/assets/icons/white-notif.svg';
 import defaultImageUrl from 'src/assets/images/itu-circle.png';
 
-import { generatePath, Params, useNavigate, useParams } from 'react-router-dom';
+import { generatePath, Params, To, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getGroupDetails, getGroupPosts, joinGroup, leaveGroup } from '~/api/groups';
 import Loader from 'src/components/loader';
 import PostItem from 'src/components/post-item';
@@ -47,7 +47,9 @@ const IconWrapper = ({ children, onClick }: { children: ReactNode; onClick?: () 
 
 export const GroupDetailsPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { groupId } = useParams<Params>();
+  const { backPath } = location.state as { backPath?: To };
 
   const args = { groupId: groupId! };
 
@@ -98,7 +100,7 @@ export const GroupDetailsPage = () => {
   const app = (window as any).Telegram!.WebApp;
 
   app.BackButton.show();
-  app.BackButton.onClick(() => navigate(paths.groups));
+  app.BackButton.onClick(() => navigate(backPath ?? paths.groups));
   return (
     <Stack height="100vh">
       <AppBar

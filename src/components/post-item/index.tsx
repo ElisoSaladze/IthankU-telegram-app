@@ -72,13 +72,45 @@ const PostItem = ({ post, isDetails = false }: Props) => {
     return content;
   };
 
-  const cardImage = post.group ? post.group.groupImage : post.author?.picture;
+  const toGroup = () => {
+    const groupId = post.group!.id;
+    navigate(
+      generatePath(paths.groupDetails, {
+        groupId,
+      }),
+      {
+        state: { backPath: location.pathname },
+      },
+    );
+  };
+
+  const toUserPage = () =>
+    navigate(
+      generatePath(paths.userDetails, {
+        userId: post.author!.id,
+      }),
+      {
+        state: { backPath: location.pathname },
+      },
+    );
 
   return (
     <Card sx={{ boxShadow: '0px 8px 24px 0px #959DA533', p: 2 }} onClick={navigateToDetails}>
       <CardHeader
-        avatar={<Avatar src={cardImage ?? ''} />}
-        title={post.group ? post.group.name : post.author?.name}
+        avatar={
+          post.group ? (
+            <Avatar onClick={toGroup} src={post.group.groupImage} />
+          ) : (
+            <Avatar onClick={toUserPage} src={post.author!.picture!} />
+          )
+        }
+        title={
+          post.group ? (
+            <Typography onClick={toGroup}>{post.group.name}</Typography>
+          ) : (
+            <Typography onClick={toUserPage}>{post.author?.name}</Typography>
+          )
+        }
         subheader={
           <Stack gap={0.5} direction="row" alignItems="center" fontSize="small" color="secondary.dark">
             {post.group && post.author?.name + ' • '}
