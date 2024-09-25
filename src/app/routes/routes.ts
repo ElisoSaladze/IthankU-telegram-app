@@ -9,7 +9,7 @@ export const authRoutes = [
   }),
   createRoute({
     path: paths.post,
-    factory: () => import('src/pages/postPage'),
+    factory: () => import('~/pages/post-details'),
     title: 'Post Details',
   }),
   createRoute({
@@ -48,11 +48,6 @@ export const authRoutes = [
         title: 'Group Final',
       }),
     ],
-  }),
-  createRoute({
-    path: paths.thankYou,
-    factory: () => import('src/pages/appreciate/thankyou'),
-    title: 'Thank You',
   }),
   createRoute({
     path: paths.appreciate,

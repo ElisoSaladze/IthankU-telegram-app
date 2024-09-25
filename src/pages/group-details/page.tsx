@@ -22,7 +22,7 @@ import { Post } from 'src/api/posts';
 import { paths } from '~/app/routes';
 import { ReactNode } from 'react';
 import { GroupUsers, WritePost } from './components';
-import IntivationDialog from '~/components/invite-users';
+import { InvitationDialog } from '~/components/invite-users';
 import { useBoolean } from '~/lib/hooks';
 
 const IconWrapper = ({ children, onClick }: { children: ReactNode; onClick?: () => void }) => {
@@ -265,7 +265,8 @@ export const GroupDetailsPage = () => {
           </Stack>
         </Box>
       )}
-      <IntivationDialog
+
+      <InvitationDialog
         groupId={groupId!}
         isOpen={isInvitationDialogOpen.isTrue}
         onClose={isInvitationDialogOpen.setFalse}

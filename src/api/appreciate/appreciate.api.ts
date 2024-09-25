@@ -33,9 +33,3 @@ export const getQRCode = async (body: GetAppreciateUser) => {
     decodeBody(TGetAppreciateQRCode),
   );
 };
-
-export const appreciateWithMobile = async (body: AppreciateUserInput) => {
-  return await request('/api/v1/transactions/pending').post({
-    body,
-  });
-};

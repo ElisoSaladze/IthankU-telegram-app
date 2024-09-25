@@ -10,7 +10,7 @@ import { AppHeader } from '~/components/header';
 import { paths } from '~/app/routes';
 import { ErrorView } from '~/components/error-view';
 
-const PostPage = () => {
+const PostDetailsPage = () => {
   const { postId } = useParams<Params>();
 
   const $post = useQuery({
@@ -34,4 +34,4 @@ const PostPage = () => {
   );
 };
 
-export default PostPage;
+export default PostDetailsPage;

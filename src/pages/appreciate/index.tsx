@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Params, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { ControlledTextArea } from 'src/components/form/controlled/controlled-text-area';
-import { appreciateUser, AppreciateUserInput, appreciateWithMobile, getAppreciateUser } from '~/api/appreciate';
+import { appreciateUser, AppreciateUserInput, getAppreciateUser } from '~/api/appreciate';
 import { qk } from '~/api/query-keys';
 import { paths } from '~/app/routes';
 import { AreaSelect, HashtagSelect } from '~/components/appreciate-components';
@@ -17,7 +17,7 @@ const AppreciatePage = () => {
 
   const isFocused = useBoolean();
 
-  const { postAuthorId, postId, phoneNumber, receiverId } = location.state || {};
+  const { postAuthorId, postId, receiverId } = location.state || {};
 
   const { appreciateId } = useParams<Params>();
 
@@ -26,7 +26,6 @@ const AppreciatePage = () => {
       receiverId: postAuthorId ?? receiverId,
       postId: postId ?? undefined,
       // postId: !phoneNumber && String(postAuthor).length > 0 ? appreciateId : undefined,
-      // mobileNumber: phoneNumber ? appreciateId : undefined,
     },
   });
 
@@ -43,10 +42,6 @@ const AppreciatePage = () => {
 
   const $appreciateUser = useMutation({
     mutationFn: appreciateUser,
-  });
-
-  const $appreciateWithMobile = useMutation({
-    mutationFn: appreciateWithMobile,
   });
 
   return (
@@ -86,21 +81,9 @@ const AppreciatePage = () => {
         <Stack gap={2} direction="row">
           <Button
             onClick={handleSubmit((data) => {
-              if (phoneNumber) {
-                $appreciateWithMobile.mutate(data, {
-                  onSuccess: () => {
-                    navigate(paths.thankYou);
-                  },
-                  onError: (error) => {
-                    console.error('Failed to send appreciation', error);
-                  },
-                });
-                return;
-              }
-
               $appreciateUser.mutate(data, {
                 onSuccess: () => {
-                  navigate(paths.thankYou);
+                  navigate(paths.home);
                 },
                 onError: (error) => {
                   console.error('Failed to send appreciation', error);
@@ -111,7 +94,7 @@ const AppreciatePage = () => {
             fullWidth
             variant="contained"
           >
-            Next
+            Appreciate
           </Button>
         </Stack>
       </Stack>

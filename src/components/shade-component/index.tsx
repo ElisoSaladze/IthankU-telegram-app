@@ -19,7 +19,6 @@ const ShadeComponent = ({ color, name, selectable = false, selected = false, onS
       border={`1px solid ${selected ? '#21A54D' : '#000000'}`}
       borderRadius="15px"
       width="fit-content"
-      p={0.5}
       pr={1}
       gap={0.5}
       boxShadow={selected ? '0px 2px 5.3px 0px #21A54D7D' : 'none'}

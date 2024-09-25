@@ -58,7 +58,7 @@ export const TransactionsList = ({ type }: { type: 'INCOMING' | 'OUTGOING' }) =>
               );
             }
             return transactions.map((transaction) => {
-              return <TransactionItem key={transaction.id} transaction={transaction} />;
+              return <TransactionItem key={transaction.id} transaction={transaction} transactionType={type} />;
             });
           }),
         )
