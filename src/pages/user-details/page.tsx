@@ -33,7 +33,7 @@ export const UserDetailsPage = () => {
 
   const [isEditable, setIsEditable] = useState(false);
 
-  const { backPath } = location.state as { backPath?: string };
+  const { backPath } = location.state || {};
 
   const isCurrent = authUser?.user.id === userId;
 
