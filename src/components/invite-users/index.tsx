@@ -1,16 +1,16 @@
 import { AppBar, Avatar, Box, Button, Dialog, IconButton, Stack, Toolbar, Typography } from '@mui/material';
-import { useQuery, useMutation, useInfiniteQuery } from '@tanstack/react-query';
+import { useMutation, useInfiniteQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { match, P } from 'ts-pattern';
-import { handleShare } from 'src/helpers';
-import { getInvitationCode, getUsersToInvite, inviteUser } from '~/api/groups';
+import { getUsersToInvite, inviteUser } from '~/api/groups';
 import { qk } from '~/api/query-keys';
 import { ControlledTextField } from '../form/controlled/controlled-text-field';
-import IosShareIcon from '@mui/icons-material/IosShare';
 import SearchIcon from '@mui/icons-material/Search';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
+import { paths } from '~/app/routes';
 
 type Props = {
   isOpen: boolean;
@@ -19,17 +19,12 @@ type Props = {
 };
 
 const IntivationDialog = ({ isOpen, onClose, groupId }: Props) => {
+  const navigate = useNavigate();
   const [ref, inView] = useInView();
   const { control, watch } = useForm({
     defaultValues: {
       name: '',
     },
-  });
-
-  const { data: invitationResponse } = useQuery({
-    queryKey: qk.groups.getInvitationCode.toKeyWithArgs({ groupId: groupId! }),
-    queryFn: () => getInvitationCode({ groupId: groupId! }),
-    enabled: !!groupId,
   });
 
   const $inviteUsers = useInfiniteQuery({
@@ -51,22 +46,25 @@ const IntivationDialog = ({ isOpen, onClose, groupId }: Props) => {
     })
     .run();
 
-  const appreciationUrl = invitationResponse
-    ? `https://web.itu-net.com/appreciate/${invitationResponse.data.qrCode}`
-    : '';
-
   const $inviteUser = useMutation({
     mutationFn: inviteUser,
     onSuccess: () => $inviteUsers.refetch(),
   });
 
+  const handleBackButtonClick = () => {
+    onClose(); // Close the dialog
+    navigate(
+      generatePath(paths.groupDetails, {
+        groupId,
+      }),
+    );
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const app = (window as any).Telegram!.WebApp;
   if (isOpen) {
     app.BackButton.show();
-    app.BackButton.onClick(() => onClose());
-  } else {
-    app.BackButton.hide();
+    app.BackButton.onClick(() => handleBackButtonClick());
   }
 
   useEffect(() => {
@@ -177,21 +175,6 @@ const IntivationDialog = ({ isOpen, onClose, groupId }: Props) => {
             </Button>
           )}
         </Stack>
-        <Button
-          onClick={() => handleShare(appreciationUrl, 'Join our Group', 'Check out this link to join our group!')}
-          sx={{
-            marginX: 2,
-            position: 'fixed',
-            bottom: 8,
-            left: 0,
-            right: 0,
-          }}
-          variant="contained"
-          size="large"
-          startIcon={<IosShareIcon />}
-        >
-          Share
-        </Button>
       </Stack>
     </Dialog>
   );

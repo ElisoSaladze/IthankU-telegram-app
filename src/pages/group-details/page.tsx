@@ -11,7 +11,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import notificationsIcon from 'src/assets/icons/white-notif.svg';
 import defaultImageUrl from 'src/assets/images/itu-circle.png';
 
-import { generatePath, Params, useNavigate, useParams } from 'react-router-dom';
+import { generatePath, Params, To, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getGroupDetails, getGroupPosts, joinGroup, leaveGroup } from '~/api/groups';
 import Loader from 'src/components/loader';
 import PostItem from 'src/components/post-item';
@@ -19,7 +19,6 @@ import TagItem from 'src/components/tag';
 import qrIcon from 'src/assets/icons/qr.png';
 import { qk } from 'src/api/query-keys';
 import { Post } from 'src/api/posts';
-import { IconArrow } from '~/assets/icons';
 import { paths } from '~/app/routes';
 import { ReactNode } from 'react';
 import { GroupUsers, WritePost } from './components';
@@ -48,7 +47,9 @@ const IconWrapper = ({ children, onClick }: { children: ReactNode; onClick?: () 
 
 export const GroupDetailsPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { groupId } = useParams<Params>();
+  const { backPath } = location.state as { backPath?: To };
 
   const args = { groupId: groupId! };
 
@@ -95,7 +96,11 @@ export const GroupDetailsPage = () => {
   };
 
   const isInvitationDialogOpen = useBoolean();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const app = (window as any).Telegram!.WebApp;
 
+  app.BackButton.show();
+  app.BackButton.onClick(() => navigate(backPath ?? paths.groups));
   return (
     <Stack height="100vh">
       <AppBar
@@ -105,11 +110,7 @@ export const GroupDetailsPage = () => {
           p: 3,
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <IconWrapper onClick={() => navigate(paths.groups)}>
-            <IconArrow direction="left" sx={{ color: 'white', fontSize: 18 }} />
-          </IconWrapper>
-
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <IconWrapper>
               <img src={notificationsIcon} />
@@ -211,7 +212,7 @@ export const GroupDetailsPage = () => {
                 fullWidth
                 variant="contained"
               >
-                Share
+                Invite
               </Button>
               <IconButton
                 onClick={() => {

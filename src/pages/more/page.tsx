@@ -17,6 +17,7 @@ import { updateAccountVisibility, updateLocationVisibility } from '~/api/auth';
 import { useUserDetails } from '~/lib/hooks';
 import { paths } from '~/app/routes';
 import { AppHeader } from '~/components/header';
+import { formatNumber } from 'src/helpers';
 
 export const MorePage = () => {
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ export const MorePage = () => {
                 </Stack>
               </Stack>
               <Avatar sx={{ bgcolor: 'primary.main' }}>
-                <Typography color="white">{userDetails.ratingPoints}</Typography>
+                <Typography color="white">{formatNumber(userDetails.ratingPoints)}</Typography>
               </Avatar>
             </Stack>
           </ListItemButton>

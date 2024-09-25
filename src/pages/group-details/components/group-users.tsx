@@ -44,9 +44,14 @@ export const GroupUsers = ({ groupId, owner }: Props) => {
   const app = (window as any).Telegram!.WebApp;
   if (isUsersDialogOpen.isTrue) {
     app.BackButton.show();
-    app.BackButton.onClick(() => isUsersDialogOpen.setFalse());
-  } else {
-    app.BackButton.hide();
+    app.BackButton.onClick(() => {
+      isUsersDialogOpen.setFalse();
+      navigate(
+        generatePath(paths.groupDetails, {
+          groupId,
+        }),
+      );
+    });
   }
 
   useEffect(() => {
