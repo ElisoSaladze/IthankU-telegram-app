@@ -211,7 +211,7 @@ export const GroupDetailsPage = () => {
                 fullWidth
                 variant="contained"
               >
-                Share
+                Invite
               </Button>
               <IconButton
                 onClick={() => {
