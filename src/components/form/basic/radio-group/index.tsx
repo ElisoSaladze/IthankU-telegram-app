@@ -1,27 +1,21 @@
-import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import {
   FormControlLabel,
   Radio,
   RadioGroup as MuiRadioGroup,
   RadioGroupProps as MuiRadioGroupProps,
-} from "@mui/material";
-import {
-  FormControl,
-  FormControlProps,
-} from "src/components/form/form-control";
-import { forwardRef, ReactNode } from "react";
-import { Dispatch, SetStateAction } from "react";
+} from '@mui/material';
+import { FormControl, FormControlProps } from 'src/components/form/form-control';
+import { forwardRef, ReactNode } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 export type RadioOption<T> = {
   label: ReactNode;
   value: T;
 };
 
-export type RadioGroupProps<T extends string> = Omit<
-  FormControlProps,
-  "children"
-> &
-  Omit<MuiRadioGroupProps, "value" | "onChange" | "label"> & {
+export type RadioGroupProps<T extends string> = Omit<FormControlProps, 'children'> &
+  Omit<MuiRadioGroupProps, 'value' | 'onChange' | 'label'> & {
     value?: T | Array<T>;
     options: Array<RadioOption<T>>;
     onChange?: Dispatch<SetStateAction<T | Array<T>>>;
@@ -29,10 +23,7 @@ export type RadioGroupProps<T extends string> = Omit<
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps<any>>(
-  (
-    { label, error, helperText, required, onChange, name, value, options },
-    ref
-  ) => {
+  ({ label, error, helperText, required, onChange, name, value, options }, ref) => {
     const controlledValue = value;
     return (
       <FormControl
@@ -45,7 +36,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps<any>>(
         fullWidth
       >
         <MuiRadioGroup
-          sx={{ width: "100%" }}
+          sx={{ width: '100%' }}
           name={name}
           value={controlledValue}
           onChange={(event) => onChange?.(event.target.value)}
@@ -56,9 +47,9 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps<any>>(
               <FormControlLabel
                 sx={{
                   marginBottom: 1,
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "space-between",
+                  display: 'flex',
+                  width: '100%',
+                  justifyContent: 'space-between',
                   marginRight: 0,
                   marginLeft: 0,
                 }}
@@ -80,5 +71,5 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps<any>>(
         </MuiRadioGroup>
       </FormControl>
     );
-  }
+  },
 );

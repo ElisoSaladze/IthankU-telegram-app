@@ -2,16 +2,16 @@ import React from 'react';
 import { Box, Typography, Avatar, Button, Stack, Chip } from '@mui/material';
 import ShadeComponent from '../shade-component';
 import { useMutation } from '@tanstack/react-query';
-import { InvitationGroup, InvitationStatus, respondIntivation } from '~/api/groups';
+import { InvitationSpace, InvitationStatus, respondIntivation } from '~/api/spaces';
 
 type InvitationItemProps = {
-  group: InvitationGroup;
+  space: InvitationSpace;
   refetch: () => void;
   invitationId: string;
   invitationStatus: InvitationStatus;
 };
 
-const InvitationItem: React.FC<InvitationItemProps> = ({ group, refetch, invitationId, invitationStatus }) => {
+const InvitationItem: React.FC<InvitationItemProps> = ({ space, refetch, invitationId, invitationStatus }) => {
   const $respond = useMutation({
     mutationFn: respondIntivation,
   });
@@ -29,12 +29,12 @@ const InvitationItem: React.FC<InvitationItemProps> = ({ group, refetch, invitat
       }}
     >
       <Box>
-        <Avatar sx={{ width: 70, height: 70, borderRadius: 4 }} variant="rounded" src={group.picture ?? ''} />
+        <Avatar sx={{ width: 70, height: 70, borderRadius: 4 }} variant="rounded" src={space.picture ?? ''} />
       </Box>
-      <Stack gap={0.5} width={'100%'}>
-        <Typography>{group.name}</Typography>
+      <Stack gap={0.5} width={1}>
+        <Typography>{space.name}</Typography>
 
-        {group.shade && <ShadeComponent color={group.shade.color} name={group.shade.en} />}
+        {space.shade && <ShadeComponent color={space.shade.color} name={space.shade.en} />}
         {invitationStatus === 'PENDING' ? (
           <Box display={'flex'} gap={1}>
             <Button

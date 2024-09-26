@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { TShade } from '../shades';
-import { TAuthor } from '../groups';
+import { TAuthor } from '../spaces';
 
 export const TAppreciateQRCode = z.object({
   requestId: z.string(),

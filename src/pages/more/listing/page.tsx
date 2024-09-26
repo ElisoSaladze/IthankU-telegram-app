@@ -1,17 +1,17 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { AppHeader } from '~/components/header';
 import { Tab, Tabs } from '~/components/tabs';
-import { GroupsList, UsersList } from './tabs';
+import { SpacesList, UsersList } from './tabs';
 import FilterDrawer from '~/components/filter-drawer';
 import { paths } from '~/app/routes';
 
-type TabTypes = 'groups' | 'users';
+type TabTypes = 'spaces' | 'users';
 
 const tabs: Array<Tab<TabTypes>> = [
   {
-    label: 'Groups',
-    value: 'groups',
-    tabComponent: <GroupsList />,
+    label: 'Spaces',
+    value: 'spaces',
+    tabComponent: <SpacesList />,
   },
   {
     label: 'Users',
@@ -45,7 +45,7 @@ export const ListingPage = () => {
           <FilterDrawer />
         </Box>
 
-        <Tabs<TabTypes> defaultTab="groups" tabs={tabs} />
+        <Tabs<TabTypes> defaultTab="spaces" tabs={tabs} />
       </Stack>
     </Box>
   );

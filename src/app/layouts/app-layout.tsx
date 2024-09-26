@@ -1,11 +1,11 @@
 import { BottomNavigation, BottomNavigationAction, Box, IconButton, Paper, styled, useTheme } from '@mui/material';
 import nav from 'src/assets/images/nav.png';
-import groupsIcon from 'src/assets/icons/groups.svg';
+import spacesIcon from 'src/assets/icons/spaces.svg';
 import homeIcon from 'src/assets/icons/home.svg';
 import mapIcon from 'src/assets/icons/map.svg';
 import moreIcon from 'src/assets/icons/more.svg';
 import qrCodeIcon from 'src/assets/icons/qr.svg';
-import groupsIconSelected from 'src/assets/icons/selectedGroups.svg';
+import spacesIconSelected from 'src/assets/icons/selectedSpaces.svg';
 import homeIconSelected from 'src/assets/icons/selectedHome.svg';
 import mapIconSelected from 'src/assets/icons/selectedMap.svg';
 import moreIconSelected from 'src/assets/icons/selectedMore.svg';
@@ -22,7 +22,7 @@ const useActiveIndex = () => {
 
   const activePath = location.pathname.split('/')[1]!; // TODO
 
-  const paths = ['home', 'groups', '', 'map', 'more'];
+  const paths = ['home', 'spaces', '', 'map', 'more'];
 
   const activeIndex = paths.indexOf(activePath);
 
@@ -51,7 +51,7 @@ export const AppLayout = ({ children }: Props) => {
 
   const isAppreciateDisabled = location.pathname.includes('appreciate');
 
-  const hideNavigationPaths = [paths.joinGroup, paths.interests, paths.createGroup];
+  const hideNavigationPaths = [paths.joinSpace, paths.interests, paths.createSpace];
 
   const hideNavigation = hideNavigationPaths.some((item) => location.pathname.includes(item));
 
@@ -96,9 +96,9 @@ export const AppLayout = ({ children }: Props) => {
               label="Home"
             />
             <BottomNavigationAction
-              onClick={() => navigate(paths.groups)}
-              icon={activeIndex === 1 ? <img src={groupsIconSelected} /> : <img src={groupsIcon} />}
-              label="Groups"
+              onClick={() => navigate(paths.spaces)}
+              icon={activeIndex === 1 ? <img src={spacesIconSelected} /> : <img src={spacesIcon} />}
+              label="Spaces"
             />
             <IconButton
               onClick={showAppreciate.setTrue}

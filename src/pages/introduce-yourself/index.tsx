@@ -11,7 +11,7 @@ import { useAuth } from '~/app/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { paths } from '~/app/routes';
 import { retrieveLaunchParams } from '@telegram-apps/sdk';
-import { useBoolean } from '~/lib/hooks';
+import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 
 const IntroduceYourself = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const IntroduceYourself = () => {
 
   const { initData } = retrieveLaunchParams();
 
-  const isFocused = useBoolean();
+  const isKeyboardOpen = useDetectKeyboardOpen();
 
   const { handleSubmit, setValue, control, watch } = useForm<TelegramSignUpRequestBody>({
     defaultValues: {
@@ -34,16 +34,6 @@ const IntroduceYourself = () => {
   });
 
   const picture = watch('picture');
-
-  const handleFocusChange = (focused: boolean) => {
-    if (focused) {
-      isFocused.setTrue();
-
-      return;
-    }
-
-    isFocused.setFalse();
-  };
 
   const $telegramSignUp = useMutation({
     mutationFn: telegramSignUp,
@@ -67,7 +57,7 @@ const IntroduceYourself = () => {
         );
       })}
       sx={{
-        height: `calc(100% + ${isFocused.isTrue ? 150 : 0}px)`,
+        height: `calc(100% + ${isKeyboardOpen ? 150 : 0}px)`,
         alignItems: 'center',
         p: 3,
         position: 'relative',
@@ -126,12 +116,6 @@ const IntroduceYourself = () => {
         placeholder="Tell others about yourself..."
         InputProps={{
           sx: { borderRadius: 8 },
-        }}
-        onFocus={() => {
-          handleFocusChange(true);
-        }}
-        onBlur={() => {
-          handleFocusChange(false);
         }}
       />
     </Stack>

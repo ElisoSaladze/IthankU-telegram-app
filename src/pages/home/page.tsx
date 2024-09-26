@@ -8,7 +8,7 @@ import { match, P } from 'ts-pattern';
 import { getPosts } from '~/api/posts';
 import { qk } from '~/api/query-keys';
 import { AppHeader } from '~/components/header';
-import { CreatePostGroupMenu } from '~/components/create-post-group-menu';
+import { CreatePostSpaceMenu } from '~/components/create-post-space-menu';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useUserDetails } from '~/lib/hooks';
 import PullToRefresh from 'react-simple-pull-to-refresh';
@@ -25,12 +25,12 @@ export const HomePage = () => {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const app = (window as any).Telegram!.WebApp;
-    const groupId = app.initDataUnsafe.start_param;
+    const spaceId = app.initDataUnsafe.start_param;
 
-    if (groupId) {
+    if (spaceId) {
       navigate(
-        generatePath(paths.groupDetails, {
-          groupId,
+        generatePath(paths.spaceDetails, {
+          spaceId,
         }),
       );
 
@@ -59,7 +59,7 @@ export const HomePage = () => {
         <AppHeader
           pageName="Home"
           additionalContent={
-            <CreatePostGroupMenu
+            <CreatePostSpaceMenu
               button={
                 <IconButton>
                   <AddCircleOutlineIcon fontSize="large" color="primary" />

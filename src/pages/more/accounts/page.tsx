@@ -5,7 +5,7 @@ import { ControlledTextArea } from 'src/components/form/controlled/controlled-te
 import Loader from 'src/components/loader';
 
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getUserGroups } from '~/api/groups';
+import { getUserSpaces } from '~/api/spaces';
 import LikesItem from 'src/components/likes';
 import { useNavigate } from 'react-router-dom';
 import { qk } from 'src/api/query-keys';
@@ -35,9 +35,9 @@ export const AccountsPage = () => {
     },
   });
 
-  const { data: groups, isLoading: groupsLoading } = useQuery({
-    queryKey: qk.groups.getUserGroups.toKeyWithArgs({ userId: userDetails?.id ?? '' }),
-    queryFn: () => getUserGroups({ userId: userDetails?.id ?? '' }),
+  const { data: spaces, isLoading: spacesLoading } = useQuery({
+    queryKey: qk.spaces.getUserSpaces.toKeyWithArgs({ userId: userDetails?.id ?? '' }),
+    queryFn: () => getUserSpaces({ userId: userDetails?.id ?? '' }),
     enabled: userDetails !== undefined,
   });
 
@@ -116,10 +116,10 @@ export const AccountsPage = () => {
           </>
         )}
 
-        {groups?.data && (
+        {spaces?.data && (
           <>
             <Typography fontSize={15} fontWeight={500} alignSelf="flex-start" mt={2}>
-              Groups
+              Spaces
             </Typography>
 
             <Box
@@ -130,12 +130,12 @@ export const AccountsPage = () => {
               }}
             >
               <Stack alignItems="center" justifyContent="space-between" direction="row">
-                {groupsLoading ? (
+                {spacesLoading ? (
                   <Typography>...</Typography>
                 ) : (
                   <LikesItem
                     size="medium"
-                    likes={groups!.data
+                    likes={spaces!.data
                       .map((data) => ({
                         id: data.id,
                         picture: data?.picture,
@@ -146,7 +146,7 @@ export const AccountsPage = () => {
                 )}
                 <IconButton
                   onClick={() => {
-                    navigate(paths.groups);
+                    navigate(paths.spaces);
                   }}
                 >
                   <IconArrow direction="right" />

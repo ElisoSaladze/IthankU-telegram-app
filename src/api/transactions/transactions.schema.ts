@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TAuthor } from '../groups';
+import { TAuthor } from '../spaces';
 import { TShade } from '../shades';
 
 export const TTransactionAction = z.union([z.literal('ACCEPT'), z.literal('DECLINE'), z.literal('PENDING')]);
@@ -17,7 +17,7 @@ export const TTransaction = z.object({
   itu: z.number().optional(),
   createdAt: z.string(),
   comment: z.string().nullable(),
-  sender: TAuthor.optional(),
+  sender: TAuthor.nullable(),
   receiver: TAuthor.optional(),
   shade: TShade.nullable(),
 });
