@@ -72,8 +72,6 @@ export const createRequest = <Path extends string>(method: RequestMethods, url: 
 
         const parsed = schema.safeParse(json);
 
-        console.log({ parsed });
-
         if (!parsed.success) {
           const { error } = parsed;
           const errorMessages = error.issues.map((issue) => issue.message).join(', ');

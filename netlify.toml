@@ -1,0 +1,16 @@
+[[redirects]]
+  from = "/api/v1/*"
+  to = "https://itu-21eea052177b.herokuapp.com/api/v1/:splat"
+  status = 200
+  conditions = { Host = ["ithank-u-telegram-app.vercel.app"] }
+
+[[redirects]]
+  from = "/api/v1/*"
+  to = "https://itu-nest-dev-5e96dcea2b77.herokuapp.com/api/v1/:splat"
+  status = 200
+  conditions = { Host = ["ithank-u-telegram-app-git-develop-just-some-projects.vercel.app"] }
+
+[[redirects]]
+  from = "/*"
+  to = "/"
+  status = 200
