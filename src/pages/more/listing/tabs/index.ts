@@ -1,2 +1,2 @@
-export { GroupsList } from './groups';
+export { SpacesList } from './spaces';
 export { UsersList } from './users';

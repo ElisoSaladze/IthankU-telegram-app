@@ -73,11 +73,11 @@ const PostItem = ({ post, isDetails = false }: Props) => {
     return content;
   };
 
-  const toGroup = () => {
-    const groupId = post.group!.id;
+  const toSpace = () => {
+    const spaceId = post.space!.id;
     navigate(
-      generatePath(paths.groupDetails, {
-        groupId,
+      generatePath(paths.spaceDetails, {
+        spaceId,
       }),
       {
         state: { backPath: location.pathname },
@@ -99,13 +99,13 @@ const PostItem = ({ post, isDetails = false }: Props) => {
     <Card sx={{ boxShadow: '0px 8px 24px 0px #959DA533', p: 2 }} onClick={navigateToDetails}>
       <CardHeader
         avatar={
-          post.group ? (
+          post.space ? (
             <Avatar
               onClick={(event) => {
                 event.stopPropagation();
-                toGroup();
+                toSpace();
               }}
-              src={post.group.groupImage}
+              src={post.space.spaceImage}
             />
           ) : (
             <Avatar
@@ -118,14 +118,14 @@ const PostItem = ({ post, isDetails = false }: Props) => {
           )
         }
         title={
-          post.group ? (
+          post.space ? (
             <Typography
               onClick={(event) => {
                 event.stopPropagation();
-                toGroup();
+                toSpace();
               }}
             >
-              {post.group.name}
+              {post.space.name}
             </Typography>
           ) : (
             <Typography
@@ -140,7 +140,7 @@ const PostItem = ({ post, isDetails = false }: Props) => {
         }
         subheader={
           <Stack gap={0.5} direction="row" alignItems="center" fontSize="small" color="secondary.dark">
-            {post.group && post.author?.name + ' • '}
+            {post.space && post.author?.name + ' • '}
             {timeAgo(post.createdAt)} •
             {post.visibility === 'FREE' ? (
               <PublicIcon sx={{ fontSize: '12px' }} />

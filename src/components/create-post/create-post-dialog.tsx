@@ -4,14 +4,14 @@ import { CreatePostForm } from './create-post-form';
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  groupId?: string;
-  fromGroupPage?: boolean;
+  spaceId?: string;
+  fromSpacePage?: boolean;
 };
 
-export const CreatePostDialog = ({ isOpen, onClose, groupId, fromGroupPage }: Props) => {
+export const CreatePostDialog = ({ isOpen, onClose, spaceId, fromSpacePage }: Props) => {
   return (
     <Dialog fullScreen open={isOpen} onClose={onClose}>
-      <CreatePostForm onClose={onClose} groupId={groupId} fromGroupPage={fromGroupPage} />
+      <CreatePostForm onClose={onClose} spaceId={spaceId} fromSpacePage={fromSpacePage} />
     </Dialog>
   );
 };

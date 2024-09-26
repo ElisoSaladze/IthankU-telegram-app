@@ -1,12 +1,11 @@
 import { z } from 'zod';
-import { TAuthor } from '../groups';
+import { TAuthor } from '../spaces';
 import { TShade } from '../shades';
 
 const TLocation = z.object({
   type: z.string(),
   coordinates: z.tuple([z.number(), z.number()]),
 });
-
 
 const TTopShade = z.object({
   shade: TShade,

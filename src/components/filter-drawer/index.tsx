@@ -14,6 +14,7 @@ import { useFilterUsersContext } from '~/providers/filter-provider';
 import { paths } from '~/app/routes';
 import { IconFilter } from '~/assets/icons';
 import { useBoolean } from '~/lib/hooks';
+import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 
 type Props = {
   buttonColor?: string;
@@ -27,7 +28,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
 
   const isOpen = useBoolean();
 
-  const isFocused = useBoolean();
+  const isKeyboardOpen = useDetectKeyboardOpen();
 
   const { control, watch, setValue, selectedShade, setSelectedShade, clear, setRefetchListing } =
     useFilterUsersContext();
@@ -111,7 +112,7 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
           spacing={0.5}
           sx={{
             px: 1,
-            pb: isFocused.isTrue ? 18 : 0,
+            pb: isKeyboardOpen ? 18 : 0,
           }}
         >
           <Stack direction="row" justifyContent="space-between">
@@ -163,8 +164,6 @@ const FilterDrawer = ({ buttonColor = 'primary.main', refetchMap }: Props) => {
                 },
               }}
               fullWidth
-              onFocus={isFocused.setTrue}
-              onBlur={isFocused.setFalse}
             />
           </CustomAccordion>
           {hashtag.length > 0 && <TagItem tag={hashtag} clickable onClick={() => setValue('hashtag', '')} />}

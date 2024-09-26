@@ -47,6 +47,7 @@
     "react-use": "^17.5.1",
     "socket.io-client": "^4.7.5",
     "ts-pattern": "^5.3.1",
+    "use-detect-keyboard-open": "^0.4.0",
     "use-query-params": "^2.2.1",
     "vite-plugin-checker": "^0.7.2",
     "zod": "^3.23.8"

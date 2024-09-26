@@ -1,24 +1,16 @@
-import {
-  RadioGroup,
-  RadioGroupProps,
-} from "src/components/form/basic/radio-group";
-import { isRequired } from "src/components/form/validations";
-import {
-  FieldPath,
-  FieldValues,
-  useController,
-  UseControllerProps,
-} from "react-hook-form";
+import { RadioGroup, RadioGroupProps } from 'src/components/form/basic/radio-group';
+import { isRequired } from 'src/components/form/validations';
+import { FieldPath, FieldValues, useController, UseControllerProps } from 'react-hook-form';
 
 export type ControlledRadioGroupProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  T extends string = string
+  T extends string = string,
 > = RadioGroupProps<T> & UseControllerProps<TFieldValues, TName>;
 
 export const ControlledRadioGroup = <
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
   name,
   control,

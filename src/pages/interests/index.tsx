@@ -72,7 +72,7 @@ const InterestsPage = () => {
       >
         <Button
           onClick={() => {
-            navigate(paths.joinGroup);
+            navigate(paths.joinSpace);
           }}
           sx={{ alignSelf: 'end' }}
           color="secondary"
@@ -117,7 +117,7 @@ const InterestsPage = () => {
               },
               {
                 onSuccess: () => {
-                  navigate(paths.joinGroup);
+                  navigate(paths.joinSpace);
                 },
               },
             );

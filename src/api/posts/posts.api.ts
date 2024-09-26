@@ -40,7 +40,7 @@ export const viewPrivatePost = async ({ postId }: GetPostDetailsInput) => {
 
 type CreatePostInput = {
   content: string;
-  groupId: string | null;
+  spaceId: string | null;
   summary: string;
   preview?: string;
   visibility: PostType;

@@ -11,11 +11,11 @@ import { useBoolean, useUserDetails } from '~/lib/hooks';
 import { PaidPostDialog } from './paid-post-dialog';
 import { Progress } from '../progress';
 import { paths } from '~/app/routes';
-import { UserGroupsSelect } from './user-groups-select';
+import { UserSpacesSelect } from './user-spaces-select';
 
 export type CreatePostFormValues = {
   content: string;
-  groupId: string | null;
+  spaceId: string | null;
   summary: string;
   preview?: string;
   visibility: PostType;
@@ -32,7 +32,7 @@ export type CreatePostFormValues = {
 
 const defaultPostValue: CreatePostFormValues = {
   content: '',
-  groupId: null,
+  spaceId: null,
   summary: '',
   preview: '',
   visibility: PostType.Free,
@@ -43,11 +43,11 @@ const defaultPostValue: CreatePostFormValues = {
 
 type Props = {
   onClose: () => void;
-  groupId?: string;
-  fromGroupPage?: boolean; // TODO
+  spaceId?: string;
+  fromSpacePage?: boolean; // TODO
 };
 
-export const CreatePostForm = ({ onClose, groupId, fromGroupPage }: Props) => {
+export const CreatePostForm = ({ onClose, spaceId, fromSpacePage }: Props) => {
   const navigate = useNavigate();
   const { user } = useUserDetails();
 
@@ -61,7 +61,7 @@ export const CreatePostForm = ({ onClose, groupId, fromGroupPage }: Props) => {
   } = useForm<CreatePostFormValues>({
     defaultValues: {
       ...defaultPostValue,
-      groupId: groupId,
+      spaceId: spaceId,
     },
   });
 
@@ -137,7 +137,7 @@ export const CreatePostForm = ({ onClose, groupId, fromGroupPage }: Props) => {
           labels={['Fully visible to everyone.', 'Preview only. 1 coin to unlock']}
         />
 
-        {fromGroupPage && <UserGroupsSelect control={control} error={errors.groupId} />}
+        {fromSpacePage && <UserSpacesSelect control={control} error={errors.spaceId} />}
 
         <SummaryInput control={control} error={errors.summary} />
 

@@ -11,10 +11,10 @@ type Props = {
   control: Control<any, any>;
   name: string;
   labels: [string, string];
-  isGroupVisibility?: boolean;
+  isSpaceVisibility?: boolean;
 };
 
-const VisibilityStatus = ({ control, name, labels, isGroupVisibility }: Props) => {
+const VisibilityStatus = ({ control, name, labels, isSpaceVisibility }: Props) => {
   return (
     <Box width={1}>
       <ControlledRadioGroup
@@ -39,12 +39,12 @@ const VisibilityStatus = ({ control, name, labels, isGroupVisibility }: Props) =
                   <PublicIcon />
                 </Box>
                 <Stack>
-                  <Typography fontWeight={600}>{isGroupVisibility ? 'Public' : 'Free'}</Typography>
+                  <Typography fontWeight={600}>{isSpaceVisibility ? 'Public' : 'Free'}</Typography>
                   <Typography fontSize="small">{labels[0]}</Typography>
                 </Stack>
               </Box>
             ),
-            value: isGroupVisibility ? Visibility.Public : PostType.Free,
+            value: isSpaceVisibility ? Visibility.Public : PostType.Free,
           },
           {
             label: (
@@ -63,12 +63,12 @@ const VisibilityStatus = ({ control, name, labels, isGroupVisibility }: Props) =
                   <LockIcon />
                 </Box>
                 <Stack>
-                  <Typography fontWeight={600}>{isGroupVisibility ? 'Private' : 'Paid'}</Typography>
+                  <Typography fontWeight={600}>{isSpaceVisibility ? 'Private' : 'Paid'}</Typography>
                   <Typography fontSize="small">{labels[1]}</Typography>
                 </Stack>
               </Box>
             ),
-            value: isGroupVisibility ? Visibility.Private : PostType.Paid,
+            value: isSpaceVisibility ? Visibility.Private : PostType.Paid,
           },
         ]}
       />

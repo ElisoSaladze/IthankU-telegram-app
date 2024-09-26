@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import './styles/app.css';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/toast.css';

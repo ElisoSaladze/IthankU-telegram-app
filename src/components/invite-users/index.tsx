@@ -2,7 +2,7 @@ import { AppBar, Avatar, Box, Button, Dialog, IconButton, Stack, Toolbar, Typogr
 import { useMutation, useInfiniteQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { match, P } from 'ts-pattern';
-import { getUsersToInvite, inviteUser } from '~/api/groups';
+import { getUsersToInvite, inviteUser } from '~/api/spaces';
 import { qk } from '~/api/query-keys';
 import { ControlledTextField } from '../form/controlled/controlled-text-field';
 import SearchIcon from '@mui/icons-material/Search';
@@ -15,10 +15,10 @@ import { paths } from '~/app/routes';
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  groupId: string;
+  spaceId: string;
 };
 
-export const InvitationDialog = ({ isOpen, onClose, groupId }: Props) => {
+export const InvitationDialog = ({ isOpen, onClose, spaceId }: Props) => {
   const navigate = useNavigate();
 
   const [ref, inView] = useInView();
@@ -29,8 +29,8 @@ export const InvitationDialog = ({ isOpen, onClose, groupId }: Props) => {
   });
 
   const $inviteUsers = useInfiniteQuery({
-    queryKey: qk.groups.getUserToInvite.toKeyWithArgs({ groupId }),
-    queryFn: async ({ pageParam = 1 }) => getUsersToInvite({ groupId, page: pageParam }),
+    queryKey: qk.spaces.getUserToInvite.toKeyWithArgs({ spaceId }),
+    queryFn: async ({ pageParam = 1 }) => getUsersToInvite({ spaceId, page: pageParam }),
     getNextPageParam: (lastPage) => {
       const nextPage = lastPage.meta.page + 1;
       return nextPage <= lastPage.meta.totalPages ? nextPage : undefined;
@@ -55,8 +55,8 @@ export const InvitationDialog = ({ isOpen, onClose, groupId }: Props) => {
   const handleBackButtonClick = () => {
     onClose(); // Close the dialog
     navigate(
-      generatePath(paths.groupDetails, {
-        groupId,
+      generatePath(paths.spaceDetails, {
+        spaceId,
       }),
     );
   };
@@ -94,7 +94,7 @@ export const InvitationDialog = ({ isOpen, onClose, groupId }: Props) => {
             </Toolbar>
           </AppBar>
           <Typography fontSize={12}>
-            Help grow our group by inviting others. Use the search field below to find and invite new members or share
+            Help grow our space by inviting others. Use the search field below to find and invite new members or share
             the link.
           </Typography>
           <Stack marginX={2} justifyContent={'center'} gap={1} direction={'row'}>
@@ -150,7 +150,7 @@ export const InvitationDialog = ({ isOpen, onClose, groupId }: Props) => {
                   <Button
                     onClick={() => {
                       $inviteUser.mutate({
-                        groupId: groupId!,
+                        spaceId: spaceId!,
                         inviteeId: user.id,
                       });
                     }}

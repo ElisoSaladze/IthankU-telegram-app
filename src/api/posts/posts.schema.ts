@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TAuthor } from '../groups';
+import { TAuthor } from '../spaces';
 
 export const TPostTypes = z.union([z.literal('FREE'), z.literal('PAID')]);
 
@@ -13,10 +13,10 @@ const TAttachment = z.object({
   originalUrl: z.string(),
 });
 
-const TPostGroup = z.object({
+const TPostSpace = z.object({
   id: z.string(),
   name: z.string(),
-  groupImage: z.string().optional(),
+  spaceImage: z.string().optional(),
 });
 
 export const TPost = z.object({
@@ -24,7 +24,7 @@ export const TPost = z.object({
   content: z.string().nullable(),
   summary: z.string().optional().nullable(),
   author: TAuthor.nullable().optional(),
-  group: TPostGroup.nullable(),
+  space: TPostSpace.nullable(),
   preview: z.string().nullable(),
   visibility: TPostTypes,
   tags: z.array(z.string()),

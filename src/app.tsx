@@ -1,4 +1,3 @@
-import './styles/app.css';
 import { Providers } from './providers';
 import { AuthSwitch } from './app/auth-switch';
 import { Box, Typography } from '@mui/material';
@@ -32,6 +31,7 @@ export const App = () => {
   app.ready();
   app.expand();
   app.disableVerticalSwipes();
+  app.enableClosingConfirmation();
 
   return (
     <Providers>

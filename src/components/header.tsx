@@ -28,6 +28,7 @@ export const AppHeader = ({ backPath, pageName, additionalContent, headerSx }: P
   } else {
     app.BackButton.hide();
   }
+
   return (
     <Box
       sx={{
