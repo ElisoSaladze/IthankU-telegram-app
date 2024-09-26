@@ -2,13 +2,13 @@
   from = "/api/v1/*"
   to = "https://itu-21eea052177b.herokuapp.com/api/v1/:splat"
   status = 200
-  conditions = { Host = ["https://ithanku-mini-app.netlify.app"] }
+  conditions = { Host = ["ithanku-mini-app.netlify.app"] }
 
 [[redirects]]
   from = "/api/v1/*"
   to = "https://itu-nest-dev-5e96dcea2b77.herokuapp.com/api/v1/:splat"
   status = 200
-  conditions = { Host = ["https://develop--poetic-klepon-5f6085.netlify.app"] }
+  conditions = { Host = ["develop--poetic-klepon-5f6085.netlify.app"] }
 
 [[redirects]]
   from = "/*"
