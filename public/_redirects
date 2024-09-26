@@ -1,4 +1,0 @@
-/* /index.html 200
-
-/api/v1/* https://itu-21eea052177b.herokuapp.com/api/v1/:splat 200! Country=*,Language=*,Host=ithanku-mini-app.netlify.app
-/api/v1/* https://itu-nest-dev-5e96dcea2b77.herokuapp.com/api/v1/:splat 200! Country=*,Language=*,Host=develop--poetic-klepon-5f6085.netlify.app
